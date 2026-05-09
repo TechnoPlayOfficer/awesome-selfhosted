@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACCET - Tokenización Inmobiliaria en Hedera</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;family=Fraunces:wght@700;800&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1ed278",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#0a120e",
+                        "accent-blue": "#0ea5e9",
+                    },
+                    fontFamily: {
+                        "display": ["Fraunces", "serif"],
+                        "sans": ["DM Sans", "sans-serif"],
+                        "inter": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-primary {
+            box-shadow: 0 0 20px rgba(30, 210, 120, 0.2);
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #1ed278, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-sans text-slate-900 dark:text-slate-100 overflow-x-hidden">
+<div class="relative flex h-auto min-h-auto w-full flex-col">
+<!-- Top Navigation -->
+<header class="relative top-0 w-full z-50 glass border-b border-primary/10 px-6 py-4 lg:px-20">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1 rounded-lg">
+<span class="material-symbols-outlined text-background-dark font-bold">account_balance</span>
+</div>
+<h2 class="font-display text-2xl font-bold tracking-tight text-slate-900 dark:text-slate-100">ACCET</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Invertir</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Propiedades</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Seguridad</a>
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Nosotros</a>
+</nav>
+<div class="flex gap-4">
+<button class="hidden sm:flex items-center justify-center rounded-lg h-10 px-6 border border-primary/30 text-sm font-bold hover:bg-primary/10 transition-all">
+                        Login
+                    </button>
+<button class="flex items-center justify-center rounded-lg h-10 px-6 bg-primary text-background-dark text-sm font-bold glow-primary hover:scale-105 transition-all">
+                        Empezar
+                    </button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<main class="pt-32 pb-20 px-6 lg:px-20 max-w-7xl mx-auto w-full">
+<div class="grid lg:grid-cols-2 gap-12 items-center">
+<div class="flex flex-col gap-8">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 w-fit">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+<span class="text-xs font-bold text-primary tracking-wider uppercase inter">Powered by Hedera HTS</span>
+</div>
+<h1 class="font-display text-5xl lg:text-7xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white">
+                        Tu patrimonio inmobiliario, <span class="text-gradient">finalmente líquido</span>
+</h1>
+<p class="text-lg text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
+                        Tokenizamos propiedades colombianas con respaldo en fideicomiso. Inversores desde $1M COP. Propietarios reciben liquidez en 72h a través de activos del mundo real (RWA).
+                    </p>
+<div class="flex flex-wrap gap-4">
+<button class="h-14 px-8 bg-primary text-background-dark rounded-xl font-bold text-lg glow-primary hover:shadow-[0_0_30px_rgba(30,210,120,0.4)] transition-all flex items-center gap-2">
+                            Invertir ahora
+                            <span class="material-symbols-outlined">trending_up</span>
+</button>
+<button class="h-14 px-8 border border-slate-700 hover:border-primary/50 rounded-xl font-bold text-lg transition-all flex items-center gap-2">
+                            Soy propietario
+                            <span class="material-symbols-outlined">sell</span>
+</button>
+</div>
+</div>
+<!-- Stats Visual -->
+<div class="relative">
+<div class="absolute -top-20 -right-20 w-64 h-64 bg-primary/20 rounded-full blur-[100px]"></div>
+<div class="absolute -bottom-20 -left-20 w-64 h-64 bg-accent-blue/20 rounded-full blur-[100px]"></div>
+<div class="glass p-8 rounded-3xl relative overflow-visible group">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/40 transition-colors">
+<p class="text-slate-400 text-sm font-medium mb-1">AUM (Activos Bajo Gestión)</p>
+<h3 class="text-3xl font-bold text-white tracking-tight">$45B+ <span class="text-sm font-normal text-slate-500">COP</span></h3>
+<div class="mt-4 flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm">arrow_upward</span>
+<span class="text-xs font-bold inter">+12.4% este mes</span>
+</div>
+</div>
+<div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/40 transition-colors">
+<p class="text-slate-400 text-sm font-medium mb-1">Retorno Promedio</p>
+<h3 class="text-3xl font-bold text-white tracking-tight">18% <span class="text-sm font-normal text-slate-500">E.A.</span></h3>
+<div class="mt-4 flex items-center gap-1 text-primary">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-xs font-bold inter">Distribución mensual</span>
+</div>
+</div>
+<div class="p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/40 transition-colors">
+<p class="text-slate-400 text-sm font-medium mb-1">Tiempo de Liquidez</p>
+<h3 class="text-3xl font-bold text-white tracking-tight">72 <span class="text-sm font-normal text-slate-500">Horas</span></h3>
+<div class="mt-4 flex items-center gap-1 text-accent-blue">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span class="text-xs font-bold inter">Protocolo Instant-Exit</span>
+</div>
+</div>
+<div class="p-6 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center">
+<div class="text-center">
+<p class="text-slate-400 text-xs uppercase tracking-widest mb-2">Red de Confianza</p>
+<div class="flex gap-2 justify-center opacity-70">
+<div class="h-6 w-16 bg-slate-700 rounded animate-pulse"></div>
+<div class="h-6 w-16 bg-slate-700 rounded animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-8 border-t border-white/10">
+<div class="flex items-center justify-between text-xs font-bold inter text-slate-500 uppercase tracking-tighter">
+<span>Chainlink Proof of Reserve</span>
+<span class="text-primary">Verificado en tiempo real</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- How it Works Tabs -->
+<section class="mt-32">
+<div class="text-center mb-16">
+<h2 class="font-display text-4xl font-bold mb-4">Ecosistema ACCET</h2>
+<p class="text-slate-400 max-w-2xl mx-auto">Dos caminos, un mismo objetivo: democratizar el acceso a la riqueza inmobiliaria en Colombia.</p>
+</div>
+<div class="glass rounded-3xl overflow-visible">
+<div class="flex border-b border-white/10">
+<button class="flex-1 py-6 px-4 text-primary font-bold border-b-2 border-primary bg-primary/5 transition-all">
+                            Para Inversores
+                        </button>
+<button class="flex-1 py-6 px-4 text-slate-500 font-bold hover:text-slate-300 transition-all">
+                            Para Propietarios
+                        </button>
+</div>
+<div class="p-8 lg:p-12 grid md:grid-cols-3 gap-8">
+<div class="flex flex-col gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/20 transition-all">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">search_insights</span>
+</div>
+<h4 class="text-xl font-bold">Explora &amp; Selecciona</h4>
+<p class="text-slate-400 text-sm leading-relaxed">Accede al Marketplace y analiza propiedades tokenizadas con auditoría legal y técnica completa.</p>
+</div>
+<div class="flex flex-col gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/20 transition-all">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</div>
+<h4 class="text-xl font-bold">Compra Fracciones</h4>
+<p class="text-slate-400 text-sm leading-relaxed">Invierte desde $1M COP usando canales locales (PSE, Bancolombia) y recibe tokens HTS en tu wallet.</p>
+</div>
+<div class="flex flex-col gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 hover:border-primary/20 transition-all">
+<div class="size-12 rounded-xl bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">currency_exchange</span>
+</div>
+<h4 class="text-xl font-bold">Genera Rentas</h4>
+<p class="text-slate-400 text-sm leading-relaxed">Recibe dividendos mensuales proporcionales a tu participación, respaldados por contratos de arrendamiento.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Marketplace Preview -->
+<section class="mt-32">
+<div class="flex items-end justify-between mb-12">
+<div>
+<h2 class="font-display text-4xl font-bold mb-4">Marketplace de Oportunidades</h2>
+<p class="text-slate-400">Propiedades activas disponibles para tokenización inmediata.</p>
+</div>
+<a class="text-primary font-bold flex items-center gap-2 group" href="#">
+                        Ver todo el inventario
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<!-- Property Card 1 -->
+<div class="glass rounded-2xl overflow-visible group">
+<div class="h-56 bg-cover bg-center" data-alt="Modern luxury apartment building in Medellin with glass facade" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBUIs94t0a5fN1EPSVDMFZsmQ-sFWO0zkgRY-Q472iZsQlAlzoISggOfJZyQu_jZtglgGTfKntiXGyuS_S_wEPaqt1luJIYYfMvxsRcOrJh2TOT_T9_cMPyNhLfhxt3H3CcxEknTfQMkC8qgyX0ko4TeO4kHh8vt2Gdm4vUn64eWnvZN-BcuTH6sg4LmieMo40F2YK14rA1fWy-3gWXt5YPXKe_lZe0MJc0tqs2zxqkGUEU8V-Xea7NLti6q3t_h2ril51TmT7_F5_i')"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-xl font-bold text-white">Torre El Poblado</h4>
+<p class="text-slate-400 text-xs uppercase tracking-wider">Medellín, Antioquia</p>
+</div>
+<span class="px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase inter">Rentando</span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-sm">
+<span class="text-slate-500">Rentabilidad Proyectada</span>
+<span class="text-white font-bold">19.2% E.A.</span>
+</div>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-visible">
+<div class="bg-primary h-full w-[75%]"></div>
+</div>
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-400">75% Recaudado</span>
+<span class="text-slate-400">Meta: $2,400M COP</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-primary hover:text-background-dark transition-all font-bold">
+                                Ver Detalles
+                            </button>
+</div>
+</div>
+<!-- Property Card 2 -->
+<div class="glass rounded-2xl overflow-visible group">
+<div class="h-56 bg-cover bg-center" data-alt="Office complex in Bogota North side architectural shot" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAr0FGR-MRLBM0DK0dqFA0XgW1gHgtrJBza_pXT2ZA3-qZMAPZsR4PezoB3wWzjsWfvKDzQ2p17pAB0uR6fvPWlaJg3yqBdG7Vlgr1zqwjYldZMR6guI_oSzz2jtnZq7og18Tav8OIeieSWDYiJZUGWCzIajPp2TcSRGraoDDg7amOoj7ymNJhMnFLATMa00Rg_jzO83siw478MA3icxo8iSBiO8dNgFPnDwhbDvA5JAk9gKFl6ykCucO8XPB7-k9gbpjCeqvWYS1wT')"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-xl font-bold text-white">Centro Negocios 93</h4>
+<p class="text-slate-400 text-xs uppercase tracking-wider">Bogotá D.C.</p>
+</div>
+<span class="px-2 py-1 rounded bg-accent-blue/20 text-accent-blue text-[10px] font-bold uppercase inter">Pre-Venta</span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-sm">
+<span class="text-slate-500">Valorización Anual</span>
+<span class="text-white font-bold">14.5% E.A.</span>
+</div>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-visible">
+<div class="bg-accent-blue h-full w-[30%]"></div>
+</div>
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-400">30% Recaudado</span>
+<span class="text-slate-400">Meta: $8,900M COP</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-primary hover:text-background-dark transition-all font-bold">
+                                Ver Detalles
+                            </button>
+</div>
+</div>
+<!-- Property Card 3 -->
+<div class="glass rounded-2xl overflow-visible group">
+<div class="h-56 bg-cover bg-center" data-alt="Coastal boutique hotel in Cartagena view of terrace" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDn3W3PVkgQa-M7FswTHwJvwkFbKsBUENDegzQ-6QcY5tEZBVuMeIpVPHrGZn-uOyiLNgd8ua5qiV-6u5LxlhjptVPADhA-w-mzx7F20BGqItQf6eGTKGZGPvTs7jKhcQRsDp_Z3T6YSWkA1FmvnGP0zJc2IdwPZ4ra8NpyiCtE28nNpnrssNmoHJ7S_PI1BozCD5kCkxO-nzMnW-VAzmj7WfxF8mg9c69SiobwjaijG9VAABDWGQYJP2IrlR87RKcGtDCXlscPvJAg')"></div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-xl font-bold text-white">Hotel Boutique Muralla</h4>
+<p class="text-slate-400 text-xs uppercase tracking-wider">Cartagena, Bolívar</p>
+</div>
+<span class="px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold uppercase inter">Rentando</span>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex justify-between text-sm">
+<span class="text-slate-500">Ocupación Promedio</span>
+<span class="text-white font-bold">88%</span>
+</div>
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-visible">
+<div class="bg-primary h-full w-[95%]"></div>
+</div>
+<div class="flex justify-between text-xs font-medium">
+<span class="text-slate-400">95% Recaudado</span>
+<span class="text-slate-400">Últimas unidades</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-primary hover:text-background-dark transition-all font-bold">
+                                Ver Detalles
+                            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- Security & Compliance -->
+<section class="mt-32">
+<div class="glass p-8 lg:p-16 rounded-[40px] border border-primary/20 bg-gradient-to-br from-primary/5 to-accent-blue/5">
+<div class="grid lg:grid-cols-2 gap-16 items-center">
+<div>
+<h2 class="font-display text-4xl font-bold mb-6">Seguridad de Nivel Institucional</h2>
+<p class="text-slate-400 text-lg mb-8 leading-relaxed">
+                                Utilizamos la tecnología más avanzada del mercado para garantizar que tu inversión esté siempre protegida por leyes colombianas y protocolos criptográficos.
+                            </p>
+<div class="space-y-6">
+<div class="flex gap-4 items-start">
+<div class="size-10 rounded-lg bg-white/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div>
+<h5 class="font-bold text-white">ISO 9001 &amp; Compliance</h5>
+<p class="text-sm text-slate-500">Procesos certificados y cumplimiento estricto con la normativa de la SFC.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="size-10 rounded-lg bg-white/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">database</span>
+</div>
+<div>
+<h5 class="font-bold text-white">Chainlink Oracles</h5>
+<p class="text-sm text-slate-500">Valoraciones de mercado en tiempo real y Proof of Reserve on-chain.</p>
+</div>
+</div>
+<div class="flex gap-4 items-start">
+<div class="size-10 rounded-lg bg-white/5 flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined">layers</span>
+</div>
+<div>
+<h5 class="font-bold text-white">Hedera HTS Ecosystem</h5>
+<p class="text-sm text-slate-500">Eficiencia energética, alta escalabilidad y finalidad de transacción en segundos.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="relative">
+<div class="aspect-square glass rounded-full flex items-center justify-center p-12 border-dashed border-primary/30">
+<div class="text-center">
+<div class="bg-primary/20 size-24 rounded-full flex items-center justify-center mx-auto mb-6">
+<span class="material-symbols-outlined text-5xl text-primary">security</span>
+</div>
+<h3 class="text-2xl font-bold text-white mb-2 inter tracking-tighter">RESPALDO LEGAL</h3>
+<p class="text-slate-400 text-sm">Fideicomiso Civil en Notaría y Escritura Pública por cada activo.</p>
+<div class="mt-8 flex justify-center gap-4">
+<div class="size-12 bg-white/10 rounded-lg flex items-center justify-center grayscale hover:grayscale-0 transition-all cursor-pointer">
+<span class="material-symbols-outlined">policy</span>
+</div>
+<div class="size-12 bg-white/10 rounded-lg flex items-center justify-center grayscale hover:grayscale-0 transition-all cursor-pointer">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div class="size-12 bg-white/10 rounded-lg flex items-center justify-center grayscale hover:grayscale-0 transition-all cursor-pointer">
+<span class="material-symbols-outlined">monitoring</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Footer -->
+<section class="mt-32 text-center py-20 relative">
+<div class="absolute inset-0 bg-gradient-to-t from-primary/10 to-transparent pointer-events-none"></div>
+<h2 class="font-display text-5xl lg:text-6xl font-extrabold mb-8 tracking-tight">¿Listo para tokenizar tu futuro?</h2>
+<p class="text-slate-400 text-xl max-w-2xl mx-auto mb-12">Únete a la primera plataforma de real estate RWA en Colombia sobre Hedera.</p>
+<div class="flex flex-wrap justify-center gap-6">
+<button class="h-16 px-12 bg-primary text-background-dark rounded-2xl font-black text-xl glow-primary hover:scale-105 transition-all">
+                        Crear Cuenta Gratis
+                    </button>
+<button class="h-16 px-12 glass rounded-2xl font-bold text-xl hover:bg-white/10 transition-all">
+                        Hablar con un asesor
+                    </button>
+</div>
+</section>
+</main>
+<footer class="bg-black/40 border-t border-white/10 py-12 px-6 lg:px-20 mt-20">
+<div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-12">
+<div class="col-span-2 md:col-span-1">
+<div class="flex items-center gap-2 mb-6">
+<div class="bg-primary p-1 rounded-lg">
+<span class="material-symbols-outlined text-background-dark text-xl font-bold">account_balance</span>
+</div>
+<h2 class="font-display text-xl font-bold text-white">ACCET</h2>
+</div>
+<p class="text-slate-500 text-sm leading-relaxed">Transformando la finca raíz en activos digitales accesibles, líquidos y seguros para todos los colombianos.</p>
+</div>
+<div>
+<h5 class="text-white font-bold mb-6">Plataforma</h5>
+<ul class="space-y-4 text-slate-500 text-sm">
+<li><a class="hover:text-primary" href="#">Marketplace</a></li>
+<li><a class="hover:text-primary" href="#">Simulador</a></li>
+<li><a class="hover:text-primary" href="#">Seguridad</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white font-bold mb-6">Compañía</h5>
+<ul class="space-y-4 text-slate-500 text-sm">
+<li><a class="hover:text-primary" href="#">Sobre nosotros</a></li>
+<li><a class="hover:text-primary" href="#">Blog</a></li>
+<li><a class="hover:text-primary" href="#">Contacto</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white font-bold mb-6">Legal</h5>
+<ul class="space-y-4 text-slate-500 text-sm">
+<li><a class="hover:text-primary" href="#">Términos</a></li>
+<li><a class="hover:text-primary" href="#">Privacidad</a></li>
+<li><a class="hover:text-primary" href="#">Compliance</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-600 text-xs inter">
+<p>© 2024 ACCET SAS. Todos los derechos reservados.</p>
+<div class="flex gap-6">
+<span>Bogotá, Colombia</span>
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-sm">public</span>
+<span class="material-symbols-outlined text-sm">shield</span>
+</div>
+</div>
+</div>
+</footer>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="01_narrative_intro.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">02</span> DE 37
+  </div>
+  <div>
+    <a href="03_narrative_owner_journey.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

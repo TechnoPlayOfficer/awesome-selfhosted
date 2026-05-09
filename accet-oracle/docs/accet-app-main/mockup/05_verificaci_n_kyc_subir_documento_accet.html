@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#2dd4bf', // teal-400
+                            dark: '#0d9488',    // teal-600
+                        },
+                        accent: {
+                            DEFAULT: '#38bdf8', // sky-400
+                        }
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"],
+                        "label": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-body min-h-auto flex flex-col">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center h-16 px-4 md:px-8 w-full sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">ACCET RWA</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors text-sm font-medium" href="#">Dashboard</a>
+<a class="text-blue-600 dark:text-blue-400 font-semibold transition-colors text-sm font-medium" href="#">Verification</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors text-sm font-medium" href="#">Assets</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 dark:text-slate-400 hover:text-blue-500 transition-all scale-95 active:opacity-80">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="text-slate-500 dark:text-slate-400 hover:text-blue-500 transition-all scale-95 active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-visible">
+<img class="h-full w-full object-cover" data-alt="User profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqyItoOn0nRXTs7vlJ7T_PUA03_dzXlfuCQI0uGE7fzQliTJhDxrWTmS0qt5kCJJ8T1tPNAR1kQc9YEfanXr5v4Pif5MoaAaIN1QpTz0UUcihb52T6Ojn5olEi7ZLffgMlrNtrdW7o1jp-TrNRJiGC8HXJ9QEUbvv43y9aV3Mgvij23imc3vzC4FBbMhLT2B67mq4o811I80L3lphSxbxy7krTYbvYwvkJJURSBE_RlKULJtzWyRr2zd6gXf7poX-TNrJWOJ4LwQGK"/>
+</div>
+</div>
+</header>
+<div class="flex flex-1 overflow-visible">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col w-64 h-[calc(100vh-64px)] sticky top-16 p-4 gap-2 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800">
+<div class="mb-6 px-4">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">KYC Verification</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400">Step 1 of 4</p>
+</div>
+<div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg px-4 py-3 cursor-pointer transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-sm font-medium">Documents</span>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="face">face</span>
+<span class="text-sm font-medium">Liveness</span>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="text-sm font-medium">Identity</span>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer transition-transform duration-200">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="text-sm font-medium">Status</span>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-950 relative">
+<!-- Decorative Gradients -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
+<div class="absolute bottom-0 left-0 w-96 h-96 bg-accent/10 blur-[100px] rounded-full pointer-events-none"></div>
+<div class="max-w-4xl mx-auto space-y-8 relative z-10">
+<!-- Header & Progress -->
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-3xl font-bold tracking-tight text-white mb-2">Verify your Identity</h1>
+<p class="text-slate-400">Please provide a valid government-issued document to proceed.</p>
+</div>
+<div class="hidden sm:block text-right">
+<span class="text-sm font-semibold text-primary uppercase tracking-wider">Step 1 of 3</span>
+<div class="flex gap-1 mt-2">
+<div class="h-1.5 w-8 rounded-full bg-primary"></div>
+<div class="h-1.5 w-8 rounded-full bg-slate-800"></div>
+<div class="h-1.5 w-8 rounded-full bg-slate-800"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bento Layout for Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Upload Area -->
+<div class="md:col-span-8 glass-panel rounded-2xl p-8 flex flex-col items-center justify-center min-h-[400px] group cursor-pointer border-dashed border-2 border-slate-700 hover:border-primary transition-all duration-300">
+<div class="w-20 h-20 rounded-full bg-slate-900 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+<span class="material-symbols-outlined text-4xl text-primary" data-icon="cloud_upload">cloud_upload</span>
+</div>
+<h3 class="text-xl font-semibold mb-2">Upload your document</h3>
+<p class="text-slate-400 text-center max-w-sm mb-8">
+                            Drag and drop your National ID, Passport, or Driver's License here, or <span class="text-primary font-medium">browse files</span>
+</p>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 px-4 py-2 bg-slate-900/50 rounded-lg text-xs text-slate-400 border border-slate-800">
+<span class="material-symbols-outlined text-sm" data-icon="picture_as_pdf">picture_as_pdf</span>
+                                PDF
+                            </div>
+<div class="flex items-center gap-2 px-4 py-2 bg-slate-900/50 rounded-lg text-xs text-slate-400 border border-slate-800">
+<span class="material-symbols-outlined text-sm" data-icon="image">image</span>
+                                JPG, PNG
+                            </div>
+</div>
+</div>
+<!-- Side Tips -->
+<div class="md:col-span-4 space-y-6">
+<div class="glass-card rounded-2xl p-6">
+<h4 class="font-bold text-sm text-slate-200 mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent" data-icon="tips_and_updates">tips_and_updates</span>
+                                PHOTO TIPS
+                            </h4>
+<ul class="space-y-4">
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm text-slate-400">Ensure the document is fully visible and not cropped.</span>
+</li>
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm text-slate-400">Avoid reflections or glare from flash or overhead lights.</span>
+</li>
+<li class="flex gap-3 items-start">
+<span class="material-symbols-outlined text-primary text-sm mt-0.5" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<span class="text-sm text-slate-400">The text must be sharp and clearly readable.</span>
+</li>
+</ul>
+</div>
+<div class="glass-card rounded-2xl p-6 border-l-4 border-l-accent">
+<h4 class="font-bold text-sm text-slate-200 mb-2">Accepted Documents</h4>
+<div class="space-y-2">
+<div class="flex items-center justify-between text-xs text-slate-400 bg-slate-950/40 p-2 rounded">
+<span>Passport</span>
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+</div>
+<div class="flex items-center justify-between text-xs text-slate-400 bg-slate-950/40 p-2 rounded">
+<span>National ID</span>
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+</div>
+<div class="flex items-center justify-between text-xs text-slate-400 bg-slate-950/40 p-2 rounded">
+<span>Driver's License</span>
+<span class="material-symbols-outlined text-xs" data-icon="verified">verified</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer / Actions -->
+<div class="md:col-span-12 flex flex-col sm:flex-row items-center justify-between gap-4 mt-4 bg-slate-900/20 p-6 rounded-2xl border border-slate-800">
+<div class="flex items-center gap-3 text-slate-400 text-sm">
+<span class="material-symbols-outlined" data-icon="lock">lock</span>
+                            Your data is encrypted and secure
+                        </div>
+<div class="flex gap-4 w-full sm:w-auto">
+<button class="flex-1 sm:flex-none px-8 py-3 rounded-xl border border-slate-700 font-semibold hover:bg-slate-800 transition-colors">
+                                Cancel
+                            </button>
+<button class="flex-1 sm:flex-none px-12 py-3 rounded-xl bg-primary text-slate-950 font-bold hover:bg-teal-300 transition-all flex items-center justify-center gap-2">
+                                Continue
+                                <span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Visual Showcase (Asymmetric Glass Card) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-12">
+<div class="glass-card rounded-2xl p-6 flex items-center gap-6 overflow-visible relative">
+<div class="relative z-10">
+<h5 class="text-lg font-bold mb-1">Mobile Verification?</h5>
+<p class="text-sm text-slate-400 mb-4">Continue on your phone to easily snap photos of your documents.</p>
+<button class="text-accent text-sm font-semibold flex items-center gap-1 hover:underline">
+                                Get QR Code
+                                <span class="material-symbols-outlined text-sm" data-icon="qr_code_2">qr_code_2</span>
+</button>
+</div>
+<div class="opacity-20 absolute -right-4 -bottom-4">
+<span class="material-symbols-outlined text-[120px]" data-icon="smartphone">smartphone</span>
+</div>
+</div>
+<div class="glass-card rounded-2xl p-6 border-slate-800 bg-gradient-to-br from-slate-900/50 to-slate-950/50">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-400" data-icon="security">security</span>
+</div>
+<h5 class="text-sm font-bold">Privacy Commitment</h5>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed">
+                            ACCET RWA uses bank-grade encryption and ISO 27001 certified protocols. Your biometric data and document images are never shared with third parties without your explicit consent.
+                        </p>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="04_registro_y_onboarding_accet.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">05</span> DE 37
+  </div>
+  <div>
+    <a href="06_verificaci_n_kyc_prueba_de_vida_accet.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

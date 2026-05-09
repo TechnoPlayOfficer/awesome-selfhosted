@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#22c55e', // Neon Green for positive feedback
+                            dark: '#16a34a'
+                        }
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .camera-mask {
+            mask-image: radial-gradient(circle, transparent 65%, black 66%);
+            -webkit-mask-image: radial-gradient(circle, transparent 65%, black 66%);
+        }
+        .progress-ring {
+            stroke-dasharray: 100 100;
+            stroke-dashoffset: 25;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-body antialiased">
+<!-- TopNavBar -->
+<header class="bg-white dark:bg-slate-950 text-slate-900 dark:text-white flex justify-between items-center h-16 px-4 md:px-8 w-full sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">ACCET RWA</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-6">
+<span class="text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors cursor-pointer">Identity</span>
+<span class="text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors cursor-pointer">Documents</span>
+<span class="text-blue-600 dark:text-blue-400 font-semibold hover:text-blue-500 dark:hover:text-blue-300 transition-colors cursor-pointer">Liveness</span>
+<span class="text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors cursor-pointer">Status</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 cursor-pointer">help</span>
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 cursor-pointer">notifications</span>
+<div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-visible">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="User profile avatar placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSkCsBLqeqwDXuywQKKpancM-ADQNUpy68NMHB2hAwzW25pUUANQLqelv0nPU8oa_f4bpKoKzIMzbckKIacriOzl0_i-jMRhSXuZ1NVHcLu1EjyprLCxT_5PjnYvffJ5n5yDdrXKnLLSHm8DQMhEbwPeqKFFhKCbzsArWvKPidum9Y_n3uQnoUV8tX6WGDrKwCdi1f-kOPEJb-1iiD6RzCA_Ayy0JQAmsFmLKH3gN5zFa3AbjBgV3SRkFS4nwOzSraMPzvPQRf70EK"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex min-h-[calc(100vh-64px)]">
+<!-- SideNavBar -->
+<nav class="hidden md:flex flex-col w-64 h-auto sticky top-16 p-4 gap-2 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800">
+<div class="mb-6 px-4 py-2">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">KYC Verification</h2>
+<p class="text-sm font-medium text-slate-500 dark:text-slate-400">Step 2 of 4</p>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="badge">badge</span>
+<span class="text-sm font-medium">Identity</span>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="description">description</span>
+<span class="text-sm font-medium">Documents</span>
+</div>
+<div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg px-4 py-3 cursor-pointer">
+<span class="material-symbols-outlined" data-icon="face">face</span>
+<span class="text-sm font-medium">Liveness</span>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer rounded-lg">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="text-sm font-medium">Status</span>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col items-center justify-center p-6 md:p-12 bg-slate-950">
+<div class="max-w-4xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+<!-- Left Column: Instructions & Status -->
+<div class="lg:col-span-5 space-y-8">
+<div class="space-y-4">
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-bold uppercase tracking-wider">
+                            Biometric Check
+                        </span>
+<h1 class="text-4xl font-extrabold text-white tracking-tight leading-tight">
+                            Position your face within the frame
+                        </h1>
+<p class="text-slate-400 text-lg leading-relaxed">
+                            We need to verify your identity using a quick 3D facial scan. Please ensure you are in a well-lit area.
+                        </p>
+</div>
+<div class="grid grid-cols-1 gap-4">
+<div class="flex items-center gap-4 p-4 rounded-xl bg-slate-900/50 border border-primary/30">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">light_mode</span>
+</div>
+<div>
+<p class="text-white font-semibold">Lighting OK</p>
+<p class="text-slate-500 text-sm">Perfect environment detected</p>
+</div>
+<span class="ml-auto material-symbols-outlined text-primary">check_circle</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-xl bg-slate-900/50 border border-slate-800">
+<div class="flex-shrink-0 w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">face</span>
+</div>
+<div>
+<p class="text-white font-semibold">Position OK</p>
+<p class="text-slate-500 text-sm">Center your face in the circle</p>
+</div>
+<span class="ml-auto material-symbols-outlined text-primary">check_circle</span>
+</div>
+</div>
+<button class="w-full py-4 px-8 bg-primary hover:bg-primary-dark text-slate-950 font-bold rounded-xl text-lg transition-all transform active:scale-95 shadow-[0_0_20px_rgba(34,197,94,0.3)]">
+                        Start Scan
+                    </button>
+</div>
+<!-- Right Column: Camera View -->
+<div class="lg:col-span-7 flex flex-col items-center">
+<div class="relative w-full aspect-square max-w-[480px]">
+<!-- Progress Ring SVG -->
+<svg class="absolute inset-0 w-full h-full -rotate-90 z-10 pointer-events-none" viewbox="0 0 100 100">
+<circle class="text-slate-800 stroke-current" cx="50" cy="50" fill="transparent" r="46" stroke-width="2"></circle>
+<circle class="text-primary stroke-current progress-ring" cx="50" cy="50" fill="transparent" r="46" stroke-linecap="round" stroke-width="2" style="stroke-dasharray: 289; stroke-dashoffset: 70;"></circle>
+</svg>
+<!-- Camera Container -->
+<div class="absolute inset-4 rounded-full overflow-visible border-4 border-slate-900 bg-slate-900 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+<!-- Background Image representing camera feed -->
+<div class="w-full h-full relative">
+<img alt="Camera Feed" class="w-full h-full object-cover grayscale opacity-80 mix-blend-lighten" data-alt="Close up portrait for facial recognition scan" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3D0MWs2iqX8YHOaym8Aci8N2vRRCrRLnrI4YXFi7AcW5pGNhy7IcmH8XFg-pnoml8VADChNjL_TW17td7Gjz-Y4U_JPfAEO2A5xNHRnseA73g5_35OuJaBppwwFI_nFEq-UVfuI94D28o25M5eViq6qIKrqu1pxru6MpKgDQLD287_cmXUSnMVc5N5SG2ffcYyJSCHbZZfRJWNJlNvu1EqItvmvpfc_6cth-pHrY8fKiFteo0FP7oWixM6fFc7hBnOLf_Cdfd8MDy"/>
+<!-- Scanning Overlay Effect -->
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-primary/10 to-transparent h-1/2 w-full animate-pulse top-1/4"></div>
+<!-- Guide Oval -->
+<div class="absolute inset-0 flex items-center justify-center">
+<div class="w-[70%] h-[80%] rounded-[50%/45%] border-2 border-dashed border-primary/50"></div>
+</div>
+</div>
+</div>
+<!-- Feedback HUD -->
+<div class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-slate-900 border border-slate-800 px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-3 z-20 whitespace-nowrap">
+<div class="w-2 h-2 rounded-full bg-primary animate-ping"></div>
+<span class="text-sm font-medium text-white">Live Feedback: <span class="text-primary">Ready to scan</span></span>
+</div>
+</div>
+<!-- Tips Section -->
+<div class="mt-16 grid grid-cols-3 gap-8 w-full">
+<div class="flex flex-col items-center text-center gap-2">
+<span class="material-symbols-outlined text-slate-500">no_photography</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">No Glasses</span>
+</div>
+<div class="flex flex-col items-center text-center gap-2">
+<span class="material-symbols-outlined text-slate-500">wb_sunny</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Good Light</span>
+</div>
+<div class="flex flex-col items-center text-center gap-2">
+<span class="material-symbols-outlined text-slate-500">face_retouching_natural</span>
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-widest">Be Natural</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="05_verificaci_n_kyc_subir_documento_accet.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">06</span> DE 37
+  </div>
+  <div>
+    <a href="07_verificaci_n_kyc_en_procesamiento_accet.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

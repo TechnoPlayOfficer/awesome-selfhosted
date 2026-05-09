@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Asset Holder Dashboard - ACCET</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#b5b5b3",
+                    "surface-container-low": "#1a1c1c",
+                    "on-surface": "#e2e2e2",
+                    "primary-fixed-dim": "#6bd3fd",
+                    "on-secondary-fixed": "#1b1c1b",
+                    "surface-container-high": "#282a2b",
+                    "secondary-fixed": "#e3e2e0",
+                    "tertiary": "#cdd2f9",
+                    "on-secondary-fixed-variant": "#464746",
+                    "on-primary-container": "#004f66",
+                    "inverse-primary": "#006684",
+                    "on-tertiary-container": "#414767",
+                    "on-tertiary": "#292e4d",
+                    "secondary-fixed-dim": "#c7c6c4",
+                    "surface-dim": "#121414",
+                    "surface-container-highest": "#333535",
+                    "error": "#ffb4ab",
+                    "tertiary-fixed-dim": "#bfc4eb",
+                    "on-background": "#e2e2e2",
+                    "outline": "#889298",
+                    "on-primary": "#003546",
+                    "primary": "#94ddff",
+                    "primary-fixed": "#bde9ff",
+                    "on-primary-fixed-variant": "#004d64",
+                    "tertiary-fixed": "#dee1ff",
+                    "on-tertiary-fixed-variant": "#3f4565",
+                    "on-primary-fixed": "#001f2a",
+                    "outline-variant": "#3e484e",
+                    "inverse-on-surface": "#2f3131",
+                    "surface": "#121414",
+                    "background": "#121414",
+                    "tertiary-container": "#b1b6dc",
+                    "on-tertiary-fixed": "#131937",
+                    "secondary": "#c7c6c4",
+                    "inverse-surface": "#e2e2e2",
+                    "surface-bright": "#37393a",
+                    "surface-container": "#1e2020",
+                    "primary-container": "#5ac4ee",
+                    "error-container": "#93000a",
+                    "surface-container-lowest": "#0c0f0f",
+                    "secondary-container": "#464746",
+                    "surface-variant": "#333535",
+                    "on-secondary": "#303130",
+                    "surface-tint": "#6bd3fd",
+                    "on-error-container": "#ffdad6",
+                    "on-error": "#690005",
+                    "on-surface-variant": "#bdc8cf"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-padding": "120px",
+                    "margin-page": "64px",
+                    "container-max": "1440px",
+                    "gutter": "24px",
+                    "unit": "8px"
+            },
+            "fontFamily": {
+                    "h2": [
+                            "Space Grotesk"
+                    ],
+                    "h3": [
+                            "Space Grotesk"
+                    ],
+                    "body-lg": [
+                            "Poppins"
+                    ],
+                    "label-caps": [
+                            "Space Grotesk"
+                    ],
+                    "body-md": [
+                            "Poppins"
+                    ],
+                    "h1": [
+                            "Space Grotesk"
+                    ]
+            },
+            "fontSize": {
+                    "h2": [
+                            "2.5rem",
+                            {
+                                    "lineHeight": "1.2",
+                                    "letterSpacing": "-0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "h3": [
+                            "1.75rem",
+                            {
+                                    "lineHeight": "1.3",
+                                    "letterSpacing": "0em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "body-lg": [
+                            "1.125rem",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "label-caps": [
+                            "0.75rem",
+                            {
+                                    "lineHeight": "1",
+                                    "letterSpacing": "0.1em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "1rem",
+                            {
+                                    "lineHeight": "1.6",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "h1": [
+                            "4rem",
+                            {
+                                    "lineHeight": "1.1",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        .platinum-glass {
+            background: linear-gradient(135deg, rgba(26, 28, 28, 0.8) 0%, rgba(40, 42, 43, 0.6) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(136, 146, 152, 0.3);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        .vignette-bottom {
+            background: linear-gradient(to top, rgba(18, 20, 20, 1) 0%, rgba(18, 20, 20, 0) 100%);
+        }
+        .glow-hover:hover {
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 0 20px rgba(107, 211, 253, 0.3);
+            border-color: rgba(148, 221, 255, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col md:flex-row overflow-x-hidden">
+<!-- SideNavBar (Desktop) -->
+<nav class="hidden md:flex flex-col h-full py-8 px-4 gap-6 bg-surface-container-low/90 backdrop-blur-2xl dark:bg-surface-container-lowest/90 border-r border-outline-variant/20 shadow-2xl fixed left-0 top-0 w-64 z-40">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="w-10 h-10 rounded-DEFAULT bg-primary flex items-center justify-center overflow-hidden">
+<img alt="Tenant Logo" class="w-full h-full object-cover" data-alt="A sleek, minimalist abstract geometric logo design glowing softly against a deep black background, embodying high-tech precision and legal authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-0V1PHiJz0KznkDiOPmSSoufgiu4TC1msivD9JzxLTUPpwcNW-rCywdM9z_FrHit8ozQCSHxosivQg8a10ihRHQ0rOteoE7y46vQSojhJt1_OQs4a8Xb3Co1MdvO07zrc1ynP19A9xxtfgEHyXGapi3DvVuidz9MhAfMwqVdikldofryUg650er-TwqvURLGw9MOGF9kVuA5CTUqGHKDruaNU8tCwxKPS3wCLZT9orqyqGR1jJPL1swovwwS7KuG59uL-PPDdM0Ne"/>
+</div>
+<div>
+<h1 class="font-h3 text-h3 text-primary truncate">ACCET</h1>
+<p class="font-label-caps text-label-caps tracking-widest text-on-surface-variant mt-1">Legal Twin Vault</p>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-2">
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-variant/50 hover:shadow-[0_0_15px_rgba(107,211,253,0.3)] transition-all duration-200 ease-in-out cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 0;">analytics</span>
+<span class="font-label-caps text-label-caps tracking-widest">Pipeline</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT bg-primary-container/20 text-primary border-r-4 border-primary hover:shadow-[0_0_15px_rgba(107,211,253,0.3)] transition-all duration-200 ease-in-out cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">layers</span>
+<span class="font-label-caps text-label-caps tracking-widest">Vault</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-variant/50 hover:shadow-[0_0_15px_rgba(107,211,253,0.3)] transition-all duration-200 ease-in-out cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 0;">database</span>
+<span class="font-label-caps text-label-caps tracking-widest">Interrogador Legal Deterministico</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-DEFAULT text-on-surface-variant hover:bg-surface-variant/50 hover:shadow-[0_0_15px_rgba(107,211,253,0.3)] transition-all duration-200 ease-in-out cursor-pointer active:scale-95" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 0;">verified_user</span>
+<span class="font-label-caps text-label-caps tracking-widest">Sistemas de Inmutabilidad Resiliente</span>
+</a>
+</div>
+<div class="mt-auto flex flex-col gap-2 pt-6 border-t border-outline-variant/20">
+<button class="w-full bg-on-surface text-surface-container-lowest font-label-caps text-label-caps py-3 px-4 rounded-DEFAULT hover:bg-primary transition-colors flex items-center justify-center gap-2 mb-4">
+<span class="material-symbols-outlined text-lg">add</span>
+                New Asset Ingestion
+            </button>
+<a class="flex items-center gap-3 px-4 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-variant/50 transition-all duration-200 ease-in-out cursor-pointer" href="#">
+<span class="material-symbols-outlined text-lg">help</span>
+<span class="font-label-caps text-label-caps tracking-widest">Help Center</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 rounded-DEFAULT text-on-surface-variant hover:bg-surface-variant/50 transition-all duration-200 ease-in-out cursor-pointer" href="#">
+<span class="material-symbols-outlined text-lg">sensors</span>
+<span class="font-label-caps text-label-caps tracking-widest">System Status</span>
+</a>
+</div>
+</nav>
+<!-- TopNavBar (Mobile Only) -->
+<nav class="md:hidden flex justify-between items-center px-gutter py-4 w-full bg-surface/80 backdrop-blur-xl dark:bg-surface/80 fixed top-0 z-50 border-b border-outline-variant/30 shadow-sm">
+<h1 class="font-h2 text-h2 font-bold tracking-tighter text-on-surface dark:text-on-surface">ACCET</h1>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer active:scale-95 transition-transform">notifications</span>
+<div class="w-8 h-8 rounded-DEFAULT bg-surface-variant overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A striking portrait of a sophisticated tech professional, softly lit with cinematic rim lighting against a deep blue background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCL2Sb9uzA7D4it-Jt2dxB45MCsfKZaGA1tr2GWAeBIJGZjwQ1MH0Yl0t-2tqlB7zKRGRZqfr0TnG3Kix2t1b_7q8UXyyj_iEI-ipz9KJ46mbg1BZ7YPLfzO98FfB_QerEIpMMthgXTrb6KeuqLnSXoOrgeXvxK--KZVZfyekPHtxDrW3p5pRPx6Ciq4uawZu5F46XxrLFbKH5BHzMA1bjzZL1XsqMWw7WpgSyY2xVdzEbTAOL8syFfoTqN9UUlcclMv-f2ez7ALllX"/>
+</div>
+</div>
+</nav>
+<!-- Main Canvas -->
+<main class="flex-1 md:ml-64 pt-24 md:pt-12 px-4 md:px-margin-page pb-section-padding flex flex-col xl:flex-row gap-gutter max-w-container-max mx-auto w-full relative">
+<!-- Center Pillar: The Legal Twin Vault -->
+<section class="flex-1 flex flex-col gap-8 relative z-10">
+<header class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-outline-variant/30 pb-6">
+<div>
+<h2 class="font-h1 text-h1 text-on-surface">The Legal Twin Vault</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-2 max-w-2xl">Immutable asset records secured via Filecoin architecture and mirrored on institutional blockchains.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-outline-variant/50 bg-surface-container/50">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_#6bd3fd] animate-pulse"></span>
+<span class="font-label-caps text-label-caps text-on-surface">Network Active</span>
+</div>
+</div>
+</header>
+<!-- 3D Card Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 relative">
+<!-- Card 1 -->
+<div class="platinum-glass rounded-xl p-6 glow-hover transition-all duration-300 relative overflow-hidden group cursor-pointer flex flex-col min-h-[320px]">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl -mr-10 -mt-10 group-hover:bg-primary/20 transition-all"></div>
+<div class="flex justify-between items-start mb-auto relative z-10">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-primary tracking-widest uppercase">Real Estate Title</span>
+<h3 class="font-h3 text-h3 text-on-surface">Phaeton Penthouse</h3>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-3xl">domain</span>
+</div>
+<div class="relative z-10 mt-8 space-y-4">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Token ID</span>
+<span class="font-body-md text-body-md text-on-surface truncate font-mono">0x7F...9A2B</span>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-sm">verified</span>
+<span class="font-label-caps text-label-caps text-on-surface">Certicámara Verified</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-2 py-1 rounded-DEFAULT">Avalanche</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="platinum-glass rounded-xl p-6 glow-hover transition-all duration-300 relative overflow-hidden group cursor-pointer flex flex-col min-h-[320px] opacity-90">
+<div class="flex justify-between items-start mb-auto relative z-10">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-primary tracking-widest uppercase">Academic Certificate</span>
+<h3 class="font-h3 text-h3 text-on-surface">Master of Science in Computer Science</h3>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors text-3xl">school</span>
+</div>
+<div class="relative z-10 mt-8 space-y-4">
+<div class="flex flex-col gap-1">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Token ID</span>
+<span class="font-body-md text-body-md text-on-surface truncate font-mono">0x2C...E4D1</span>
+</div>
+<div class="flex items-center justify-between border-t border-outline-variant/30 pt-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-sm">pending_actions</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant">Verification Pending</span>
+</div>
+<span class="font-label-caps text-label-caps text-on-surface-variant bg-surface-container px-2 py-1 rounded-DEFAULT">Base</span>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute bottom-0 left-0 w-full h-32 vignette-bottom pointer-events-none z-20"></div>
+</section>
+<!-- Right Sidebar: Asset Anatomy -->
+<aside class="w-full xl:w-96 flex flex-col gap-6 shrink-0 relative z-30">
+<!-- User Status / Keyless Onboarding -->
+<div class="platinum-glass rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full border border-primary/50 overflow-hidden relative">
+<img alt="Logged in user" class="w-full h-full object-cover" data-alt="A portrait of a confident tech leader, dimly lit with cool blue accents in a modern server room environment, conveying trust and authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYnn2doPZyquSTDZXcLilUi1QM05EN3Bhcq2tnpo9OY9a-KU77LczB5nMwUh4e6VZ6ixRDSvap4e3JWaNgJE8Y7LMVRaxLDzvye1XDp9EaEgLz4ZKcxGrWpt0O_DufBj9e4M2hDzJOt62o5-itqTKDMr688weEcy0BfH0qNm1W63ad0j8304m5bq9mhpOU5mzFVL7vCFdJ-9P7CKYqQIfSXFwr0WHGtfiyP-LIoZaKoGutAMbl2DeZDCAY3OGOmvqm2-d2tBFLNGxd"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-primary rounded-full border border-background"></div>
+</div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface">Social Identity Linked</span>
+<span class="font-body-md text-body-md text-on-surface-variant text-sm truncate max-w-[150px]">0xAlex.eth</span>
+</div>
+</div>
+<button class="p-2 rounded-DEFAULT border border-outline-variant/50 text-on-surface-variant hover:text-primary hover:border-primary transition-colors">
+<span class="material-symbols-outlined text-xl">logout</span>
+</button>
+</div>
+<!-- Asset Anatomy Panel -->
+<div class="platinum-glass rounded-xl p-6 flex flex-col flex-1 border-t-2 border-t-primary">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">data_object</span>
+<h3 class="font-h3 text-h3 text-on-surface">Trinidad de la Certeza</h3>
+</div>
+<div class="space-y-6">
+<!-- Anatomy Section 1 -->
+<div class="flex flex-col gap-2 border-b border-outline-variant/20 pb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Capa de Memoria (Persistence)</span>
+<div class="bg-surface-container-low p-3 rounded-DEFAULT border border-outline-variant/30 flex justify-between items-center group cursor-copy hover:border-primary/50 transition-colors">
+<span class="font-body-md text-body-md text-on-surface font-mono text-sm truncate">bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary text-sm ml-2">content_copy</span>
+</div>
+</div>
+<!-- Anatomy Section 2 -->
+<div class="flex flex-col gap-2 border-b border-outline-variant/20 pb-4">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Capa de Poder (Execution)</span>
+<div class="bg-surface-container-low p-3 rounded-DEFAULT border border-outline-variant/30 flex justify-between items-center group cursor-copy hover:border-primary/50 transition-colors">
+<span class="font-body-md text-body-md text-on-surface font-mono text-sm truncate">0x9a8b7c6d5e4f3g2h1i0j9k8l7m6n5o4p3q2r1s0</span>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary text-sm ml-2">open_in_new</span>
+</div>
+</div>
+<!-- Anatomy Section 3 -->
+<div class="flex flex-col gap-3 pt-2">
+<span class="font-label-caps text-label-caps text-on-surface-variant">Capa de Ley (Legal Seal)</span>
+<div class="flex items-center gap-4 bg-surface-container-low/50 p-4 rounded-DEFAULT border border-primary/20">
+<div class="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center bg-primary/10 shadow-[0_0_10px_rgba(107,211,253,0.2)]">
+<span class="material-symbols-outlined text-primary text-2xl">gpp_good</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Apostilla Computacional</span>
+<span class="font-label-caps text-label-caps text-on-surface-variant mt-1">Timestamp: 2024-05-20T14:30:00Z</span>
+</div>
+</div>
+</div>
+</div>
+<button class="mt-8 w-full bg-primary text-on-primary font-label-caps text-label-caps py-3 rounded-DEFAULT hover:bg-primary-fixed-dim transition-colors flex items-center justify-center gap-2 shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-sm">download</span>
+                    Download Dossier Legal
+                </button>
+</div>
+</aside>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-surface-container-highest/90 backdrop-blur-xl border-t border-outline-variant/30 flex justify-around items-center py-3 px-2 z-50">
+<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">analytics</span>
+<span class="font-label-caps text-label-caps text-[10px]">Pipeline</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-primary" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">layers</span>
+<span class="font-label-caps text-label-caps text-[10px] font-bold">Vault</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-xl">database</span>
+<span class="font-label-caps text-label-caps text-[10px] text-center leading-tight">Interrogador<br/>Legal</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCET · Los Ladrillones · Spot 4 — El Blockchain Para Todos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════ ACCET DESIGN SYSTEM ════════════════ */
+:root {
+  --sky:   #5EC8F2;
+  --ice:   #5ED7F2;
+  --teal:  #377D8C;
+  --dark:  #0D0D0D;
+  --sky04: rgba(94,200,242,.04);
+  --sky10: rgba(94,200,242,.10);
+  --sky20: rgba(94,200,242,.20);
+  --amber: #ffaa00;
+  --chalk: #e8e4d8;
+  --board: #1a2418;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--dark);
+  background-image:
+    linear-gradient(var(--sky04) 1px,transparent 1px),
+    linear-gradient(90deg,var(--sky04) 1px,transparent 1px);
+  background-size:40px 40px;
+  width:100%;height:100vh;overflow:hidden;
+  font-family:'DM Sans',sans-serif;user-select:none;
+}
+#stage{width:100%;height:100%;position:relative;overflow:hidden;}
+
+.accent-line{position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));z-index:200;}
+.prog-bar{position:absolute;bottom:0;left:0;height:3px;width:0%;
+  background:var(--sky);box-shadow:0 0 10px rgba(94,200,242,.7);
+  z-index:999;transition:width .08s linear;}
+
+.scene{position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .5s ease;}
+.scene.active{opacity:1;pointer-events:auto;}
+
+.card-scene{
+  background:var(--dark);
+  background-image:linear-gradient(var(--sky04) 1px,transparent 1px),
+    linear-gradient(90deg,var(--sky04) 1px,transparent 1px);
+  background-size:40px 40px;flex-direction:column;z-index:80;}
+.card-scene::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));}
+
+/* ═══════════════════════════════════
+   ENVIRONMENT — Classroom / Aula
+   ═══════════════════════════════════ */
+.room-bg{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(180deg,#0e0d0b 0%,#111008 45%,#151310 100%);
+}
+/* Ceiling */
+.ceiling-light{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:180px;height:6px;
+  background:rgba(255,240,200,.08);
+  box-shadow:0 0 40px 20px rgba(255,240,200,.04);
+}
+/* Floor */
+.floor{
+  position:absolute;bottom:0;left:0;width:100%;height:35%;
+  background:linear-gradient(180deg,#181510 0%,#100e0c 100%);
+  border-top:1px solid rgba(94,200,242,.08);
+}
+.floor::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 55px,rgba(255,255,255,.02) 55px,rgba(255,255,255,.02) 56px),
+    repeating-linear-gradient(0deg,transparent,transparent 55px,rgba(255,255,255,.015) 55px,rgba(255,255,255,.015) 56px);
+}
+/* Wall */
+.wall{
+  position:absolute;top:0;left:0;width:100%;height:66%;
+  background:linear-gradient(180deg,#0d0c0a 0%,#111008 100%);
+  border-bottom:2px solid rgba(255,200,80,.06);
+}
+
+/* ─── CHALKBOARD ─── */
+.board-frame{
+  position:absolute;top:8%;left:50%;
+  transform:translateX(-50%);
+  width:min(580px,88%);
+  z-index:5;
+}
+.board{
+  background:var(--board);
+  border:5px solid #2a2420;
+  border-radius:4px;
+  box-shadow:
+    inset 0 2px 12px rgba(0,0,0,.6),
+    0 4px 24px rgba(0,0,0,.6),
+    0 0 0 1px rgba(255,200,80,.05);
+  position:relative;
+  overflow:hidden;
+  height:clamp(130px,22vh,190px);
+  transition:background .4s;
+}
+/* Board worn texture */
+.board::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background-image:
+    repeating-linear-gradient(0deg,transparent,transparent 22px,rgba(255,255,255,.012) 22px,rgba(255,255,255,.012) 23px);
+  pointer-events:none;
+}
+/* Chalk dust ledge */
+.board-ledge{
+  height:8px;
+  background:linear-gradient(180deg,#2a2420,#1e1a16);
+  border-top:1px solid rgba(255,200,80,.08);
+  position:relative;
+}
+.chalk-dust{
+  position:absolute;bottom:0;left:0;width:100%;height:4px;
+  background:linear-gradient(90deg,
+    transparent 0%,rgba(220,210,190,.08) 20%,
+    rgba(220,210,190,.15) 50%,rgba(220,210,190,.08) 80%,transparent 100%);
+}
+/* Board legs */
+.board-leg{
+  width:10px;height:28px;
+  background:linear-gradient(180deg,#2a2420,#1a1410);
+  margin:0 auto;
+  box-shadow:0 4px 8px rgba(0,0,0,.4);
+}
+.board-legs{display:flex;justify-content:space-between;padding:0 40px;}
+
+/* ─── CANVAS for chalk drawing ─── */
+#chalk-canvas{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+}
+
+/* ─── FIRE overlay ─── */
+.fire-overlay{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  background:linear-gradient(180deg,
+    rgba(255,60,0,0) 0%,
+    rgba(255,100,0,.08) 40%,
+    rgba(255,60,0,.18) 70%,
+    rgba(200,40,0,.35) 100%);
+  opacity:0;pointer-events:none;
+  transition:opacity .6s;
+  z-index:6;
+}
+.fire-overlay.on{opacity:1;}
+
+/* Flame particles */
+.flame{
+  position:absolute;pointer-events:none;z-index:7;
+  font-size:22px;opacity:0;
+  animation:flame-rise 1.4s ease-out infinite;
+}
+@keyframes flame-rise{
+  0%{opacity:0;transform:translateY(0) scale(.6) rotate(-5deg)}
+  20%{opacity:1}
+  80%{opacity:.5}
+  100%{opacity:0;transform:translateY(-60px) scale(1.2) rotate(8deg)}
+}
+
+/* ─── SIMPLE FORMULA (Líqui's board) ─── */
+.formula-board{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;gap:0;
+  opacity:0;transition:opacity .5s;
+  z-index:8;
+}
+.fstep{
+  display:flex;align-items:center;
+}
+.fbox{
+  background:rgba(94,200,242,.1);
+  border:1.5px solid rgba(94,200,242,.35);
+  border-radius:4px;
+  padding:clamp(5px,1.2vw,9px) clamp(8px,1.8vw,16px);
+  font-family:'Syne',sans-serif;
+  font-weight:800;
+  font-size:clamp(9px,1.6vw,14px);
+  color:var(--sky);
+  white-space:nowrap;
+  letter-spacing:.3px;
+  box-shadow:0 0 12px rgba(94,200,242,.15);
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity .45s, transform .45s cubic-bezier(.34,1.56,.64,1);
+}
+.fbox.show{opacity:1;transform:translateY(0);}
+.farrow{
+  font-family:'JetBrains Mono',monospace;
+  font-size:clamp(12px,2vw,20px);
+  color:rgba(94,200,242,.5);
+  padding:0 clamp(4px,1vw,10px);
+  opacity:0;transition:opacity .3s .15s;
+}
+.farrow.show{opacity:1;}
+
+/* ERASER sweep */
+@keyframes erase-sweep{
+  0%{transform:translateX(-110%)}
+  100%{transform:translateX(110%)}
+}
+.eraser{
+  position:absolute;top:0;left:0;width:18%;height:100%;
+  background:rgba(30,35,25,.85);
+  pointer-events:none;opacity:0;z-index:9;
+}
+.eraser.sweeping{
+  opacity:1;
+  animation:erase-sweep .65s cubic-bezier(.4,0,.2,1) forwards;
+}
+
+/* ═════════════════════
+   BRICK CHARACTERS
+   ════════════════════= */
+.brick-char{
+  position:absolute;display:flex;flex-direction:column;
+  align-items:center;pointer-events:none;
+}
+.body{
+  position:relative;border-radius:10px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:6px;
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,.14),
+    inset 0 -4px 6px rgba(0,0,0,.3),
+    0 8px 28px rgba(0,0,0,.55);
+  transition:transform .15s,background .4s;
+}
+.eyes{display:flex;gap:5px;margin-bottom:3px;}
+.eye{background:white;border-radius:50%;position:relative;overflow:visible;
+  display:flex;align-items:center;justify-content:center;}
+.pupil{width:42%;height:42%;background:#111;border-radius:50%;}
+.brow{position:absolute;top:-5px;left:-1px;width:calc(100% + 2px);height:3px;
+  background:#3a3a3a;border-radius:2px;}
+.mouth-explain{width:18px;height:3px;background:#333;border-radius:2px;margin:4px auto 0;}
+.mouth-proud{width:22px;height:12px;border:3px solid #222;border-bottom:none;
+  border-radius:12px 12px 0 0;margin:2px auto 0;}
+.mouth-shock{width:14px;height:18px;background:#222;border-radius:50% 50% 46% 46%;margin:3px auto 0;}
+.mouth-spiral{width:14px;height:14px;border-radius:50%;margin:3px auto 0;
+  background:repeating-conic-gradient(#444 0deg,#222 10deg,#444 20deg);
+  animation:spiral-spin 1.2s linear infinite;}
+@keyframes spiral-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.mouth-ahh{width:20px;height:20px;background:#222;border-radius:50%;
+  border:3px solid #444;margin:2px auto 0;}
+.mouth-smile{width:22px;height:12px;border:3px solid #222;border-bottom:none;
+  border-radius:12px 12px 0 0;margin:2px auto 0;}
+
+/* Spiral eyes */
+.eye-spin{animation:spiral-spin 1.6s linear infinite;overflow:hidden;}
+.eye-spin .pupil{width:60%;height:60%;background:repeating-conic-gradient(#333 0deg,#111 8deg,#333 16deg);}
+
+/* ─── CRIPTO — chalk maestro ─── */
+#cripto{bottom:36%;left:-120px;z-index:10;
+  transition:left .75s cubic-bezier(.34,1.56,.64,1);}
+#cripto .body{width:54px;height:94px;
+  background:
+    repeating-linear-gradient(60deg,rgba(94,200,242,.05) 0,rgba(94,200,242,.05) 2px,transparent 2px,transparent 22px),
+    linear-gradient(150deg,#0e2228,#091619,#060f11);}
+.hex-tag{font-size:8px;color:var(--sky);font-family:'JetBrains Mono';
+  opacity:.6;margin-bottom:2px;letter-spacing:1px;}
+.chain-tag{font-size:6px;color:var(--ice);font-family:'JetBrains Mono';
+  opacity:.45;margin-top:3px;letter-spacing:.5px;}
+/* Pointer stick */
+.pointer{
+  position:absolute;right:-38px;top:30px;
+  width:40px;height:3px;
+  background:linear-gradient(90deg,#c8a060,#9a7040);
+  border-radius:1px;transform-origin:left center;
+  transform:rotate(-20deg);
+  opacity:0;transition:opacity .3s;
+}
+/* Cripto gesticulate */
+@keyframes point-gesture{
+  0%,100%{transform:rotate(-20deg)}
+  50%{transform:rotate(-35deg) translateY(-3px)}
+}
+
+/* ─── CEMEN — confused student ─── */
+#cemen{bottom:36%;right:-120px;z-index:9;
+  transition:right .7s cubic-bezier(.34,1.56,.64,1);}
+#cemen .body{width:70px;height:60px;
+  background:linear-gradient(135deg,#787868,#626255,#464638);}
+.crack-c1,.crack-c2{position:absolute;background:rgba(0,0,0,.35);border-radius:1px;}
+.beard-c{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);
+  width:28px;height:7px;background:linear-gradient(180deg,#888,#666);
+  border-radius:0 0 5px 5px;}
+/* Confusion steam */
+.steam{position:absolute;font-size:12px;opacity:0;pointer-events:none;
+  animation:steam-rise 1.5s ease-out infinite;}
+@keyframes steam-rise{
+  0%{opacity:0;transform:translateY(0) scale(.5)}
+  30%{opacity:.8}
+  100%{opacity:0;transform:translateY(-35px) scale(1.1) rotate(20deg)}
+}
+/* Head wobble (confused) */
+@keyframes wobble-confused{
+  0%,100%{transform:rotate(0deg)}
+  20%{transform:rotate(-7deg)}
+  40%{transform:rotate(6deg)}
+  60%{transform:rotate(-5deg)}
+  80%{transform:rotate(4deg)}
+}
+/* Nod AHH */
+@keyframes nod-ahh{
+  0%,100%{transform:translateY(0)}
+  30%{transform:translateY(-8px)}
+  60%{transform:translateY(2px)}
+}
+
+/* ─── LÍQUI ─── */
+#liqui{bottom:36%;right:-120px;z-index:11;
+  transition:right .85s cubic-bezier(.25,.46,.45,.94);}
+#liqui .body{width:54px;height:84px;
+  background:linear-gradient(135deg,#a0d4e8,#7ab8d0,#5090a8);
+  box-shadow:inset 0 4px 8px rgba(255,255,255,.32),
+    0 0 22px rgba(94,200,242,.22),0 8px 28px rgba(0,0,0,.5);}
+.shine-l{position:absolute;top:8px;left:7px;width:10px;height:26px;
+  background:rgba(255,255,255,.35);border-radius:5px;transform:rotate(-8deg);}
+
+/* ─── BLOQUE & TOKKO (audience) ─── */
+#bloque{bottom:36%;left:-100px;z-index:8;
+  transition:left .7s cubic-bezier(.34,1.56,.64,1);}
+#bloque .body{width:66px;height:58px;
+  background:linear-gradient(140deg,#d86040,#c44f2a,#a03318);}
+.hat-dome{width:42px;height:20px;background:linear-gradient(160deg,#ffe033,#f0c000);
+  border-radius:50% 50% 0 0;margin:0 auto;box-shadow:0 -2px 8px rgba(255,200,0,.3);}
+.hat-brim{width:60px;height:6px;background:linear-gradient(180deg,#f0c000,#c89000);
+  border-radius:3px;margin:-2px auto 0;}
+.hard-hat{position:absolute;top:-20px;left:50%;transform:translateX(-50%);}
+
+#tokko{bottom:36%;left:-160px;z-index:7;
+  transition:left .6s cubic-bezier(.34,1.56,.64,1);}
+#tokko .body{width:44px;height:44px;
+  background:linear-gradient(135deg,#d08800,#a86a00,#7a4a00);}
+.glasses-t{position:absolute;top:-12px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:1px;}
+.lens-t{width:16px;height:12px;border:2px solid #555;border-radius:4px;
+  background:rgba(94,200,242,.12);}
+.bridge-t{width:3px;height:2px;background:#555;margin-bottom:3px;}
+
+/* ─── CHALK HOLDER (Cripto's hand element) ─── */
+.chalk-piece{
+  position:absolute;right:-16px;top:52px;
+  width:8px;height:14px;
+  background:linear-gradient(180deg,#e8e4d8,#d0ccc0);
+  border-radius:2px;
+  transform:rotate(-30deg);
+  opacity:0;transition:opacity .3s;
+  box-shadow:0 1px 4px rgba(0,0,0,.3);
+}
+
+/* ─── QUESTION MARKS floating ─── */
+.qmark{position:absolute;pointer-events:none;
+  font-family:'Syne',sans-serif;font-weight:900;
+  color:rgba(255,200,80,.6);opacity:0;z-index:22;
+  animation:qm-float 1.4s ease-out forwards;}
+@keyframes qm-float{
+  0%{opacity:0;transform:translateY(0) scale(.5) rotate(-10deg)}
+  25%{opacity:1}
+  100%{opacity:0;transform:translateY(-50px) scale(1.1) rotate(15deg)}
+}
+
+/* ─── GLOW ─── */
+.room-glow{
+  position:absolute;bottom:34%;left:50%;transform:translateX(-50%);
+  width:350px;height:55px;
+  background:radial-gradient(ellipse,rgba(94,200,242,.16),transparent 70%);
+  opacity:0;filter:blur(14px);pointer-events:none;
+  transition:opacity .8s;
+}
+
+/* Bubbles */
+.bubble{
+  position:absolute;background:white;border-radius:8px;
+  padding:7px 11px;font-family:'DM Sans',sans-serif;
+  font-size:11px;line-height:1.4;color:#1a1a1a;
+  white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.45);
+  opacity:0;transition:opacity .3s;z-index:30;pointer-events:none;
+}
+.bubble::after{content:'';position:absolute;bottom:-9px;left:50%;
+  transform:translateX(-50%);border:9px solid transparent;
+  border-top-color:white;border-bottom:none;}
+.bubble.left::after{left:16%;}
+.bubble.right::after{left:74%;}
+
+/* Caption */
+.caption{
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  background:rgba(13,13,13,.82);backdrop-filter:blur(8px);
+  border:1px solid rgba(94,200,242,.12);border-top:1px solid rgba(94,200,242,.25);
+  color:rgba(255,255,255,.85);font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:.3px;padding:7px 18px;border-radius:4px;
+  white-space:nowrap;opacity:0;z-index:50;transition:opacity .25s;pointer-events:none;
+}
+
+/* Scene label */
+.scene-label{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:rgba(94,200,242,.2);text-transform:uppercase;z-index:50;pointer-events:none;
+}
+
+/* Typography */
+.spot-eyebrow{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:rgba(94,200,242,.55);text-transform:uppercase;margin-bottom:14px;
+  opacity:0;animation:fadeup .6s .3s forwards;}
+.spot-headline{font-family:'Syne',sans-serif;font-size:clamp(30px,6vw,58px);font-weight:900;
+  color:white;text-align:center;line-height:1.05;opacity:0;animation:fadeup .6s .6s forwards;}
+.spot-headline .accent{color:var(--sky);}
+.spot-sub{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:rgba(94,200,242,.35);margin-top:14px;text-transform:uppercase;
+  opacity:0;animation:fadeup .6s .9s forwards;}
+.tagline{font-family:'Syne',sans-serif;font-size:clamp(22px,4.5vw,46px);font-weight:900;
+  color:white;text-align:center;line-height:1.15;max-width:580px;
+  opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s;}
+.t-sky{color:var(--sky);}.t-ice{color:var(--ice);}
+.end-sep{width:280px;height:1px;background:rgba(94,200,242,.15);
+  margin:18px auto 0;opacity:0;transition:opacity .4s .4s;}
+.end-tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;justify-content:center;
+  opacity:0;transition:opacity .6s .5s;}
+.etag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;
+  padding:3px 8px;border:1px solid rgba(94,200,242,.3);
+  color:rgba(94,200,242,.6);background:var(--sky10);}
+.end-brand{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  color:var(--sky);margin-top:22px;opacity:0;transition:opacity .5s .9s;}
+.end-info{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;
+  color:rgba(255,255,255,.18);margin-top:5px;opacity:0;transition:opacity .4s 1.1s;}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Confetti */
+.conf{position:absolute;border-radius:2px;pointer-events:none;z-index:90;}
+
+#replay-btn{
+  position:absolute;bottom:28px;right:28px;
+  background:var(--sky);color:#0D0D0D;border:none;padding:10px 22px;
+  border-radius:4px;font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;font-weight:500;
+  cursor:pointer;z-index:999;opacity:0;pointer-events:none;
+  transition:opacity .4s,transform .15s;}
+#replay-btn:hover{transform:scale(1.06);}
+#replay-btn.show{opacity:1;pointer-events:auto;}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <div class="accent-line"></div>
+  <div class="prog-bar" id="prog"></div>
+
+  <!-- ══════════════ INTRO CARD ══════════════ -->
+  <div class="scene card-scene active" id="scene-intro">
+    <div style="text-align:center">
+      <div class="spot-eyebrow">Los Ladrillones · Spot 4 de 4</div>
+      <div class="spot-headline">El Blockchain<br><span class="accent">Para Todos</span></div>
+      <div class="spot-sub">Animación de marca ACCET · 30s</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MAIN SCENE ══════════════ -->
+  <div class="scene" id="scene-main">
+
+    <!-- Environment -->
+    <div class="room-bg"></div>
+    <div class="ceiling-light"></div>
+    <div class="wall"></div>
+    <div class="floor"></div>
+    <div class="room-glow" id="room-glow"></div>
+    <div class="scene-label">ACCET · El Blockchain Para Todos</div>
+
+    <!-- ── CHALKBOARD ── -->
+    <div class="board-frame" id="board-frame">
+      <div class="board" id="board">
+        <canvas id="chalk-canvas"></canvas>
+        <!-- Formula (Líqui's simple version) -->
+        <div class="formula-board" id="formula-board">
+          <div class="fstep">
+            <div class="fbox" id="fb1">🏠 Propiedad</div>
+            <div class="farrow" id="fa1">→</div>
+          </div>
+          <div class="fstep">
+            <div class="fbox" id="fb2">🪙 Token</div>
+            <div class="farrow" id="fa2">→</div>
+          </div>
+          <div class="fstep">
+            <div class="fbox" id="fb3">📈 Rendimiento</div>
+          </div>
+        </div>
+        <!-- Fire overlay on board -->
+        <div class="fire-overlay" id="fire-overlay"></div>
+        <!-- Eraser element -->
+        <div class="eraser" id="eraser"></div>
+      </div>
+      <div class="board-ledge"><div class="chalk-dust"></div></div>
+      <div class="board-legs">
+        <div class="board-leg"></div>
+        <div class="board-leg"></div>
+      </div>
+    </div>
+
+    <!-- Flames on board -->
+    <div id="flames-container" style="position:absolute;top:8%;left:50%;transform:translateX(-50%);width:min(580px,88%);height:clamp(130px,22vh,190px);z-index:7;pointer-events:none;overflow:hidden;"></div>
+
+    <!-- ── CRIPTO — at the board ── -->
+    <div class="brick-char" id="cripto">
+      <div class="pointer" id="pointer"></div>
+      <div class="chalk-piece" id="chalk-piece"></div>
+      <div class="body" id="cripto-body">
+        <div class="hex-tag">⬡⬡⬡</div>
+        <div class="eyes" id="cripto-eyes">
+          <div class="eye" style="width:16px;height:16px;background:linear-gradient(135deg,var(--sky),var(--teal))">
+            <div class="brow"></div>
+            <div class="pupil" style="background:#fff"></div>
+          </div>
+          <div class="eye" style="width:16px;height:16px;background:linear-gradient(135deg,var(--sky),var(--teal))">
+            <div class="brow"></div>
+            <div class="pupil" style="background:#fff"></div>
+          </div>
+        </div>
+        <div class="mouth-explain" id="cripto-mouth"></div>
+        <div class="chain-tag">ERC·3643</div>
+      </div>
+      <div class="bubble left" id="bub-cripto1" style="bottom:104px;left:52px;font-size:9.5px;">
+        ¡El blockchain es simple!<br>Mira mira mira... 📝
+      </div>
+      <div class="bubble left" id="bub-cripto2" style="bottom:104px;left:52px;font-size:9.5px;">
+        ...y el hash del bloque<br>conecta al Merkle tree... 🤓
+      </div>
+      <div class="bubble left" id="bub-cripto3" style="bottom:104px;left:52px;font-size:9.5px;">
+        ¿Por qué huele a humo? 🔥
+      </div>
+    </div>
+
+    <!-- ── CEMEN — confused student ── -->
+    <div class="brick-char" id="cemen">
+      <!-- Steam (confusion) -->
+      <div class="steam" id="steam1" style="top:-10px;left:8px;animation-delay:0s;"></div>
+      <div class="steam" id="steam2" style="top:-18px;left:28px;animation-delay:.6s;"></div>
+      <div class="steam" id="steam3" style="top:-8px;left:48px;animation-delay:1.1s;"></div>
+      <div class="body" id="cemen-body">
+        <div class="crack-c1" style="width:2px;height:16px;position:absolute;top:7px;left:18px;transform:rotate(14deg);"></div>
+        <div class="crack-c2" style="width:1px;height:12px;position:absolute;top:28px;right:12px;transform:rotate(-8deg);"></div>
+        <div class="eyes" style="margin-top:4px" id="cemen-eyes">
+          <div class="eye" style="width:19px;height:19px" id="ceye-l">
+            <div class="brow" style="transform:rotate(10deg)"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:19px;height:19px" id="ceye-r">
+            <div class="brow" style="transform:rotate(-10deg)"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-explain" id="cemen-mouth"></div>
+        <div class="beard-c"></div>
+      </div>
+      <div class="bubble right" id="bub-cemen1" style="bottom:80px;right:66px;font-size:10px;">
+        Ajá... sí... claro...<br>totalmente. 😵‍💫
+      </div>
+      <div class="bubble right" id="bub-cemen2" style="bottom:80px;right:66px;font-size:10px;">
+        ¡AAH!<br>...¿qué es un hash? 🤔
+      </div>
+      <div class="bubble right" id="bub-cemen3" style="bottom:80px;right:66px;font-size:10px;">
+        Ahh... ya entendí.<br>(no entendí nada) 😌
+      </div>
+    </div>
+
+    <!-- ── BLOQUE & TOKKO (audience, left) ── -->
+    <div class="brick-char" id="bloque">
+      <div class="hard-hat">
+        <div class="hat-dome"></div>
+        <div class="hat-brim"></div>
+      </div>
+      <div class="body">
+        <div class="eyes">
+          <div class="eye" style="width:18px;height:18px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:18px;height:18px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-shock" id="bloque-mouth"></div>
+      </div>
+    </div>
+    <div class="brick-char" id="tokko">
+      <div class="glasses-t">
+        <div class="lens-t"></div>
+        <div class="bridge-t"></div>
+        <div class="lens-t"></div>
+      </div>
+      <div class="body">
+        <div class="eyes">
+          <div class="eye" style="width:13px;height:13px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:13px;height:13px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-shock" id="tokko-mouth"></div>
+      </div>
+    </div>
+
+    <!-- ── LÍQUI ── -->
+    <div class="brick-char" id="liqui">
+      <div class="body">
+        <div class="shine-l"></div>
+        <div class="eyes" style="margin-top:12px">
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-smile" id="liqui-mouth" style="width:20px;height:10px;border-color:#225566;"></div>
+      </div>
+      <div class="bubble left" id="bub-liqui" style="bottom:98px;left:52px;font-size:10px;">
+        Permíteme. 😊
+      </div>
+    </div>
+
+    <div class="caption" id="caption"></div>
+
+  </div><!-- /scene-main -->
+
+  <!-- ══════════════ END CARD ══════════════ -->
+  <div class="scene card-scene" id="scene-end">
+    <div style="text-align:center">
+      <div class="tagline" id="tagline">
+        Tecnología blockchain.<br>
+        <span class="t-sky">Resultados reales.</span><br>
+        <span class="t-ice">ACCET.</span>
+      </div>
+      <div class="end-sep" id="end-sep"></div>
+      <div class="end-tags" id="end-tags">
+        <span class="etag">PROPIEDAD</span>
+        <span class="etag">→ TOKEN</span>
+        <span class="etag">→ RENDIMIENTO</span>
+        <span class="etag">ERC-3643</span>
+      </div>
+      <div class="end-brand" id="end-brand">ACCET</div>
+      <div class="end-info" id="end-info">Real Estate Tokenization · Blockchain para todos</div>
+    </div>
+  </div>
+
+  <button id="replay-btn" onclick="run()">↺ REPLAY</button>
+
+</div>
+<script>
+const TOTAL=30000;
+let timers=[],progInterval=null,t0=null;
+const $=id=>document.getElementById(id);
+
+function tick(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];if(progInterval)clearInterval(progInterval);}
+function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
+function caption(txt,dur=2600){const el=$('caption');el.textContent=txt;el.style.opacity='1';tick(dur,()=>el.style.opacity='0');}
+function bubble(id,dur=2400){const el=$(id);el.style.opacity='1';tick(dur,()=>el.style.opacity='0');}
+
+/* ═══ CANVAS CHALK DRAWING ENGINE ═══ */
+let ctx=null,W=0,H=0;
+let drawTimer=null;
+
+function initCanvas(){
+  const canvas=$('chalk-canvas');
+  const board=$('board');
+  W=board.clientWidth;H=board.clientHeight;
+  canvas.width=W;canvas.height=H;
+  ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+}
+
+// Chalk line style
+function chalkStyle(col,sz){
+  ctx.strokeStyle=col||'rgba(220,215,200,.85)';
+  ctx.lineWidth=sz||2.2;
+  ctx.lineCap='round';
+  ctx.lineJoin='round';
+  ctx.shadowColor='rgba(220,215,200,.2)';
+  ctx.shadowBlur=1.5;
+}
+
+// Draw a node (circle+label)
+function drawNode(x,y,r,label,col){
+  col=col||'rgba(220,215,200,.75)';
+  ctx.beginPath();
+  ctx.arc(x,y,r,0,Math.PI*2);
+  ctx.strokeStyle=col;
+  ctx.lineWidth=1.8;
+  ctx.shadowBlur=2;
+  ctx.stroke();
+  ctx.font=`bold ${r*.7}px JetBrains Mono, monospace`;
+  ctx.fillStyle=col;
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+  ctx.fillText(label,x,y);
+}
+
+// Draw arrow
+function drawArrow(x1,y1,x2,y2,col){
+  col=col||'rgba(180,175,160,.65)';
+  chalkStyle(col,1.6);
+  ctx.beginPath();ctx.moveTo(x1,y1);ctx.lineTo(x2,y2);ctx.stroke();
+  const a=Math.atan2(y2-y1,x2-x1);
+  const hs=7;
+  ctx.beginPath();
+  ctx.moveTo(x2,y2);
+  ctx.lineTo(x2-hs*Math.cos(a-0.45),y2-hs*Math.sin(a-0.45));
+  ctx.lineTo(x2-hs*Math.cos(a+0.45),y2-hs*Math.sin(a+0.45));
+  ctx.closePath();ctx.fillStyle=col;ctx.fill();
+}
+
+// Draw scribble text
+function chalkText(x,y,txt,sz,col){
+  ctx.font=`${sz||10}px JetBrains Mono,monospace`;
+  ctx.fillStyle=col||'rgba(210,205,190,.7)';
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.shadowColor='rgba(220,215,200,.15)';ctx.shadowBlur=1;
+  ctx.fillText(txt,x,y);
+}
+
+// Phase 1: Simple diagram
+function drawPhase1(){
+  const cx=W/2,cy=H/2;
+  drawNode(cx,cy,22,'BLOCK','rgba(94,200,242,.8)');
+  drawArrow(cx+24,cy,cx+70,cy);
+  drawNode(cx+88,cy,18,'TX','rgba(94,200,242,.65)');
+  chalkText(cx,cy-38,'Blockchain',9,'rgba(220,215,200,.5)');
+}
+
+// Phase 2: Growing chaos — more nodes and arrows sprawling
+function drawPhase2(){
+  const cx=W/2,cy=H/2;
+  // Central nodes
+  drawNode(cx,cy,22,'BLOCK','rgba(94,200,242,.75)');
+  drawArrow(cx+24,cy,cx+65,cy-12);
+  drawNode(cx+82,cy-18,16,'TX','rgba(94,200,242,.6)');
+  drawArrow(cx+98,cy-22,cx+140,cy-8);
+  drawNode(cx+155,cy-12,14,'HASH','rgba(200,180,140,.65)');
+  drawArrow(cx,cy-24,cx-10,cy-65);
+  drawNode(cx-12,cy-80,18,'NODE','rgba(180,210,160,.6)');
+  drawArrow(cx-12,cy-62,cx-55,cy-50);
+  drawNode(cx-70,cy-52,13,'P2P','rgba(200,190,140,.5)');
+  chalkText(cx-20,cy+34,'consensus',8,'rgba(200,195,180,.45)');
+  chalkText(cx+90,cy+28,'nonce?',7,'rgba(200,195,180,.4)');
+  // Labels getting smaller / chaos
+  chalkText(cx-55,cy-14,'proof of',7,'rgba(200,195,180,.35)');
+  chalkText(cx-55,cy-5,'work',7,'rgba(200,195,180,.35)');
+}
+
+// Phase 3: Full chaos — spilling off edges
+function drawPhase3(){
+  drawPhase2();
+  const cx=W/2,cy=H/2;
+  // Even more sprawl
+  drawArrow(cx+155,cy-18,cx+W*.32,cy-32);
+  drawNode(cx+W*.34,cy-28,12,'ERC','rgba(94,200,242,.55)');
+  drawArrow(cx+W*.34+14,cy-30,cx+W*.34+50,cy-42);
+  drawNode(cx+W*.35+50,cy-38,11,'3643','rgba(94,200,242,.5)');
+  drawArrow(cx-70,cy-38,cx-105,cy-28);
+  drawNode(cx-115,cy-22,12,'IPFS','rgba(180,210,160,.5)');
+  drawArrow(cx-12,cy-98,cx,cy-120);
+  drawNode(cx+2,cy-130,14,'DLT','rgba(200,190,140,.55)');
+  // Wild annotation lines going toward edges
+  chalkStyle('rgba(180,175,160,.3)',1);
+  ctx.beginPath();ctx.moveTo(cx+160,cy-12);ctx.lineTo(W-8,cy-55);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx-110,cy-22);ctx.lineTo(5,cy-90);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,cy-130);ctx.lineTo(cx-40,6);ctx.stroke();
+  // Label storm
+  const labels=['Merkle tree','sharding','gas fees','PoS','L2','zk-rollup','validator'];
+  labels.forEach((l,i)=>{
+    const lx=15+Math.random()*(W-30);
+    const ly=8+Math.random()*(H-16);
+    chalkText(lx,ly,l,6+i%3,'rgba(200,195,180,.28)');
+  });
+  chalkText(W/2,H-12,'???',8,'rgba(200,195,180,.25)');
+}
+
+/* ─── FLAME SYSTEM ─── */
+let flameInterval=null;
+function startFlames(){
+  const cont=$('flames-container');
+  flameInterval=setInterval(()=>{
+    const el=document.createElement('div');
+    el.className='flame';
+    el.textContent=['🔥','🔥','🔥','💥','🔥'][Math.floor(Math.random()*5)];
+    el.style.left=(5+Math.random()*90)+'%';
+    el.style.bottom='0';
+    el.style.fontSize=(16+Math.random()*18)+'px';
+    el.style.animationDuration=(1.0+Math.random()*.8)+'s';
+    el.style.animationDelay=(Math.random()*.3)+'s';
+    cont.appendChild(el);
+    setTimeout(()=>el.remove(),2200);
+  },180);
+}
+function stopFlames(){if(flameInterval)clearInterval(flameInterval);}
+
+/* ─── QUESTION MARKS ─── */
+function spawnQ(char,delay,txt='?'){
+  tick(delay,()=>{
+    const q=document.createElement('div');
+    q.className='qmark';
+    q.textContent=txt;
+    q.style.cssText=`font-size:${14+Math.random()*10}px;top:${-5-Math.random()*20}px;left:${-5+Math.random()*50}px;`;
+    char.appendChild(q);
+    tick(1600,()=>q.remove());
+  });
+}
+
+/* ─── STEAM ─── */
+let steamOn=false;
+function startSteam(){
+  steamOn=true;
+  ['steam1','steam2','steam3'].forEach((id,i)=>{
+    const el=$(id);
+    el.textContent='💭';
+    el.style.opacity='1';
+    el.style.animationPlayState='running';
+  });
+}
+function stopSteam(){
+  ['steam1','steam2','steam3'].forEach(id=>{
+    $(id).style.opacity='0';
+    $(id).style.animationPlayState='paused';
+  });
+}
+
+/* ─── CONFETTI ─── */
+function confetti(n=55){
+  const stage=document.getElementById('stage');
+  const cols=['#5EC8F2','#5ED7F2','#377D8C','#ffaa00','#ffffff','#b0e0f5'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');el.className='conf';
+    const w=Math.random()*10+3,h=Math.random()>.5?w:w*2.2;
+    const col=cols[Math.floor(Math.random()*cols.length)];
+    const sx=15+Math.random()*70,delay=Math.random()*600,dur=900+Math.random()*1300,dx=(Math.random()-.5)*100;
+    el.style.cssText=`width:${w}px;height:${h}px;background:${col};left:${sx}%;top:15%;border-radius:${Math.random()>.5?'50%':'2px'};opacity:1;`;
+    stage.appendChild(el);
+    setTimeout(()=>{
+      el.style.transition=`transform ${dur}ms ease-in,opacity ${dur}ms ease-in`;
+      el.style.transform=`translate(${dx}px,${260+Math.random()*200}px) rotate(${Math.random()*700}deg)`;
+      el.style.opacity='0';
+      setTimeout(()=>el.remove(),dur+100);
+    },delay+30);
+  }
+}
+
+function resetState(){
+  // Canvas
+  if(ctx) ctx.clearRect(0,0,W,H);
+  // Board
+  $('board').style.background='var(--board)';
+  $('fire-overlay').classList.remove('on');
+  $('flames-container').innerHTML='';
+  $('eraser').classList.remove('sweeping');
+  $('eraser').style.opacity='0';
+  // Formula
+  $('formula-board').style.opacity='0';
+  ['fb1','fb2','fb3','fa1','fa2'].forEach(id=>{
+    $(id).classList.remove('show');
+  });
+  // Characters
+  $('cripto').style.cssText='position:absolute;bottom:36%;left:-120px;z-index:10;transition:none;';
+  $('cripto-body').style.animation='';
+  $('cripto-mouth').className='mouth-explain';
+  $('pointer').style.opacity='0';
+  $('chalk-piece').style.opacity='0';
+  ['bub-cripto1','bub-cripto2','bub-cripto3'].forEach(id=>{$(id).style.opacity='0';});
+
+  $('cemen').style.cssText='position:absolute;bottom:36%;right:-120px;z-index:9;transition:none;';
+  $('cemen-body').style.animation='';
+  $('cemen-mouth').className='mouth-explain';
+  stopSteam();
+  ['bub-cemen1','bub-cemen2','bub-cemen3'].forEach(id=>{$(id).style.opacity='0';});
+  const eyes=[$('ceye-l'),$('ceye-r')];
+  eyes.forEach(e=>{e.className='eye';e.style.background='white';});
+
+  $('bloque').style.cssText='position:absolute;bottom:36%;left:-100px;z-index:8;transition:none;';
+  $('tokko').style.cssText='position:absolute;bottom:36%;left:-160px;z-index:7;transition:none;';
+
+  $('liqui').style.cssText='position:absolute;bottom:36%;right:-120px;z-index:11;transition:none;';
+  $('bub-liqui').style.opacity='0';
+
+  $('room-glow').style.opacity='0';
+  $('caption').style.opacity='0';
+  $('replay-btn').classList.remove('show');
+  $('prog').style.width='0%';
+
+  $('tagline').style.opacity='0';$('tagline').style.transform='translateY(18px)';
+  $('end-sep').style.opacity='0';$('end-tags').style.opacity='0';
+  $('end-brand').style.opacity='0';$('end-info').style.opacity='0';
+
+  document.querySelectorAll('.conf,.qmark,.flame').forEach(el=>el.remove());
+  stopFlames();
+}
+
+// ════════════════════════════════════════
+//  MAIN ANIMATION — 30 Seconds
+// ════════════════════════════════════════
+function run(){
+  clearAll();resetState();
+  tick(50,initCanvas); // init canvas after reset
+  t0=Date.now();
+
+  progInterval=setInterval(()=>{
+    const pct=Math.min(((Date.now()-t0)/TOTAL)*100,100);
+    $('prog').style.width=pct+'%';
+    if(pct>=100)clearInterval(progInterval);
+  },60);
+
+  show('scene-intro');
+
+  // ── INTRO: 0–2400ms ──────────────────────────────────
+  tick(2400,()=>{
+    show('scene-main');
+    tick(80,initCanvas);
+
+    // ◆ BEAT 1 — Cripto entra al pizarrón (0–2500ms rel)
+    $('cripto').style.transition='left .75s cubic-bezier(.34,1.56,.64,1)';
+    $('cripto').style.left='12%';
+
+    // Cemen entra como estudiante
+    tick(400,()=>{
+      $('cemen').style.transition='right .7s cubic-bezier(.34,1.56,.64,1)';
+      $('cemen').style.right='14%';
+    });
+
+    // Audience (Bloque y Tokko) entran
+    tick(600,()=>{
+      $('bloque').style.transition='left .65s cubic-bezier(.34,1.56,.64,1)';
+      $('bloque').style.left='3%';
+    });
+    tick(800,()=>{
+      $('tokko').style.transition='left .6s cubic-bezier(.34,1.56,.64,1)';
+      $('tokko').style.left='13%';
+    });
+
+    tick(1000,()=>{
+      $('pointer').style.opacity='1';
+      $('chalk-piece').style.opacity='1';
+      $('pointer').style.animation='point-gesture .9s ease-in-out infinite';
+      caption('Cripto frente al pizarrón. "Es sencillo." 📝',2600);
+      bubble('bub-cripto1',2600);
+    });
+
+    // ◆ BEAT 2 — Phase 1 drawing (2500ms rel)
+    tick(2500,()=>{
+      caption('Fase 1: Un diagrama simple. Funciona. 👍',1800);
+      tick(200,()=>drawPhase1());
+    });
+
+    // ◆ BEAT 3 — Cemen entiende... tal vez (4500ms rel)
+    tick(4500,()=>{
+      $('cemen-mouth').className='mouth-explain';
+      bubble('bub-cemen1',2400);
+      caption('Cemen: "Ajá, sí, claro, totalmente..." 😵‍💫',2400);
+      startSteam();
+      spawnQ($('cemen'),400,'?');
+      spawnQ($('cemen'),900,'??');
+    });
+
+    // ◆ BEAT 4 — Diagram grows (6800ms rel)
+    tick(6800,()=>{
+      ctx.clearRect(0,0,W,H);
+      drawPhase2();
+      $('cripto-mouth').className='mouth-proud';
+      bubble('bub-cripto2',2600);
+      caption('Cripto: "...y el hash del bloque conecta al Merkle tree..." 🤓',2600);
+
+      // Cemen spiral eyes START
+      tick(800,()=>{
+        $('cemen-body').style.animation='wobble-confused .6s ease-in-out infinite';
+        const el=$('ceye-l');
+        el.className='eye eye-spin';
+        el.style.width='19px';el.style.height='19px';
+        spawnQ($('cemen'),100,'???');
+        spawnQ($('cemen'),600,'???');
+        spawnQ($('cemen'),1100,'!??');
+      });
+    });
+
+    // ◆ BEAT 5 — Full chaos, spilling out (9800ms rel)
+    tick(9800,()=>{
+      ctx.clearRect(0,0,W,H);
+      drawPhase3();
+      caption('El diagrama ESCAPA del pizarrón... 📉💥',2200);
+
+      // Both Cemen eyes spiral
+      tick(300,()=>{
+        const er=$('ceye-r');
+        er.className='eye eye-spin';er.style.width='19px';er.style.height='19px';
+        $('cemen-mouth').className='mouth-shock';
+        bubble('bub-cemen2',2400);
+        caption('Cemen ve el Merkle tree... y el Merkle tree le devuelve la mirada 🌀',2600);
+      });
+    });
+
+    // ◆ BEAT 6 — FIRE! (12200ms rel)
+    tick(12200,()=>{
+      stopSteam();
+      $('fire-overlay').classList.add('on');
+      $('board').style.background='linear-gradient(180deg,#1a2418 0%,#1e1a10 100%)';
+      startFlames();
+      $('cripto-mouth').className='mouth-shock';
+      bubble('bub-cripto3',2400);
+      caption('💥 EL PIZARRÓN SE INCENDIÓ ESPONTÁNEAMENTE 🔥',2200);
+
+      // Cripto recoil
+      $('cripto-body').style.animation='recoil .55s ease-in-out';
+      tick(600,()=>{ $('cripto-body').style.animation=''; });
+
+      // Cemen collapses confusion
+      $('cemen-body').style.animation='';
+    });
+
+    // ◆ BEAT 7 — Pausa dramática (14600ms rel)
+    tick(14600,()=>{
+      stopFlames();
+      $('fire-overlay').classList.remove('on');
+      $('flames-container').innerHTML='';
+      caption('...silencio. Todos miran el pizarrón carbonizado. 😶',2000);
+    });
+
+    // ◆ BEAT 8 — Líqui entra (16800ms rel)
+    tick(16800,()=>{
+      $('liqui').style.transition='right .85s cubic-bezier(.25,.46,.45,.94)';
+      $('liqui').style.right='14%';
+
+      tick(1000,()=>{
+        bubble('bub-liqui',2000);
+        caption('Líqui: "Permíteme." Y borra todo. 😊',2000);
+
+        // ERASE — eraser sweeps
+        tick(500,()=>{
+          $('eraser').style.opacity='1';
+          $('eraser').classList.add('sweeping');
+          tick(400,()=>{
+            ctx.clearRect(0,0,W,H);
+            $('eraser').style.opacity='0';
+            $('board').style.background='var(--board)';
+          });
+        });
+      });
+    });
+
+    // ◆ BEAT 9 — Simple formula appears (19500ms rel)
+    tick(19500,()=>{
+      caption('Propiedad → Token → Rendimiento. Eso es todo. ✨',2800);
+      $('formula-board').style.opacity='1';
+      $('room-glow').style.opacity='1';
+
+      // Staggered reveal of formula boxes
+      tick(300,()=>{  $('fb1').classList.add('show'); $('fa1').classList.add('show'); });
+      tick(700,()=>{  $('fb2').classList.add('show'); $('fa2').classList.add('show'); });
+      tick(1100,()=>{ $('fb3').classList.add('show'); });
+
+      // Fix Cemen eyes back to normal
+      [$('ceye-l'),$('ceye-r')].forEach(e=>{
+        e.className='eye';
+        e.style.background='white';
+        e.style.width='19px';e.style.height='19px';
+      });
+    });
+
+    // ◆ BEAT 10 — Cemen's famous AHH (22000ms rel)
+    tick(22000,()=>{
+      $('cemen-body').style.animation='nod-ahh .55s cubic-bezier(.34,1.56,.64,1)';
+      $('cemen-mouth').className='mouth-ahh';
+      bubble('bub-cemen3',2600);
+      caption('Cemen: "Ahh... ya entendí." (no entendió nada pero se ve muy seguro) 😌',2800);
+      tick(600,()=>{ $('cemen-body').style.animation=''; });
+
+      // Everyone reacts
+      tick(800,()=>{
+        confetti(55);
+        $('bloque-mouth').className='mouth-smile';
+        $('tokko-mouth').className='mouth-smile';
+      });
+    });
+
+  });// /scene-main
+
+  // ── END CARD: 26000ms absolute ────────────────────────
+  tick(26000,()=>{
+    show('scene-end');
+    const tg=$('tagline');
+    tg.style.transition='opacity .85s,transform .85s';
+    tick(60,()=>{tg.style.opacity='1';tg.style.transform='translateY(0)';});
+    tick(400,()=>{$('end-sep').style.transition='opacity .4s';$('end-sep').style.opacity='1';});
+    tick(500,()=>{$('end-tags').style.opacity='1';});
+    tick(700,()=>{$('end-brand').style.opacity='1';});
+    tick(900,()=>{$('end-info').style.opacity='1';});
+    tick(400,()=>confetti(40));
+    tick(2200,()=>$('replay-btn').classList.add('show'));
+    $('prog').style.width='100%';
+  });
+}
+
+// Inject keyframes
+const ks=document.createElement('style');
+ks.textContent=`
+@keyframes recoil{0%{transform:scale(1)}30%{transform:scale(1.1) rotate(-8deg) translateX(-5px)}60%{transform:scale(.95) rotate(5deg)}100%{transform:scale(1) rotate(0deg)}}
+@keyframes nod-ahh{0%{transform:translateY(0)}30%{transform:translateY(-10px) scale(1.05)}60%{transform:translateY(2px) scale(.97)}80%{transform:translateY(-4px)}100%{transform:translateY(0)}}
+@keyframes wobble-confused{0%,100%{transform:rotate(0deg)}20%{transform:rotate(-7deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-5deg)}80%{transform:rotate(4deg)}}
+@keyframes point-gesture{0%,100%{transform:rotate(-20deg)}50%{transform:rotate(-35deg) translateY(-3px)}}
+@keyframes mouth-smile{to{border-radius:12px 12px 0 0;}}
+`;
+document.head.appendChild(ks);
+
+window.addEventListener('load',()=>setTimeout(run,200));
+</script>
+</body>
+</html>

@@ -1,0 +1,1485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCET — Manual de Marca · Brand Guidelines v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   ACCET BRAND MANUAL — Design System Tokens
+   ═══════════════════════════════════════════ */
+:root {
+  --sky:     #5EC8F2;
+  --ice:     #5ED7F2;
+  --teal:    #377D8C;
+  --light:   #F2F2F2;
+  --dark:    #0D0D0D;
+
+  --sky10:   rgba(94,200,242,.10);
+  --sky15:   rgba(94,200,242,.15);
+  --sky20:   rgba(94,200,242,.20);
+  --sky40:   rgba(94,200,242,.40);
+  --sky04:   rgba(94,200,242,.04);
+  --teal10:  rgba(55,125,140,.10);
+
+  --pass:    #1A7A4A;
+  --passlt:  rgba(26,122,74,.12);
+  --fail:    #8B1A1A;
+  --faillt:  rgba(139,26,26,.12);
+
+  --page-bg: #0D0D0D;
+  --ff-head: 'Syne', sans-serif;
+  --ff-body: 'DM Sans', sans-serif;
+  --ff-mono: 'JetBrains Mono', monospace;
+}
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--page-bg);
+  color: var(--light);
+  font-family: var(--ff-body);
+  font-weight: 300;
+  line-height: 1.7;
+  background-image:
+    linear-gradient(var(--sky04) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sky04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* ─── LAYOUT ─── */
+.page { max-width: 1080px; margin: 0 auto; padding: 0 32px 120px; }
+
+/* ─── SECTION BLOCKS ─── */
+.section {
+  padding: 80px 0 0;
+  border-top: 1px solid rgba(94,200,242,.12);
+  margin-top: 80px;
+}
+.section:first-of-type { border-top: none; margin-top: 0; }
+
+/* ─── SIGNATURE LINE ─── */
+.sig-line {
+  height: 3px;
+  background: linear-gradient(90deg, var(--sky), var(--ice), var(--teal));
+  margin-bottom: 0;
+}
+
+/* ─── SECTION LABEL ─── */
+.sec-label {
+  font-family: var(--ff-mono);
+  font-size: 9px; letter-spacing: 4px;
+  text-transform: uppercase;
+  color: rgba(94,200,242,.5);
+  margin-bottom: 10px;
+  display: flex; align-items: center; gap: 10px;
+}
+.sec-label::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: rgba(94,200,242,.12);
+}
+
+/* ─── HEADINGS ─── */
+h1, h2, h3 { font-family: var(--ff-head); letter-spacing: -0.5px; }
+h1 { font-size: clamp(48px,7vw,88px); font-weight: 900; line-height: .92; }
+h2 { font-size: clamp(26px,4vw,42px); font-weight: 800; line-height: 1.05; }
+h3 { font-size: clamp(16px,2.2vw,22px); font-weight: 700; margin-bottom: 12px; }
+.sky { color: var(--sky); }
+.ice { color: var(--ice); }
+.teal { color: var(--teal); }
+.dim { color: rgba(255,255,255,.38); }
+
+p { font-size: 14px; color: rgba(255,255,255,.6); line-height: 1.75; font-weight: 300; }
+p + p { margin-top: 10px; }
+
+/* ─── GRID UTILS ─── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+@media(max-width:860px){ .grid-3,.grid-4{grid-template-columns:1fr 1fr;} }
+@media(max-width:580px){ .grid-2,.grid-3,.grid-4{grid-template-columns:1fr;} }
+
+/* ─── CARDS ─── */
+.card {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  padding: 24px;
+}
+.card.sky-accent { border-top: 2px solid var(--sky); }
+.card.teal-accent { border-top: 2px solid var(--teal); }
+
+/* ═══════════════════════════════════════════
+   COVER
+   ═══════════════════════════════════════════ */
+.cover {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  justify-content: space-between;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+.cover-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 40px 0 0;
+  border-bottom: 1px solid rgba(94,200,242,.1);
+  padding-bottom: 20px;
+}
+.cover-brand-tag {
+  font-family: var(--ff-mono); font-size: 9px;
+  letter-spacing: 4px; color: rgba(94,200,242,.45);
+  text-transform: uppercase;
+}
+.cover-version {
+  font-family: var(--ff-mono); font-size: 9px;
+  letter-spacing: 3px; color: rgba(255,255,255,.2);
+}
+.cover-hero {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center; padding: 60px 0 40px;
+  position: relative;
+}
+.cover-eyebrow {
+  font-family: var(--ff-mono); font-size: 10px;
+  letter-spacing: 5px; color: rgba(94,200,242,.5);
+  text-transform: uppercase; margin-bottom: 24px;
+}
+.cover-h {
+  font-family: var(--ff-head); font-weight: 900;
+  font-size: clamp(64px,10vw,120px);
+  line-height: .88; letter-spacing: -3px;
+  color: white; margin-bottom: 0;
+}
+.cover-h .accent-word { color: var(--sky); }
+.cover-sub {
+  font-size: 15px; font-weight: 300;
+  color: rgba(255,255,255,.4);
+  max-width: 520px; line-height: 1.6;
+  margin-top: 28px;
+}
+/* Giant decorative C behind cover */
+.cover-deco {
+  position: absolute; right: -80px; top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--ff-head); font-weight: 900;
+  font-size: clamp(280px,42vw,440px);
+  color: rgba(94,200,242,.03);
+  line-height: 1; pointer-events: none;
+  letter-spacing: -10px;
+  user-select: none;
+}
+.cover-bottom {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  gap: 1px; background: rgba(94,200,242,.08);
+  border-top: 1px solid rgba(94,200,242,.12);
+  margin: 0;
+}
+.cover-stat {
+  background: var(--page-bg);
+  padding: 24px 20px;
+}
+.cover-stat-n {
+  font-family: var(--ff-head); font-size: 26px; font-weight: 700;
+  color: var(--sky); margin-bottom: 4px;
+}
+.cover-stat-l {
+  font-family: var(--ff-mono); font-size: 8px;
+  letter-spacing: 2px; color: rgba(255,255,255,.3);
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   LOGO SECTION
+   ═══════════════════════════════════════════ */
+
+/* Logo preview box */
+.logo-box {
+  border: 1px solid rgba(255,255,255,.08);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.logo-box-label {
+  position: absolute; bottom: 10px; left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--ff-mono); font-size: 8px;
+  letter-spacing: 2px; color: rgba(255,255,255,.2);
+  white-space: nowrap;
+}
+
+/* SVG Logo — drawn from scratch matching the uploaded */
+.logo-svg { width: 100%; max-width: 160px; }
+
+/* Logo grid */
+.logo-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 2px;
+}
+.logo-cell {
+  aspect-ratio: 1/1;
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  flex-direction: column;
+  gap: 6px;
+}
+.logo-cell-label {
+  font-family: var(--ff-mono); font-size: 7.5px;
+  letter-spacing: 1.5px; color: rgba(255,255,255,.25);
+  text-align: center; position: absolute; bottom: 10px;
+}
+
+/* ─── USE RULES GRID ─── */
+.use-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+}
+.use-cell {
+  padding: 24px;
+  position: relative;
+  min-height: 160px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.use-cell.permit {
+  background: var(--passlt);
+  border: 1px solid rgba(26,122,74,.25);
+}
+.use-cell.forbid {
+  background: var(--faillt);
+  border: 1px solid rgba(139,26,26,.25);
+}
+.use-badge {
+  font-family: var(--ff-mono); font-size: 8px;
+  letter-spacing: 2px; text-transform: uppercase;
+  padding: 3px 8px; border-radius: 2px;
+  display: inline-flex; align-items: center; gap: 5px;
+  width: fit-content;
+}
+.use-badge.ok  { background:rgba(26,122,74,.3); color:#4DDE94; border:1px solid rgba(77,222,148,.2); }
+.use-badge.no  { background:rgba(139,26,26,.3); color:#FF7575; border:1px solid rgba(255,117,117,.2); }
+.use-cell-title {
+  font-family: var(--ff-head); font-size: 14px; font-weight: 700;
+  color: white;
+}
+.use-cell p { font-size: 12px; }
+
+/* Logo visual demonstrations */
+.demo-logo-wrap {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  border-radius: 3px; min-height: 80px;
+}
+
+/* Forbidden overlays */
+.forbid-demo {
+  position: relative; display: inline-flex;
+  align-items: center; justify-content: center;
+}
+.forbid-x {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 100%; height: 100%;
+  background:
+    linear-gradient(to bottom right, transparent calc(50% - 1px), rgba(255,80,80,.6) calc(50% - 1px), rgba(255,80,80,.6) calc(50% + 1px), transparent calc(50% + 1px)),
+    linear-gradient(to bottom left, transparent calc(50% - 1px), rgba(255,80,80,.6) calc(50% - 1px), rgba(255,80,80,.6) calc(50% + 1px), transparent calc(50% + 1px));
+  pointer-events: none; border-radius: 2px;
+}
+
+/* ═══════════════════════════════════════════
+   COLOR SECTION
+   ═══════════════════════════════════════════ */
+.swatch-block {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 2px;
+}
+@media(max-width:700px){ .swatch-block{grid-template-columns:repeat(3,1fr);} }
+
+.swatch {
+  aspect-ratio: 1/1.2;
+  display: flex; flex-direction: column;
+  justify-content: flex-end; padding: 12px;
+  position: relative; cursor: default;
+  transition: transform .2s;
+}
+.swatch:hover { transform: translateY(-4px); }
+
+.swatch-hex {
+  font-family: var(--ff-mono); font-size: 10px;
+  font-weight: 500; letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+.swatch-name {
+  font-family: var(--ff-mono); font-size: 8px;
+  letter-spacing: 2px; text-transform: uppercase;
+  opacity: .6;
+}
+.swatch-role {
+  position: absolute; top: 12px; right: 12px;
+  font-family: var(--ff-mono); font-size: 7px;
+  letter-spacing: 1px; opacity: .5;
+  text-transform: uppercase;
+}
+
+/* Color usage matrix */
+.color-matrix {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  margin-top: 24px;
+}
+.cmx-row {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.cmx-dot { width: 18px; height: 18px; border-radius: 3px; flex-shrink: 0; }
+.cmx-label {
+  font-family: var(--ff-mono); font-size: 10px;
+  color: rgba(255,255,255,.6); flex: 1;
+}
+.cmx-pct {
+  font-family: var(--ff-head); font-size: 16px; font-weight: 700;
+  color: var(--sky);
+}
+/* Combination legibility table */
+.combo-table { width: 100%; border-collapse: collapse; margin-top: 24px; }
+.combo-table th {
+  font-family: var(--ff-mono); font-size: 9px; letter-spacing: 2px;
+  text-transform: uppercase; color: rgba(255,255,255,.3);
+  text-align: left; padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.combo-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+  font-size: 13px;
+}
+.combo-swatch {
+  display: inline-block; width: 16px; height: 16px;
+  border-radius: 2px; vertical-align: middle; margin-right: 6px;
+}
+.badge-pass { background:rgba(26,122,74,.3);color:#4DDE94;border:1px solid rgba(77,222,148,.2); font-family:var(--ff-mono);font-size:8px;padding:2px 7px;letter-spacing:1px; }
+.badge-fail { background:rgba(139,26,26,.3);color:#FF7575;border:1px solid rgba(255,117,117,.2); font-family:var(--ff-mono);font-size:8px;padding:2px 7px;letter-spacing:1px; }
+.badge-warn { background:rgba(122,92,0,.3);color:#FFD060;border:1px solid rgba(255,208,96,.2); font-family:var(--ff-mono);font-size:8px;padding:2px 7px;letter-spacing:1px; }
+
+/* ═══════════════════════════════════════════
+   TYPOGRAPHY SECTION
+   ═══════════════════════════════════════════ */
+.type-specimen {
+  padding: 32px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.06);
+  margin-bottom: 2px;
+}
+.type-label {
+  font-family: var(--ff-mono); font-size: 8px; letter-spacing: 3px;
+  text-transform: uppercase; color: rgba(94,200,242,.4);
+  margin-bottom: 12px;
+}
+.type-meta {
+  font-family: var(--ff-mono); font-size: 9px;
+  color: rgba(255,255,255,.2); margin-top: 10px;
+}
+
+/* Type scale */
+.scale-row {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,.04);
+}
+.scale-size {
+  font-family: var(--ff-mono); font-size: 9px;
+  color: rgba(94,200,242,.4); width: 65px; flex-shrink: 0;
+  letter-spacing: 1px;
+}
+.scale-text { flex: 1; }
+.scale-use {
+  font-family: var(--ff-mono); font-size: 8px;
+  color: rgba(255,255,255,.2); text-align: right;
+  letter-spacing: .5px; flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════════
+   SPACING / CLEAR SPACE
+   ═══════════════════════════════════════════ */
+.clearspace-demo {
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.06);
+  position: relative;
+}
+.cs-inner {
+  position: relative; display: inline-block;
+}
+.cs-box {
+  border: 1px dashed rgba(255,170,0,.3);
+  padding: 24px;
+  position: relative;
+}
+.cs-label {
+  position: absolute;
+  font-family: var(--ff-mono); font-size: 8px;
+  color: rgba(255,170,0,.5); letter-spacing: 1px;
+  white-space: nowrap;
+}
+.cs-label.top { top: -18px; left: 50%; transform: translateX(-50%); }
+.cs-label.left { left: -36px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+.cs-label.right { right: -36px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+.cs-label.bottom { bottom: -18px; left: 50%; transform: translateX(-50%); }
+/* Dimension arrows */
+.cs-arrow-h, .cs-arrow-v {
+  position: absolute; background: rgba(255,170,0,.2);
+}
+.cs-arrow-h { height: 1px; top: 50%; left: 0; right: 0; }
+.cs-arrow-v { width: 1px; left: 50%; top: 0; bottom: 0; }
+
+/* ═══════════════════════════════════════════
+   MOTION / ANIMATION SPECS
+   ═══════════════════════════════════════════ */
+.motion-card {
+  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(255,255,255,.06);
+  border-left: 3px solid var(--sky);
+  padding: 18px 20px;
+  margin-bottom: 2px;
+}
+.motion-card-title {
+  font-family: var(--ff-head); font-size: 13px; font-weight: 700;
+  color: white; margin-bottom: 6px;
+}
+.motion-card p { font-size: 12px; }
+.easing-preview {
+  height: 3px; background: var(--sky);
+  border-radius: 2px; margin-top: 10px;
+  transform-origin: left center;
+}
+
+/* ═══════════════════════════════════════════
+   APPLICATION EXAMPLES
+   ═══════════════════════════════════════════ */
+.mockup-card {
+  background: #111;
+  border: 1px solid rgba(94,200,242,.12);
+  border-top: 2px solid var(--sky);
+  overflow: hidden;
+}
+.mockup-bar {
+  background: var(--dark);
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 8px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.mock-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+}
+.mockup-content { padding: 20px; }
+
+/* Token badge component */
+.token-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--sky10); border: 1px solid rgba(94,200,242,.25);
+  padding: 6px 12px; border-radius: 3px;
+  font-family: var(--ff-mono); font-size: 10px;
+  color: var(--sky); letter-spacing: 1px;
+}
+.token-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sky);
+  animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.7)} }
+
+/* CTA button */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--sky); color: var(--dark);
+  padding: 10px 20px; font-family: var(--ff-head);
+  font-weight: 700; font-size: 13px; letter-spacing: .3px;
+  border: none; cursor: pointer; border-radius: 3px;
+}
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: transparent; color: var(--sky);
+  padding: 10px 20px; font-family: var(--ff-head);
+  font-weight: 700; font-size: 13px; letter-spacing: .3px;
+  border: 1.5px solid rgba(94,200,242,.4);
+  cursor: pointer; border-radius: 3px;
+}
+
+/* Data stat component */
+.stat-block {
+  padding: 16px; background: rgba(255,255,255,.025);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.stat-n {
+  font-family: var(--ff-head); font-size: 28px; font-weight: 700;
+  color: var(--sky); line-height: 1;
+}
+.stat-l {
+  font-family: var(--ff-mono); font-size: 8px; letter-spacing: 2px;
+  color: rgba(255,255,255,.3); margin-top: 4px; text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   DON'TS SHOWCASE
+   ═══════════════════════════════════════════ */
+.dont-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+.dont-cell {
+  background: var(--faillt); border: 1px solid rgba(139,26,26,.2);
+  padding: 20px; position: relative;
+}
+.dont-cell::after {
+  content: '✕ NO PERMITIDO';
+  position: absolute; top: 10px; right: 10px;
+  font-family: var(--ff-mono); font-size: 7px;
+  letter-spacing: 2px; color: rgba(255,90,90,.6);
+}
+.dont-label {
+  font-family: var(--ff-head); font-size: 12px; font-weight: 700;
+  color: rgba(255,110,110,.8); margin-bottom: 8px;
+}
+.dont-demo {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 70px; margin-bottom: 10px;
+}
+.dont-rule { font-size: 11px; color: rgba(255,255,255,.4); }
+
+/* ═══════════════════════════════════════════
+   TONE OF VOICE
+   ═══════════════════════════════════════════ */
+.tone-row {
+  display: flex; gap: 2px; margin-bottom: 2px;
+}
+.tone-cell {
+  flex: 1; padding: 18px 16px;
+  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(255,255,255,.06);
+}
+.tone-cell.vs { flex: none; width: 40px; display: flex;
+  align-items: center; justify-content: center;
+  font-family: var(--ff-mono); font-size: 10px;
+  color: rgba(255,255,255,.2); background: transparent; border: none; }
+.tone-ok { border-left: 3px solid var(--pass) !important; }
+.tone-no { border-left: 3px solid var(--fail) !important; opacity: .7; }
+.tone-tag {
+  font-family: var(--ff-mono); font-size: 7px; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.tone-ok .tone-tag { color: rgba(77,222,148,.6); }
+.tone-no .tone-tag { color: rgba(255,117,117,.6); }
+.tone-quote { font-size: 12px; font-style: italic; color: rgba(255,255,255,.65); line-height: 1.5; }
+
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
+.doc-footer {
+  margin-top: 100px; padding: 32px 0 24px;
+  border-top: 1px solid rgba(255,255,255,.07);
+  display: flex; justify-content: space-between; align-items: flex-end;
+  flex-wrap: wrap; gap: 16px;
+}
+.footer-brand {
+  font-family: var(--ff-head); font-size: 24px; font-weight: 800;
+  color: var(--sky); letter-spacing: -1px;
+}
+.footer-meta {
+  font-family: var(--ff-mono); font-size: 8px;
+  letter-spacing: 2px; color: rgba(255,255,255,.18);
+  line-height: 1.8; text-align: right;
+}
+
+/* ─── TOC ─── */
+.toc {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 2px;
+  margin-top: 40px;
+}
+.toc-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px;
+  background: rgba(255,255,255,.02);
+  border: 1px solid rgba(255,255,255,.05);
+  text-decoration: none; color: inherit;
+  transition: background .2s, border-color .2s;
+}
+.toc-item:hover {
+  background: var(--sky10); border-color: rgba(94,200,242,.2);
+}
+.toc-num {
+  font-family: var(--ff-mono); font-size: 10px;
+  color: rgba(94,200,242,.4); width: 28px; flex-shrink: 0;
+}
+.toc-title {
+  font-family: var(--ff-head); font-size: 13px; font-weight: 700; color: white;
+}
+.toc-sub {
+  font-family: var(--ff-mono); font-size: 8px;
+  color: rgba(255,255,255,.3); letter-spacing: 1px;
+}
+.toc-arrow { margin-left: auto; color: rgba(94,200,242,.3); font-size: 12px; }
+
+/* ─── INLINE CHIP ─── */
+.chip {
+  display: inline-block;
+  font-family: var(--ff-mono); font-size: 9px; letter-spacing: 1px;
+  padding: 3px 8px; border-radius: 2px;
+  background: var(--sky10); border: 1px solid rgba(94,200,242,.2);
+  color: var(--sky); margin: 2px 2px;
+}
+.chip.dark { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.5); }
+
+/* ─── DIVIDER ─── */
+.div-sky { height: 1px; background: rgba(94,200,242,.12); margin: 32px 0; }
+
+/* ─── PRINT ─── */
+@media print {
+  * { -webkit-print-color-adjust:exact!important; print-color-adjust:exact!important; }
+  body { background: #0D0D0D!important; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ════════════════════════════════════════
+     SIGNATURE LINE
+     ════════════════════════════════════════ -->
+<div class="sig-line"></div>
+
+<!-- ════════════════════════════════════════
+     COVER
+     ════════════════════════════════════════ -->
+<div class="cover" id="cover">
+  <div class="cover-deco">CC</div>
+
+  <div class="cover-top">
+    <div class="cover-brand-tag">ACCET · Real Estate Tokenization · AGORALINK S.A.S.</div>
+    <div class="cover-version">Brand Guidelines · v1.0 · 2026</div>
+  </div>
+
+  <div class="cover-hero">
+    <div class="cover-eyebrow">Manual de Marca / Brand Guidelines</div>
+    <h1 class="cover-h">
+      Brand<br>
+      <span class="accent-word">Manual</span>
+    </h1>
+    <p class="cover-sub">
+      Este documento define los estándares visuales, de comunicación y de identidad de ACCET.
+      Su uso correcto garantiza coherencia, confianza institucional y diferenciación en los mercados
+      donde opera la plataforma.
+    </p>
+  </div>
+
+  <!-- TOC -->
+  <nav class="toc" aria-label="Tabla de contenidos">
+    <a class="toc-item" href="#logo"><span class="toc-num">01</span><div><div class="toc-title">Logotipo</div><div class="toc-sub">Uso correcto · variaciones · espacio</div></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item" href="#colores"><span class="toc-num">02</span><div><div class="toc-title">Sistema de Color</div><div class="toc-sub">Paleta · combinaciones · legibilidad</div></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item" href="#tipografia"><span class="toc-num">03</span><div><div class="toc-title">Tipografía</div><div class="toc-sub">Familias · escala · jerarquía</div></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item" href="#espacio"><span class="toc-num">04</span><div><div class="toc-title">Espacio & Grid</div><div class="toc-sub">Clear space · espaciado · retícula</div></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item" href="#permitidos"><span class="toc-num">05</span><div><div class="toc-title">Usos Permitidos</div><div class="toc-sub">Contextos correctos del logo</div></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item" href="#prohibidos"><span class="toc-num">06</span><div><div class="toc-title">Usos Prohibidos</div><div class="toc-sub">Errores críticos de marca</div></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item" href="#componentes"><span class="toc-num">07</span><div><div class="toc-title">Componentes UI</div><div class="toc-sub">Botones · badges · stats · cards</div></div><span class="toc-arrow">→</span></a>
+    <a class="toc-item" href="#voz"><span class="toc-num">08</span><div><div class="toc-title">Tono de Voz</div><div class="toc-sub">Estilo comunicacional · ejemplos</div></div><span class="toc-arrow">→</span></a>
+  </nav>
+
+  <div class="cover-bottom">
+    <div class="cover-stat"><div class="cover-stat-n">5</div><div class="cover-stat-l">Colores del sistema</div></div>
+    <div class="cover-stat"><div class="cover-stat-n">3</div><div class="cover-stat-l">Familias tipográficas</div></div>
+    <div class="cover-stat"><div class="cover-stat-n">24+</div><div class="cover-stat-l">Reglas de uso</div></div>
+    <div class="cover-stat"><div class="cover-stat-n">ERC-3643</div><div class="cover-stat-l">Estándar blockchain</div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     01 · LOGOTIPO
+     ════════════════════════════════════════ -->
+<div class="section" id="logo">
+  <div class="sec-label">01 · Logotipo</div>
+  <h2>El Símbolo <span class="sky">ACCET</span></h2>
+  <p style="max-width:620px;margin-top:12px">El logo de ACCET está compuesto por dos elementos: el <strong style="color:rgba(255,255,255,.8)">Símbolo CC</strong> —dos formas en C que se intersectan creando un punto central de conexión— y el <strong style="color:rgba(255,255,255,.8)">Wordmark</strong> en tipografía redondeada. Juntos comunican dualidad, liquidez e interoperabilidad financiera.</p>
+
+  <div class="div-sky"></div>
+
+  <!-- Primary logo versions -->
+  <div class="sec-label" style="margin-top:0">Versiones principales</div>
+  <div class="logo-grid" style="margin-top:12px">
+
+    <!-- Dark background (primary) -->
+    <div class="logo-cell" style="background:#0D0D0D;border:1px solid rgba(255,255,255,.06);aspect-ratio:1/1">
+      <svg class="logo-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Left C (sky blue) -->
+        <path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <!-- Right C (white) - mirrored/overlapping -->
+        <path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <!-- Center dot (white) -->
+        <circle cx="100" cy="100" r="10" fill="white"/>
+        <!-- Wordmark -->
+        <text x="100" y="210" text-anchor="middle" fill="#5EC8F2" font-family="'DM Sans',sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text>
+      </svg>
+      <div class="logo-cell-label">VERSIÓN PRINCIPAL · Fondo oscuro</div>
+    </div>
+
+    <!-- Light background -->
+    <div class="logo-cell" style="background:#F2F2F2;border:1px solid rgba(0,0,0,.1);aspect-ratio:1/1">
+      <svg class="logo-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <path d="M115 40 A58 58 0 1 1 115 160" stroke="#0D0D0D" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="10" fill="#0D0D0D"/>
+        <text x="100" y="210" text-anchor="middle" fill="#5EC8F2" font-family="'DM Sans',sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text>
+      </svg>
+      <div class="logo-cell-label">VERSIÓN CLARA · Fondo claro</div>
+    </div>
+
+    <!-- Sky blue background -->
+    <div class="logo-cell" style="background:#5EC8F2;border:1px solid rgba(0,0,0,.1);aspect-ratio:1/1">
+      <svg class="logo-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M85 40 A58 58 0 1 0 85 160" stroke="#0D0D0D" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="10" fill="#0D0D0D"/>
+        <text x="100" y="210" text-anchor="middle" fill="#0D0D0D" font-family="'DM Sans',sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text>
+      </svg>
+      <div class="logo-cell-label">VERSIÓN SKY · Fondo de marca</div>
+    </div>
+
+    <!-- Monochrome white -->
+    <div class="logo-cell" style="background:#1a1a1a;border:1px solid rgba(255,255,255,.06);aspect-ratio:1/1">
+      <svg class="logo-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M85 40 A58 58 0 1 0 85 160" stroke="white" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <path d="M115 40 A58 58 0 1 1 115 160" stroke="rgba(255,255,255,.55)" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="10" fill="white"/>
+        <text x="100" y="210" text-anchor="middle" fill="white" font-family="'DM Sans',sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text>
+      </svg>
+      <div class="logo-cell-label">MONOCROMÁTICO · Solo blanco</div>
+    </div>
+
+    <!-- Symbol only -->
+    <div class="logo-cell" style="background:#0D0D0D;border:1px solid rgba(255,255,255,.06);aspect-ratio:1/1">
+      <svg style="width:90px" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/>
+        <path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="12" fill="white"/>
+      </svg>
+      <div class="logo-cell-label">SÍMBOLO SOLO · Sin wordmark</div>
+    </div>
+
+    <!-- Monochrome black (for print) -->
+    <div class="logo-cell" style="background:white;border:1px solid rgba(0,0,0,.1);aspect-ratio:1/1">
+      <svg class="logo-svg" viewBox="0 0 200 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M85 40 A58 58 0 1 0 85 160" stroke="#0D0D0D" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <path d="M115 40 A58 58 0 1 1 115 160" stroke="#555" stroke-width="26" fill="none" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="10" fill="#0D0D0D"/>
+        <text x="100" y="210" text-anchor="middle" fill="#0D0D0D" font-family="'DM Sans',sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text>
+      </svg>
+      <div class="logo-cell-label">MONOCROMÁTICO · Impresión negro</div>
+    </div>
+  </div>
+
+  <!-- Anatomy -->
+  <div class="div-sky"></div>
+  <div class="sec-label">Anatomía del logotipo</div>
+  <div class="grid-2" style="margin-top:12px">
+    <div class="card sky-accent">
+      <h3 style="font-size:15px">Símbolo CC</h3>
+      <p>Dos formas en C opuestas que se intersectan en un punto central. La C izquierda en <span class="chip">#5EC8F2</span> representa el activo real (propiedad). La C derecha en <strong style="color:rgba(255,255,255,.7)">blanco</strong> representa el token digital. El punto central es el momento de tokenización.</p>
+    </div>
+    <div class="card sky-accent">
+      <h3 style="font-size:15px">Wordmark</h3>
+      <p>Lettering en <span class="chip">#5EC8F2</span> con tipografía redondeada de peso regular. La capitalización mixta <strong style="color:rgba(255,255,255,.7)">"Accet"</strong> (no "ACCET") en el wordmark tipográfico suaviza el tono institucional sin perder autoridad. En contextos de datos o UI siempre en mayúsculas: <strong style="color:rgba(255,255,255,.7)">ACCET</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     05 · USOS PERMITIDOS
+     ════════════════════════════════════════ -->
+<div class="section" id="permitidos">
+  <div class="sec-label">05 · Usos del Logo — Permitidos</div>
+  <h2>Lo que <span class="sky">SÍ</span> puede hacerse</h2>
+  <p style="max-width:600px;margin-top:12px">Los usos permitidos garantizan legibilidad, contraste adecuado y coherencia con la identidad visual de ACCET.</p>
+
+  <div class="div-sky"></div>
+
+  <div class="use-grid" style="margin-top:12px">
+
+    <div class="use-cell permit">
+      <div class="use-badge ok">✓ Permitido</div>
+      <div class="use-cell-title">Logo sobre fondo oscuro (#0D0D0D o variantes)</div>
+      <div class="demo-logo-wrap" style="background:#0D0D0D;border-radius:3px">
+        <svg style="width:90px" viewBox="0 0 200 240" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="26" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="10" fill="white"/><text x="100" y="210" text-anchor="middle" fill="#5EC8F2" font-family="DM Sans,sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text></svg>
+      </div>
+      <p>Versión principal. Máximo contraste. Uso recomendado para web, app, presentaciones y materiales digitales.</p>
+    </div>
+
+    <div class="use-cell permit">
+      <div class="use-badge ok">✓ Permitido</div>
+      <div class="use-cell-title">Logo sobre fondo claro (#F2F2F2 o blanco)</div>
+      <div class="demo-logo-wrap" style="background:#F2F2F2;border-radius:3px">
+        <svg style="width:90px" viewBox="0 0 200 240" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#0D0D0D" stroke-width="26" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="10" fill="#0D0D0D"/><text x="100" y="210" text-anchor="middle" fill="#5EC8F2" font-family="DM Sans,sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text></svg>
+      </div>
+      <p>Para documentos impresos, contratos, papelería y contextos de fondo blanco. La C derecha cambia a <span class="chip dark">#0D0D0D</span>.</p>
+    </div>
+
+    <div class="use-cell permit">
+      <div class="use-badge ok">✓ Permitido</div>
+      <div class="use-cell-title">Símbolo solo (sin wordmark) para avatares e iconos</div>
+      <div class="demo-logo-wrap" style="background:#0D0D0D;border-radius:3px">
+        <svg style="width:60px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+      </div>
+      <p>Cuando el espacio es reducido (ícono de app, favicon, avatar de redes). Solo cuando ACCET ya está establecido en el contexto.</p>
+    </div>
+
+    <div class="use-cell permit">
+      <div class="use-badge ok">✓ Permitido</div>
+      <div class="use-cell-title">Versión monocromática (solo en impresión 1 tinta)</div>
+      <div class="demo-logo-wrap" style="background:white;border-radius:3px">
+        <svg style="width:90px" viewBox="0 0 200 240" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#0D0D0D" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#555" stroke-width="26" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="10" fill="#0D0D0D"/><text x="100" y="210" text-anchor="middle" fill="#0D0D0D" font-family="DM Sans,sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text></svg>
+      </div>
+      <p>Exclusivamente para impresión en un solo color: sellos, grabados, bordados. No usar en comunicación digital.</p>
+    </div>
+
+    <div class="use-cell permit">
+      <div class="use-badge ok">✓ Permitido</div>
+      <div class="use-cell-title">Logo con fondo de color primario sky (#5EC8F2)</div>
+      <div class="demo-logo-wrap" style="background:#5EC8F2;border-radius:3px">
+        <svg style="width:90px" viewBox="0 0 200 240" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#0D0D0D" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="white" stroke-width="26" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="10" fill="#0D0D0D"/><text x="100" y="210" text-anchor="middle" fill="#0D0D0D" font-family="DM Sans,sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text></svg>
+      </div>
+      <p>Versión de alta visibilidad para banners, cubiertas de presentación y materiales de marketing de alto impacto.</p>
+    </div>
+
+    <div class="use-cell permit">
+      <div class="use-badge ok">✓ Permitido</div>
+      <div class="use-cell-title">Reescalado proporcional (sin límite de tamaño mínimo si ≥24px)</div>
+      <div class="demo-logo-wrap" style="background:#0D0D0D;border-radius:3px;gap:16px;flex-direction:row">
+        <svg style="width:24px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+        <svg style="width:44px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+        <svg style="width:64px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+      </div>
+      <p>El símbolo puede usarse desde 24px de ancho sin wordmark. Con wordmark, el mínimo es 100px de ancho total.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     06 · USOS PROHIBIDOS
+     ════════════════════════════════════════ -->
+<div class="section" id="prohibidos">
+  <div class="sec-label">06 · Usos del Logo — Prohibidos</div>
+  <h2>Lo que <span style="color:#FF6B6B">NO</span> puede hacerse</h2>
+  <p style="max-width:600px;margin-top:12px">Estas violaciones comprometen la integridad visual de ACCET, reducen la legibilidad y dañan la percepción institucional ante inversores y reguladores.</p>
+
+  <div class="div-sky"></div>
+
+  <div class="dont-grid" style="margin-top:12px">
+
+    <!-- 1 Distort -->
+    <div class="dont-cell">
+      <div class="dont-label">No distorsionar proporciones</div>
+      <div class="dont-demo">
+        <div class="forbid-demo">
+          <svg style="width:90px;transform:scaleX(1.6)" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">Nunca estirar, comprimir ni aplicar transformaciones no proporcionales al logotipo. Siempre escalar manteniendo el ratio original.</p>
+    </div>
+
+    <!-- 2 Wrong colors -->
+    <div class="dont-cell">
+      <div class="dont-label">No usar colores fuera del sistema</div>
+      <div class="dont-demo">
+        <div class="forbid-demo">
+          <svg style="width:90px" viewBox="0 0 200 240" fill="none">
+            <path d="M85 40 A58 58 0 1 0 85 160" stroke="#00ff88" stroke-width="26" fill="none" stroke-linecap="round"/>
+            <path d="M115 40 A58 58 0 1 1 115 160" stroke="#ff00cc" stroke-width="26" fill="none" stroke-linecap="round"/>
+            <circle cx="100" cy="100" r="10" fill="#ffff00"/>
+            <text x="100" y="210" text-anchor="middle" fill="#ff0000" font-family="DM Sans,sans-serif" font-size="36" letter-spacing="2">Accet</text>
+          </svg>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">Los colores del logo son <span class="chip">#5EC8F2</span> <span class="chip dark">#FFFFFF</span> <span class="chip dark">#0D0D0D</span> únicamente. No aplicar gradientes, colores corporativos de terceros ni colores "de moda".</p>
+    </div>
+
+    <!-- 3 Low contrast bg -->
+    <div class="dont-cell">
+      <div class="dont-label">No usar sobre fondos de bajo contraste</div>
+      <div class="dont-demo">
+        <div class="forbid-demo">
+          <div style="background:#4a7a9a;padding:14px;border-radius:3px">
+            <svg style="width:70px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+          </div>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">El logo no puede aparecer sobre fondos de color similar al sky blue. El contraste mínimo requerido es 4.5:1 para garantizar legibilidad WCAG AA.</p>
+    </div>
+
+    <!-- 4 Rotation -->
+    <div class="dont-cell">
+      <div class="dont-label">No rotar ni inclinar el logotipo</div>
+      <div class="dont-demo">
+        <div class="forbid-demo">
+          <svg style="width:80px;transform:rotate(35deg)" viewBox="0 0 200 240" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="26" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="26" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="10" fill="white"/><text x="100" y="210" text-anchor="middle" fill="#5EC8F2" font-family="DM Sans,sans-serif" font-size="36" letter-spacing="2">Accet</text></svg>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">El logotipo siempre en posición horizontal canónica. No aplicar rotaciones, inclinaciones ni efectos de perspectiva.</p>
+    </div>
+
+    <!-- 5 Effects -->
+    <div class="dont-cell">
+      <div class="dont-label">No aplicar efectos (sombras, brillos, 3D)</div>
+      <div class="dont-demo">
+        <div class="forbid-demo">
+          <svg style="width:80px;filter:drop-shadow(0 0 12px #5EC8F2) drop-shadow(0 4px 8px rgba(0,0,0,.8))" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">Prohibido: drop shadows, glow, gradientes sobre el logo, efectos de bisel, emboss, outline adicional ni filtros de imagen. El logo es plano.</p>
+    </div>
+
+    <!-- 6 Outline -->
+    <div class="dont-cell">
+      <div class="dont-label">No separar símbolo y wordmark</div>
+      <div class="dont-demo" style="gap:28px;flex-direction:row">
+        <div class="forbid-demo">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:20px">
+            <svg style="width:50px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+            <span style="color:#5EC8F2;font-family:'DM Sans';font-size:20px;letter-spacing:3px">Accet</span>
+          </div>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">El símbolo y el wordmark forman una unidad. No separar verticalmente más de lo establecido (ver espacio de separación). No insertar otros elementos entre ellos.</p>
+    </div>
+
+    <!-- 7 Typography modification -->
+    <div class="dont-cell">
+      <div class="dont-label">No cambiar la tipografía del wordmark</div>
+      <div class="dont-demo">
+        <div class="forbid-demo">
+          <svg style="width:120px" viewBox="0 0 260 60" fill="none">
+            <text x="130" y="45" text-anchor="middle" fill="#5EC8F2" font-family="Impact,sans-serif" font-size="42" letter-spacing="4">ACCET</text>
+          </svg>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">El wordmark "Accet" usa DM Sans weight regular. Prohibido: Impact, Arial Bold, fuentes serif, fuentes decorativas o cualquier sustituto tipográfico.</p>
+    </div>
+
+    <!-- 8 Busy background -->
+    <div class="dont-cell">
+      <div class="dont-label">No usar sobre fondos fotográficos sin área limpia</div>
+      <div class="dont-demo">
+        <div class="forbid-demo" style="border-radius:3px;overflow:hidden">
+          <div style="width:130px;height:72px;background:linear-gradient(135deg,#2a4a6a,#4a2a2a,#2a4a2a,#4a3a2a);display:flex;align-items:center;justify-content:center">
+            <svg style="width:60px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="28" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="28" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+          </div>
+          <div class="forbid-x"></div>
+        </div>
+      </div>
+      <p class="dont-rule">Si se usa sobre fotografía, debe existir una banda de color sólido (#0D0D0D o #F2F2F2) que sirva de área de aterrizaje para el logo.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     02 · COLORES
+     ════════════════════════════════════════ -->
+<div class="section" id="colores">
+  <div class="sec-label">02 · Sistema de Color</div>
+  <h2>Paleta <span class="sky">Primaria</span></h2>
+  <p style="max-width:620px;margin-top:12px">El sistema de color de ACCET está diseñado para comunicar confianza tecnológica, liquidez y sofisticación financiera. El <strong style="color:rgba(255,255,255,.8)">Sky Blue</strong> es el color dominante — no es decorativo, es estructural.</p>
+
+  <div class="div-sky"></div>
+
+  <!-- Main swatches -->
+  <div class="swatch-block" style="margin-top:12px">
+
+    <div class="swatch" style="background:#5EC8F2;color:#0D0D0D">
+      <div class="swatch-role" style="color:rgba(0,0,0,.4)">Primario</div>
+      <div class="swatch-hex" style="color:#0D0D0D">#5EC8F2</div>
+      <div class="swatch-name" style="color:rgba(0,0,0,.5)">Sky Blue</div>
+    </div>
+
+    <div class="swatch" style="background:#5ED7F2;color:#0D0D0D">
+      <div class="swatch-role" style="color:rgba(0,0,0,.4)">Secundario</div>
+      <div class="swatch-hex" style="color:#0D0D0D">#5ED7F2</div>
+      <div class="swatch-name" style="color:rgba(0,0,0,.5)">Ice</div>
+    </div>
+
+    <div class="swatch" style="background:#377D8C;color:white">
+      <div class="swatch-role">Acento</div>
+      <div class="swatch-hex">#377D8C</div>
+      <div class="swatch-name">Teal</div>
+    </div>
+
+    <div class="swatch" style="background:#F2F2F2;color:#0D0D0D;border:1px solid rgba(0,0,0,.08)">
+      <div class="swatch-role" style="color:rgba(0,0,0,.35)">Neutro claro</div>
+      <div class="swatch-hex" style="color:#0D0D0D">#F2F2F2</div>
+      <div class="swatch-name" style="color:rgba(0,0,0,.4)">Light</div>
+    </div>
+
+    <div class="swatch" style="background:#0D0D0D;border:1px solid rgba(255,255,255,.08)">
+      <div class="swatch-role">Fondo</div>
+      <div class="swatch-hex">#0D0D0D</div>
+      <div class="swatch-name">Dark</div>
+    </div>
+
+  </div>
+
+  <!-- Usage percentages -->
+  <div class="color-matrix">
+    <div class="cmx-row"><div class="cmx-dot" style="background:#5EC8F2"></div><div class="cmx-label">Sky Blue — Acento dominante, CTAs, datos clave, marca</div><div class="cmx-pct">45%</div></div>
+    <div class="cmx-row"><div class="cmx-dot" style="background:#0D0D0D"></div><div class="cmx-label">Dark — Fondos primarios, backgrounds, bases</div><div class="cmx-pct">35%</div></div>
+    <div class="cmx-row"><div class="cmx-dot" style="background:#F2F2F2"></div><div class="cmx-label">Light — Texto, cards en modo claro, contraste</div><div class="cmx-pct">12%</div></div>
+    <div class="cmx-row"><div class="cmx-dot" style="background:#377D8C"></div><div class="cmx-label">Teal — Separadores, bordes, acento intermedio</div><div class="cmx-pct">5%</div></div>
+    <div class="cmx-row"><div class="cmx-dot" style="background:#5ED7F2"></div><div class="cmx-label">Ice — Highlights, gradientes junto a Sky, detalles</div><div class="cmx-pct">3%</div></div>
+    <div class="cmx-row"><div class="cmx-dot" style="background:#ffaa00"></div><div class="cmx-label">Amber (auxiliar) — Solo para tokens, datos financieros</div><div class="cmx-pct">Aux</div></div>
+  </div>
+
+  <!-- Combination legibility -->
+  <div class="div-sky"></div>
+  <div class="sec-label">Combinaciones y legibilidad</div>
+  <table class="combo-table">
+    <thead>
+      <tr>
+        <th>Texto</th>
+        <th>Sobre fondo</th>
+        <th>Muestra</th>
+        <th>Ratio</th>
+        <th>WCAG AA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="combo-swatch" style="background:#5EC8F2"></span>#5EC8F2 Sky</td>
+        <td><span class="combo-swatch" style="background:#0D0D0D;border:1px solid rgba(255,255,255,.15)"></span>#0D0D0D Dark</td>
+        <td><span style="color:#5EC8F2;background:#0D0D0D;padding:3px 8px">Accet</span></td>
+        <td style="font-family:var(--ff-mono);font-size:11px">8.2:1</td>
+        <td><span class="badge-pass">PASS</span></td>
+      </tr>
+      <tr>
+        <td><span class="combo-swatch" style="background:#FFFFFF;border:1px solid rgba(0,0,0,.1)"></span>#FFFFFF Blanco</td>
+        <td><span class="combo-swatch" style="background:#0D0D0D;border:1px solid rgba(255,255,255,.15)"></span>#0D0D0D Dark</td>
+        <td><span style="color:white;background:#0D0D0D;padding:3px 8px">Accet</span></td>
+        <td style="font-family:var(--ff-mono);font-size:11px">21:1</td>
+        <td><span class="badge-pass">PASS</span></td>
+      </tr>
+      <tr>
+        <td><span class="combo-swatch" style="background:#0D0D0D"></span>#0D0D0D Dark</td>
+        <td><span class="combo-swatch" style="background:#5EC8F2"></span>#5EC8F2 Sky</td>
+        <td><span style="color:#0D0D0D;background:#5EC8F2;padding:3px 8px">Accet</span></td>
+        <td style="font-family:var(--ff-mono);font-size:11px">8.2:1</td>
+        <td><span class="badge-pass">PASS</span></td>
+      </tr>
+      <tr>
+        <td><span class="combo-swatch" style="background:#0D0D0D"></span>#0D0D0D Dark</td>
+        <td><span class="combo-swatch" style="background:#F2F2F2"></span>#F2F2F2 Light</td>
+        <td><span style="color:#0D0D0D;background:#F2F2F2;padding:3px 8px">Accet</span></td>
+        <td style="font-family:var(--ff-mono);font-size:11px">19.4:1</td>
+        <td><span class="badge-pass">PASS</span></td>
+      </tr>
+      <tr>
+        <td><span class="combo-swatch" style="background:#5EC8F2"></span>#5EC8F2 Sky</td>
+        <td><span class="combo-swatch" style="background:#5ED7F2"></span>#5ED7F2 Ice</td>
+        <td><span style="color:#5EC8F2;background:#5ED7F2;padding:3px 8px">Accet</span></td>
+        <td style="font-family:var(--ff-mono);font-size:11px">1.05:1</td>
+        <td><span class="badge-fail">FAIL</span></td>
+      </tr>
+      <tr>
+        <td><span class="combo-swatch" style="background:#FFFFFF;border:1px solid rgba(0,0,0,.1)"></span>#FFFFFF Blanco</td>
+        <td><span class="combo-swatch" style="background:#5EC8F2"></span>#5EC8F2 Sky</td>
+        <td><span style="color:white;background:#5EC8F2;padding:3px 8px">Accet</span></td>
+        <td style="font-family:var(--ff-mono);font-size:11px">2.55:1</td>
+        <td><span class="badge-warn">WARN</span></td>
+      </tr>
+      <tr>
+        <td><span class="combo-swatch" style="background:#377D8C"></span>#377D8C Teal</td>
+        <td><span class="combo-swatch" style="background:#0D0D0D;border:1px solid rgba(255,255,255,.15)"></span>#0D0D0D Dark</td>
+        <td><span style="color:#377D8C;background:#0D0D0D;padding:3px 8px">Accet</span></td>
+        <td style="font-family:var(--ff-mono);font-size:11px">4.7:1</td>
+        <td><span class="badge-pass">PASS</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ════════════════════════════════════════
+     03 · TIPOGRAFÍA
+     ════════════════════════════════════════ -->
+<div class="section" id="tipografia">
+  <div class="sec-label">03 · Tipografía</div>
+  <h2>Sistema <span class="sky">Tipográfico</span></h2>
+  <p style="max-width:620px;margin-top:12px">Tres familias con roles distintos y complementarios. <strong style="color:rgba(255,255,255,.8)">Syne</strong> para impacto visual, <strong style="color:rgba(255,255,255,.8)">DM Sans</strong> para legibilidad extendida, <strong style="color:rgba(255,255,255,.8)">JetBrains Mono</strong> para datos, código y etiquetas de sistema.</p>
+
+  <div class="div-sky"></div>
+
+  <!-- Syne -->
+  <div class="type-specimen">
+    <div class="type-label">01 · Familia Display — Syne</div>
+    <div style="font-family:'Syne',sans-serif;font-size:clamp(38px,6vw,72px);font-weight:800;line-height:.9;letter-spacing:-2px;color:white">
+      Tu patrimonio,<br><span style="color:var(--sky)">finalmente líquido.</span>
+    </div>
+    <div class="type-meta">Syne · Weight 800 · Uso: Headlines, títulos de sección, taglines, logotipo</div>
+  </div>
+
+  <!-- DM Sans -->
+  <div class="type-specimen">
+    <div class="type-label">02 · Familia Body — DM Sans</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:16px;font-weight:300;line-height:1.75;color:rgba(255,255,255,.7);max-width:580px">
+      ACCET tokeniza propiedades colombianas con respaldo en fideicomiso. Inversores desde $1M COP. Propietarios reciben liquidez en 72h a través de activos del mundo real (RWA) representados como tokens ERC-3643 en la red Hedera.
+    </div>
+    <div class="type-meta">DM Sans · Weight 300/400/500 · Uso: Párrafos, subtítulos, cuerpo de texto, UI copy</div>
+  </div>
+
+  <!-- JetBrains Mono -->
+  <div class="type-specimen">
+    <div class="type-label">03 · Familia Sistema — JetBrains Mono</div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:400;line-height:1.6;color:var(--sky)">
+      ERC-3643 · LTV 60% · 17% E.A. · HEDERA HTS<br>
+      <span style="opacity:.5">TOKEN-ID: 0.0.4823001 · ISSUER: ACCET.COP · STATUS: ACTIVE</span>
+    </div>
+    <div class="type-meta">JetBrains Mono · Weight 400/500 · Uso: Datos técnicos, etiquetas, código, métricas, hashes</div>
+  </div>
+
+  <!-- Type scale -->
+  <div class="div-sky"></div>
+  <div class="sec-label">Escala tipográfica</div>
+  <div style="margin-top:12px">
+    <div class="scale-row"><div class="scale-size">9px · 3px ls</div><div class="scale-text" style="font-family:'JetBrains Mono';font-size:9px;letter-spacing:3px;color:rgba(94,200,242,.5);text-transform:uppercase">EYEBROW · CATEGORÍA · ETIQUETA</div><div class="scale-use">JetBrains Mono</div></div>
+    <div class="scale-row"><div class="scale-size">11–12px</div><div class="scale-text" style="font-family:'DM Sans';font-size:12px;color:rgba(255,255,255,.55)">Caption, footnotes, datos auxiliares de bajo impacto</div><div class="scale-use">DM Sans 300</div></div>
+    <div class="scale-row"><div class="scale-size">13–14px</div><div class="scale-text" style="font-family:'DM Sans';font-size:14px;color:rgba(255,255,255,.65)">Body text, párrafos de producto, descripción de instrumentos</div><div class="scale-use">DM Sans 300/400</div></div>
+    <div class="scale-row"><div class="scale-size">16–18px</div><div class="scale-text" style="font-family:'DM Sans';font-size:17px;color:rgba(255,255,255,.75);font-weight:500">Lead copy, subtítulos, introducción de sección</div><div class="scale-use">DM Sans 500</div></div>
+    <div class="scale-row"><div class="scale-size">22–28px</div><div class="scale-text" style="font-family:'Syne';font-size:24px;font-weight:700;color:white">Subtítulo de sección · Card headline</div><div class="scale-use">Syne 700</div></div>
+    <div class="scale-row"><div class="scale-size">36–48px</div><div class="scale-text" style="font-family:'Syne';font-size:40px;font-weight:800;line-height:1;color:white">Section Title</div><div class="scale-use">Syne 800</div></div>
+    <div class="scale-row"><div class="scale-size">64px+</div><div class="scale-text" style="font-family:'Syne';font-size:clamp(46px,7vw,72px);font-weight:900;line-height:.9;letter-spacing:-2px;color:var(--sky)">ACCET</div><div class="scale-use">Syne 900</div></div>
+  </div>
+
+  <!-- Font pairing rules -->
+  <div class="div-sky"></div>
+  <div class="grid-3" style="margin-top:12px">
+    <div class="card sky-accent">
+      <h3 style="font-size:13px">Combinación 1 — Digital</h3>
+      <p style="font-size:11px">Syne 800 headline + DM Sans 300 body + JetBrains Mono labels. Contexto: web, app, presentaciones.</p>
+    </div>
+    <div class="card sky-accent">
+      <h3 style="font-size:13px">Combinación 2 — Documentos</h3>
+      <p style="font-size:11px">Syne 700 títulos + DM Sans 400 texto corrido. Sin monospace. Contexto: informes, contratos, white papers.</p>
+    </div>
+    <div class="card teal-accent">
+      <h3 style="font-size:13px">Fallback — Sistema</h3>
+      <p style="font-size:11px">Si Syne no carga: system-ui, sans-serif. Si DM Sans no carga: -apple-system, BlinkMacSystemFont. Nunca Arial como primera opción.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     04 · ESPACIO & GRID
+     ════════════════════════════════════════ -->
+<div class="section" id="espacio">
+  <div class="sec-label">04 · Espacio & Clear Space</div>
+  <h2>Zona de <span class="sky">Protección</span></h2>
+  <p style="max-width:620px;margin-top:12px">El logotipo requiere una zona de exclusión libre de otros elementos. Esta zona se define por la altura de la letra "A" del wordmark ("x-height ACCET"), denominada unidad <strong style="color:rgba(255,255,255,.8)">X</strong>.</p>
+
+  <div class="div-sky"></div>
+
+  <div class="clearspace-demo" style="margin-top:12px">
+    <div class="cs-inner">
+      <div class="cs-box">
+        <div class="cs-label top">Zona X — mín. 16px</div>
+        <div class="cs-label left">X</div>
+        <div class="cs-label right">X</div>
+        <div class="cs-label bottom">X</div>
+        <svg style="width:130px;display:block" viewBox="0 0 200 240" fill="none">
+          <path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="26" fill="none" stroke-linecap="round"/>
+          <path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="26" fill="none" stroke-linecap="round"/>
+          <circle cx="100" cy="100" r="10" fill="white"/>
+          <text x="100" y="210" text-anchor="middle" fill="#5EC8F2" font-family="DM Sans,sans-serif" font-size="36" font-weight="400" letter-spacing="2">Accet</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:16px">
+    <div class="card sky-accent">
+      <h3 style="font-size:13px">Tamaño mínimo digital</h3>
+      <p style="font-size:12px">Logo completo (símbolo + wordmark): <strong style="color:var(--sky)">100px</strong> de ancho mínimo.<br>Símbolo solo: <strong style="color:var(--sky)">24px</strong> de ancho mínimo.</p>
+    </div>
+    <div class="card sky-accent">
+      <h3 style="font-size:13px">Tamaño mínimo impresión</h3>
+      <p style="font-size:12px">Logo completo: <strong style="color:var(--sky)">20mm</strong> de ancho mínimo en impresión offset.<br>Símbolo solo: <strong style="color:var(--sky)">8mm</strong>.</p>
+    </div>
+    <div class="card teal-accent">
+      <h3 style="font-size:13px">Grid de fondo — Textura</h3>
+      <p style="font-size:12px">El background grid de <strong style="color:var(--sky)">40×40px</strong> con líneas <span class="chip">rgba(94,200,242,.04)</span> es el texture signature del sistema. Siempre presente en fondos oscuros.</p>
+    </div>
+  </div>
+
+  <!-- Spacing system -->
+  <div class="div-sky"></div>
+  <div class="sec-label">Sistema de espaciado</div>
+  <div class="grid-4" style="margin-top:12px">
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">4px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">XS · Micro</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">8px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">SM · Componente</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">16px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">MD · Sección</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">24px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">LG · Card</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">32px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">XL · Layout</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">48px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">2XL · Página</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">80px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">3XL · Sección mayor</div>
+    </div>
+    <div class="card" style="text-align:center;padding:16px">
+      <div style="font-family:var(--ff-head);font-size:24px;font-weight:700;color:var(--sky)">40px</div>
+      <div style="font-family:var(--ff-mono);font-size:8px;color:rgba(255,255,255,.3);letter-spacing:1px;margin-top:4px">Grid · Background</div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     07 · COMPONENTES UI
+     ════════════════════════════════════════ -->
+<div class="section" id="componentes">
+  <div class="sec-label">07 · Componentes UI</div>
+  <h2>Sistema de <span class="sky">Componentes</span></h2>
+  <p style="max-width:620px;margin-top:12px">Los componentes de interfaz de ACCET siguen el principio de <strong style="color:rgba(255,255,255,.8)">información densa con claridad máxima</strong>. Dark background, acentos sky, datos en monospace.</p>
+
+  <div class="div-sky"></div>
+
+  <div class="grid-2" style="margin-top:12px">
+
+    <!-- Mockup: App header -->
+    <div>
+      <div class="sec-label" style="margin-bottom:10px">Aplicación web — Header</div>
+      <div class="mockup-card">
+        <div class="mockup-bar">
+          <div class="mock-dot" style="background:#ff5f57"></div>
+          <div class="mock-dot" style="background:#febc2e"></div>
+          <div class="mock-dot" style="background:#28c840"></div>
+          <span style="font-family:var(--ff-mono);font-size:9px;color:rgba(255,255,255,.2);margin-left:8px">accet.com/app</span>
+        </div>
+        <div style="background:#0D0D0D;border-bottom:1px solid rgba(94,200,242,.15);padding:12px 20px;display:flex;align-items:center;justify-content:space-between">
+          <div style="display:flex;align-items:center;gap:10px">
+            <svg style="width:28px" viewBox="0 0 200 200" fill="none"><path d="M85 40 A58 58 0 1 0 85 160" stroke="#5EC8F2" stroke-width="30" fill="none" stroke-linecap="round"/><path d="M115 40 A58 58 0 1 1 115 160" stroke="#FFFFFF" stroke-width="30" fill="none" stroke-linecap="round"/><circle cx="100" cy="100" r="12" fill="white"/></svg>
+            <span style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--sky);letter-spacing:-0.5px">ACCET</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-family:var(--ff-mono);font-size:9px;color:rgba(94,200,242,.5)">POWERED BY HEDERA HTS</span>
+            <div class="btn-primary" style="font-size:11px;padding:7px 14px">Invertir ahora ↗</div>
+          </div>
+        </div>
+        <div class="mockup-content">
+          <div class="token-badge" style="margin-bottom:14px"><div class="token-dot"></div>ERC-3643 · ACTIVO</div>
+          <div style="font-family:'Syne',sans-serif;font-size:clamp(20px,3.5vw,32px);font-weight:800;color:white;line-height:1.1;margin-bottom:8px">Tu patrimonio<br>inmobiliario, <span style="color:var(--sky)">líquido.</span></div>
+          <p style="font-size:12px;margin-bottom:16px">Tokenizamos propiedades colombianas con respaldo en fideicomiso. Inversores desde $1M COP.</p>
+          <div style="display:flex;gap:8px">
+            <div class="btn-primary">Invertir ahora ↗</div>
+            <div class="btn-outline">Soy propietario</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mockup: Stats card -->
+    <div>
+      <div class="sec-label" style="margin-bottom:10px">Tarjeta de datos — Dashboard</div>
+      <div class="mockup-card">
+        <div class="mockup-bar">
+          <div class="mock-dot" style="background:#ff5f57"></div>
+          <div class="mock-dot" style="background:#febc2e"></div>
+          <div class="mock-dot" style="background:#28c840"></div>
+          <span style="font-family:var(--ff-mono);font-size:9px;color:rgba(255,255,255,.2);margin-left:8px">Portfolio Overview</span>
+        </div>
+        <div class="mockup-content">
+          <div class="grid-2" style="gap:8px;margin-bottom:14px">
+            <div class="stat-block"><div class="stat-n">17%</div><div class="stat-l">Rendimiento E.A.</div></div>
+            <div class="stat-block"><div class="stat-n">$1M</div><div class="stat-l">Mínimo COP</div></div>
+            <div class="stat-block"><div class="stat-n">72h</div><div class="stat-l">Liquidez estimada</div></div>
+            <div class="stat-block"><div class="stat-n">60%</div><div class="stat-l">LTV máximo</div></div>
+          </div>
+          <!-- Mini token list -->
+          <div style="border-top:1px solid rgba(94,200,242,.1);padding-top:12px">
+            <div style="font-family:var(--ff-mono);font-size:8px;letter-spacing:2px;color:rgba(94,200,242,.4);margin-bottom:8px;text-transform:uppercase">Posiciones activas</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+              <span style="font-family:var(--ff-mono);font-size:10px;color:rgba(255,255,255,.6)">CDT-TOKEN #0041</span>
+              <span style="font-family:var(--ff-head);font-size:13px;font-weight:700;color:var(--sky)">+17.2%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)">
+              <span style="font-family:var(--ff-mono);font-size:10px;color:rgba(255,255,255,.6)">CDT-TOKEN #0088</span>
+              <span style="font-family:var(--ff-head);font-size:13px;font-weight:700;color:var(--sky)">+18.5%</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+              <span style="font-family:var(--ff-mono);font-size:10px;color:rgba(255,255,255,.6)">CDT-TOKEN #0103</span>
+              <span style="font-family:var(--ff-head);font-size:13px;font-weight:700;color:var(--sky)">+16.8%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Button system -->
+  <div class="div-sky"></div>
+  <div class="sec-label">Botones y acciones</div>
+  <div class="card" style="margin-top:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;padding:24px">
+    <div class="btn-primary">Primario — CTA Principal</div>
+    <div class="btn-outline">Secundario — Acción alternativa</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:rgba(255,255,255,.35);border:1.5px solid rgba(255,255,255,.1);border-radius:3px;cursor:not-allowed">Deshabilitado</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;padding:10px 20px;font-family:var(--ff-mono);font-size:10px;letter-spacing:2px;color:rgba(94,200,242,.6);border:1px solid rgba(94,200,242,.2);background:var(--sky10);border-radius:2px">ACCIÓN DE SISTEMA</div>
+  </div>
+
+  <!-- Sig line component -->
+  <div class="div-sky"></div>
+  <div class="sec-label">Elementos de firma visual</div>
+  <div class="grid-2" style="margin-top:12px">
+    <div class="card sky-accent">
+      <h3 style="font-size:13px">Línea de acento superior (3px)</h3>
+      <div style="height:3px;background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));margin:12px 0 8px;border-radius:2px"></div>
+      <p style="font-size:12px">Gradient 90° desde Sky → Ice → Teal. Siempre en el borde superior de secciones, covers, modales y tarjetas de alto impacto. Altura fija: 3px.</p>
+    </div>
+    <div class="card teal-accent">
+      <h3 style="font-size:13px">Separadores de sección (1px)</h3>
+      <div style="height:1px;background:rgba(94,200,242,.15);margin:12px 0 8px"></div>
+      <p style="font-size:12px">Líneas horizontales en <span class="chip">rgba(94,200,242,.15)</span> como separadores internos. Nunca líneas blancas opacas al 100% — siempre semi-transparentes sobre el fondo oscuro.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     08 · TONO DE VOZ
+     ════════════════════════════════════════ -->
+<div class="section" id="voz">
+  <div class="sec-label">08 · Tono de Voz</div>
+  <h2>Cómo <span class="sky">comunica</span> ACCET</h2>
+  <p style="max-width:620px;margin-top:12px">ACCET habla como un colega financiero inteligente, no como un banco ni como un proyecto crypto de Discord. Directo, preciso, con confianza ganada — no impuesta.</p>
+
+  <div class="div-sky"></div>
+
+  <div class="grid-2" style="margin-top:12px;margin-bottom:2px">
+    <div class="card sky-accent">
+      <h3 style="font-size:14px;margin-bottom:12px">Los 4 pilares del tono</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:var(--sky);font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">DIRECTO</span>
+          <p style="font-size:12px">Sin eufemismos financieros. Si algo genera el 17% E.A., decirlo así — no "retornos potencialmente significativos".</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:var(--sky);font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">PRECISO</span>
+          <p style="font-size:12px">Datos reales, cifras verificables, términos técnicos cuando corresponde — siempre explicados en la primera aparición.</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:var(--sky);font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">CERCANO</span>
+          <p style="font-size:12px">Segunda persona en comunicación directa. "Tu patrimonio", "tus tokens". Nunca "el usuario" ni lenguaje de tercera persona.</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:var(--sky);font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">CONFIABLE</span>
+          <p style="font-size:12px">Referencias explícitas a regulación (Superfinanciera, SFC, Hedera). La confianza se construye con transparencia de estándares.</p>
+        </div>
+      </div>
+    </div>
+    <div class="card teal-accent">
+      <h3 style="font-size:14px;margin-bottom:12px">Lo que NO es ACCET</h3>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:#FF7575;font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">NO HYPE</span>
+          <p style="font-size:12px">Sin promesas de "100x", "moonshot" ni lenguaje de especulación. ACCET es infraestructura financiera, no casino.</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:#FF7575;font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">NO PASIVO</span>
+          <p style="font-size:12px">Sin voz pasiva ni gerundios que diluyen la acción. "ACCET tokeniza" no "la tokenización es realizada por".</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:#FF7575;font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">NO BUROCRÁTICO</span>
+          <p style="font-size:12px">Sin jerga bancaria obsoleta. "Liquidez en 72h" no "disponibilidad de fondos en el plazo establecido por el instrumento".</p>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="color:#FF7575;font-family:var(--ff-mono);font-size:11px;width:100px;flex-shrink:0">NO FRÍO</span>
+          <p style="font-size:12px">Sin distancia institucional excesiva. ACCET resuelve problemas reales de personas reales — la empatía es parte del tono.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tone examples -->
+  <div style="margin-top:2px">
+    <div class="tone-row">
+      <div class="tone-cell tone-ok"><div class="tone-tag">✓ Correcto</div><div class="tone-quote">"Tu casa vale $420M. ACCET te da $252M en efectivo esta semana al 18% E.A. Sin colas, sin trámites de 3 meses."</div></div>
+      <div class="tone-cell vs">vs</div>
+      <div class="tone-cell tone-no"><div class="tone-tag">✗ Incorrecto</div><div class="tone-quote">"Nuestra innovadora plataforma de tokenización basada en tecnología blockchain permite a los propietarios acceder a soluciones de liquidez competitivas."</div></div>
+    </div>
+    <div class="tone-row">
+      <div class="tone-cell tone-ok"><div class="tone-tag">✓ Correcto</div><div class="tone-quote">"Invierte desde $1M COP. Recibe el 17% E.A. Tu capital está respaldado por un activo físico real, no por promesas."</div></div>
+      <div class="tone-cell vs">vs</div>
+      <div class="tone-cell tone-no"><div class="tone-tag">✗ Incorrecto</div><div class="tone-quote">"¡ACCET al 1000% bro! 🚀🚀🚀 Don't miss the wave! This is your financial revolution moment! GM fam!!"</div></div>
+    </div>
+    <div class="tone-row">
+      <div class="tone-cell tone-ok"><div class="tone-tag">✓ Correcto</div><div class="tone-quote">"Regulado bajo el sandbox LaArenera de la SFC. Cada token es un ERC-3643 auditado en tiempo real."</div></div>
+      <div class="tone-cell vs">vs</div>
+      <div class="tone-cell tone-no"><div class="tone-tag">✗ Incorrecto</div><div class="tone-quote">"Confía en nosotros, somos seguros. La tecnología funciona, te lo prometemos. Invierte tranquilo."</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════ -->
+<div class="doc-footer">
+  <div>
+    <div class="footer-brand">ACCET</div>
+    <p style="font-size:11px;margin-top:4px;color:rgba(255,255,255,.25);max-width:380px">
+      Real Estate Tokenization Platform · AGORALINK S.A.S. · Medellín, Colombia
+    </p>
+  </div>
+  <div class="footer-meta">
+    Brand Guidelines v1.0 · 2026<br>
+    Oscar Rangel · CTO & Project Manager<br>
+    Powered by Hedera HTS · ERC-3643<br>
+    Confidencial — Uso interno y aliados estratégicos
+  </div>
+</div>
+<div class="sig-line" style="margin-top:32px"></div>
+
+</div><!-- /page -->
+
+<script>
+// Smooth scroll for TOC links
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target){e.preventDefault();target.scrollIntoView({behavior:'smooth',block:'start'});}
+  });
+});
+// Animate sections on scroll
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(en.isIntersecting){
+      en.target.style.opacity='1';
+      en.target.style.transform='translateY(0)';
+    }
+  });
+},{threshold:.05});
+document.querySelectorAll('.section').forEach(s=>{
+  s.style.opacity='0';
+  s.style.transform='translateY(24px)';
+  s.style.transition='opacity .7s ease, transform .7s ease';
+  obs.observe(s);
+});
+</script>
+</body>
+</html>

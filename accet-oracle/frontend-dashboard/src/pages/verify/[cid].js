@@ -7,13 +7,13 @@ import {
   ShieldAlert, 
   FileCheck, 
   Globe, 
-  Zap, 
   ArrowLeft,
   Calendar,
   User,
   Hash,
   ExternalLink,
-  Info
+  CheckCircle2,
+  Database
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -33,7 +33,6 @@ export default function Verify() {
         setLoading(false);
       })
       .catch(() => {
-        // Fallback for demo
         setTimeout(() => {
           setData({
             cid,
@@ -44,8 +43,9 @@ export default function Verify() {
             network: 'Base Mainnet',
             tokenStandard: 'ERC-3643',
             holder: 'Kennedy Arellano',
-            issuer: 'POK University',
-            issueDate: '2026-05-01'
+            issuer: 'POK.tech Institute',
+            issueDate: '2026-05-01',
+            txHash: '0x3a4f8...b9e2c1'
           });
           setLoading(false);
         }, 800);
@@ -55,89 +55,110 @@ export default function Verify() {
   if (!cid && !loading) return null;
 
   return (
-    <div className="min-h-screen bg-[#020624] text-white flex flex-col">
+    <div className="min-h-screen bg-[#020624] text-white font-sans flex flex-col netflix-gradient relative overflow-hidden">
       <Head>
-        <title>Verify Credential | ACCET Oracle</title>
+        <title>Public Verification | ACCET Oracle</title>
       </Head>
 
-      <nav className="h-20 border-b border-white/5 px-8 flex items-center">
-        <Link href="/dashboard" className="flex items-center gap-2 text-sm opacity-50 hover:opacity-100 transition-opacity">
-          <ArrowLeft size={16} /> Back to Dashboard
-        </Link>
+      {/* Glow Effects */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[60rem] h-[60rem] bg-[#5AC4EE]/5 blur-[120px] rounded-full pointer-events-none" />
+
+      <nav className="h-16 border-b border-[#E5E4E2]/10 px-6 flex items-center shrink-0 relative z-10 bg-[#020624]/50 backdrop-blur-md">
+        <div className="max-w-4xl w-full mx-auto flex justify-between items-center">
+           <Link href="/dashboard" className="flex items-center gap-2 text-sm text-[#B0B0C0] hover:text-[#5AC4EE] transition-colors font-medium">
+            <ArrowLeft size={16} /> Exit Vault
+          </Link>
+          <div className="text-xs font-title text-[#5AC4EE] tracking-widest uppercase flex items-center gap-2">
+             <div className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse" />
+             Public Verification Portal
+          </div>
+        </div>
       </nav>
 
-      <main className="flex-1 flex items-center justify-center p-6">
-        <div className="w-full max-w-2xl">
+      <main className="flex-1 flex items-start justify-center p-6 pt-12 relative z-10">
+        <div className="w-full max-w-3xl">
           {loading ? (
-            <div className="text-center">
-              <div className="w-12 h-12 border-2 border-[#5AC4EE]/20 border-t-[#5AC4EE] rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-sm opacity-40 uppercase tracking-widest">Interrogating Legal Oracle...</p>
+            <div className="text-center py-32">
+              <div className="relative w-16 h-16 mx-auto mb-6">
+                <div className="absolute inset-0 border-t-2 border-[#5AC4EE] rounded-full animate-spin" />
+                <div className="absolute inset-2 border-r-2 border-[#a78bfa] rounded-full animate-spin animation-delay-150" />
+                <ShieldCheck size={24} className="absolute inset-0 m-auto text-[#5AC4EE]/50" />
+              </div>
+              <p className="text-sm font-title text-[#5AC4EE] uppercase tracking-widest animate-pulse">Interrogating Filecoin & Base L2...</p>
             </div>
           ) : (
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="glass p-8 md:p-12 relative overflow-hidden"
+              transition={{ duration: 0.5 }}
+              className="asset-card-3d rounded-xl overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
             >
-              {/* Status Header */}
-              <div className="text-center mb-12">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${data.valid ? 'bg-[#10b981]/10 text-[#10b981] glow' : 'bg-[#ef4444]/10 text-[#ef4444]'}`}>
-                  {data.valid ? <ShieldCheck size={40} /> : <ShieldAlert size={40} />}
+              {/* Header */}
+              <div className="p-10 border-b border-[#E5E4E2]/10 text-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-[#5AC4EE]/10 to-transparent" />
+                <div className={`relative z-10 mx-auto mb-6 w-20 h-20 rounded-full flex items-center justify-center border-2 ${data.valid ? 'border-[#10B981] text-[#10B981] shadow-[0_0_30px_rgba(16,185,129,0.3)]' : 'border-[#EF4444] text-[#EF4444] shadow-[0_0_30px_rgba(239,68,68,0.3)]'}`}>
+                  {data.valid ? <ShieldCheck size={40} strokeWidth={1.5} /> : <ShieldAlert size={40} strokeWidth={1.5} />}
                 </div>
-                <h1 className={`text-3xl font-extrabold mb-2 ${data.valid ? 'text-[#10b981]' : 'text-[#ef4444]'}`}>
-                  {data.valid ? 'Credential Verified' : 'Invalid Credential'}
+                <h1 className={`relative z-10 text-3xl font-title mb-2 ${data.valid ? 'text-white' : 'text-[#EF4444]'}`}>
+                  {data.valid ? 'Legally Binding Asset' : 'Invalid or Revoked Document'}
                 </h1>
-                <p className="text-sm text-secondary">
-                  Digitally signed and sealed by state authorities on {new Date(data.verifiedAt).toLocaleDateString()}
+                <p className="relative z-10 text-sm text-[#B0B0C0] font-mono">
+                  Oracle Sync: {new Date(data.verifiedAt).toLocaleString()}
                 </p>
               </div>
 
-              {/* Document Details */}
-              <div className="space-y-4 mb-10">
-                <DetailRow icon={<User size={16} />} label="Holder" value={data.holder} />
-                <DetailRow icon={<FileCheck size={16} />} label="Issuer" value={data.issuer} />
-                <DetailRow icon={<Calendar size={16} />} label="Issue Date" value={data.issueDate} />
-                <DetailRow icon={<Hash size={16} />} label="CID" value={data.cid} isMono />
-              </div>
-
-              {/* Validation Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
-                <ValidationBadge active={data.stateSealed} label="State Sealed" sub="Certicámara" />
-                <ValidationBadge active={data.mletrCompliant} label="MLETR Ready" sub="Cross-border" />
-                <ValidationBadge active={true} label="Gasless" sub="Read-only" />
-              </div>
-
-              {/* Technical Details */}
-              <div className="bg-white/5 rounded-xl p-6 border border-white/5">
-                <div className="flex items-center gap-2 mb-4 text-xs font-bold uppercase tracking-widest opacity-40">
-                  <Zap size={14} /> Technical Proof
+              <div className="p-10 bg-[#020624]/80 backdrop-blur-xl">
+                {/* Core Details */}
+                <div className="space-y-2 mb-10">
+                  <DetailRow icon={<User size={16} />} label="Asset Holder" value={data.holder} />
+                  <DetailRow icon={<FileCheck size={16} />} label="Issuing Authority" value={data.issuer} />
+                  <DetailRow icon={<Calendar size={16} />} label="Date of Ingestion" value={data.issueDate} />
+                  <DetailRow icon={<Database size={16} />} label="Filecoin Identity (CID)" value={data.cid} isMono isHighlight />
                 </div>
-                <div className="grid grid-cols-2 gap-y-4 text-sm">
-                  <div>
-                    <div className="opacity-40 text-[10px] uppercase mb-1">Network</div>
-                    <div className="flex items-center gap-2">
-                      <Globe size={14} className="text-[#5AC4EE]" /> {data.network}
+
+                {/* Legal Assertions */}
+                <div className="mb-10">
+                  <h3 className="text-xs font-title text-[#5AC4EE] uppercase tracking-widest mb-5 flex items-center gap-2">
+                    <span className="w-4 h-[1px] bg-[#5AC4EE]" /> The Trinity Proofs
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <ValidationCheck active={data.stateSealed} label="State Notarized" sub="Certicámara Digital Signature" color="#10B981" />
+                    <ValidationCheck active={data.mletrCompliant} label="MLETR Compliant" sub="UCC Article 12 standard" color="#10B981" />
+                    <ValidationCheck active={true} label="Zero Data Drift" sub="FVM Memory Interrogation" color="#5AC4EE" />
+                    <ValidationCheck active={true} label="KYC Bound" sub="ERC-3643 Sovereign Identity" color="#a78bfa" />
+                  </div>
+                </div>
+
+                {/* Technical Proof */}
+                <div className="bg-[#070B2E] rounded-lg p-6 border border-[#E5E4E2]/10 relative overflow-hidden group">
+                  <div className="absolute inset-0 bg-[#5AC4EE]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="flex justify-between items-center mb-6 relative z-10">
+                    <div className="text-sm font-title text-white">Immutable Ledger Record</div>
+                    <div className="flex items-center gap-2 text-xs font-title text-[#10B981] uppercase tracking-widest bg-[#10B981]/10 px-2 py-1 rounded">
+                      <CheckCircle2 size={12} /> Synchronized
                     </div>
                   </div>
-                  <div>
-                    <div className="opacity-40 text-[10px] uppercase mb-1">Standard</div>
-                    <div>{data.tokenStandard}</div>
+                  
+                  <div className="grid grid-cols-2 gap-6 text-sm mb-6 relative z-10">
+                    <div>
+                      <div className="text-xs text-[#B0B0C0] uppercase tracking-wider mb-2">Network Layer</div>
+                      <div className="flex items-center gap-2 text-white font-medium">
+                        <Globe size={14} className="text-[#5AC4EE]" /> {data.network}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-xs text-[#B0B0C0] uppercase tracking-wider mb-2">Token Standard</div>
+                      <div className="text-white font-medium">{data.tokenStandard}</div>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-between items-center pt-5 border-t border-[#E5E4E2]/10 relative z-10">
+                     <div className="text-xs text-[#5AC4EE] font-mono bg-[#5AC4EE]/10 px-2 py-1 rounded">TX: {data.txHash}</div>
+                     <button className="text-xs font-title text-white hover:text-[#5AC4EE] inline-flex items-center gap-1.5 transition-colors uppercase tracking-wider">
+                       View on Explorer <ExternalLink size={14} />
+                     </button>
                   </div>
                 </div>
-                <div className="mt-6 pt-6 border-t border-white/5 flex justify-between items-center">
-                  <div className="text-[10px] opacity-30">VDA PROOF ID: {Math.random().toString(16).slice(2, 10).toUpperCase()}</div>
-                  <button className="flex items-center gap-2 text-[#5AC4EE] text-xs font-medium hover:underline">
-                    View on Explorer <ExternalLink size={12} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Info Box */}
-              <div className="mt-10 flex gap-4 p-4 rounded-lg bg-[#5AC4EE]/5 border border-[#5AC4EE]/10">
-                <Info size={20} className="text-[#5AC4EE] shrink-0" />
-                <p className="text-xs text-[#5AC4EE]/80 leading-relaxed">
-                  This document is a <strong>Binding Digital Copy</strong>. Its possession on-chain is legally equivalent to physical possession of the original title under MLETR and UCC Art. 12 standards.
-                </p>
               </div>
             </motion.div>
           )}
@@ -147,23 +168,31 @@ export default function Verify() {
   );
 }
 
-function DetailRow({ icon, label, value, isMono = false }) {
+function DetailRow({ icon, label, value, isMono = false, isHighlight = false }) {
   return (
-    <div className="flex items-center justify-between py-3 border-b border-white/5">
-      <div className="flex items-center gap-3 opacity-50">
-        {icon}
-        <span className="text-sm">{label}</span>
+    <div className="flex items-center py-4 border-b border-[#E5E4E2]/5 last:border-0 group">
+      <div className="flex items-center gap-3 w-1/3 text-[#B0B0C0] group-hover:text-white transition-colors">
+        <span className={isHighlight ? 'text-[#5AC4EE]' : ''}>{icon}</span>
+        <span className="text-sm font-medium">{label}</span>
       </div>
-      <span className={`text-sm font-medium ${isMono ? 'font-mono text-xs opacity-80' : ''}`}>{value}</span>
+      <div className={`w-2/3 text-sm ${isMono ? 'font-mono text-[#5AC4EE]' : 'text-white font-medium'} truncate`}>
+        {value}
+      </div>
     </div>
   );
 }
 
-function ValidationBadge({ active, label, sub }) {
+function ValidationCheck({ active, label, sub, color }) {
   return (
-    <div className={`p-4 rounded-xl border text-center transition-all ${active ? 'bg-[#10b981]/5 border-[#10b981]/20' : 'bg-white/5 border-white/10 opacity-50'}`}>
-      <div className={`text-xs font-bold uppercase tracking-tight mb-1 ${active ? 'text-[#10b981]' : 'opacity-50'}`}>{label}</div>
-      <div className="text-[10px] opacity-40 uppercase tracking-widest">{sub}</div>
+    <div className="flex items-start gap-3 p-4 rounded-lg bg-[#070B2E] border border-[#E5E4E2]/10 relative overflow-hidden group">
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity" style={{ backgroundColor: color }} />
+      <div className={`mt-0.5 relative z-10`} style={{ color: active ? color : '#555555' }}>
+        <CheckCircle2 size={18} strokeWidth={2.5} />
+      </div>
+      <div className="relative z-10">
+        <div className={`text-sm font-title tracking-wide mb-1`} style={{ color: active ? '#FFFFFF' : '#888888' }}>{label}</div>
+        <div className="text-xs text-[#B0B0C0] leading-snug">{sub}</div>
+      </div>
     </div>
   );
 }

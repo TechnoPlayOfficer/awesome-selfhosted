@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introducción · ACCET</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#5EC8F2; --ice:#5ED7F2; --teal:#377D8C;
+  --light:#F2F2F2; --dark:#0D0D0D;
+  --sky10:rgba(94,200,242,.10); --sky20:rgba(94,200,242,.20);
+  --teal10:rgba(55,125,140,.10);
+  --dark05:rgba(13,13,13,.05); --dark08:rgba(13,13,13,.08);
+  --green:#15693A; --ltgrn:#D4EDDA;
+  --red:#8B2020; --ltred:#FDECEA;
+  --amber:#7A5C00; --ltamb:#FFF3CC;
+  --rule:rgba(13,13,13,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'DM Sans',sans-serif;background:var(--light);color:var(--dark);
+  background-image:linear-gradient(rgba(94,200,242,.05) 1px,transparent 1px),
+                   linear-gradient(90deg,rgba(94,200,242,.05) 1px,transparent 1px);
+  background-size:40px 40px;
+}
+.pg{max-width:1140px;margin:0 auto;padding:28px 20px 80px}
+.cover{background:var(--dark);padding:48px 52px 44px;position:relative;overflow:hidden; border-bottom: 4px solid var(--sky)}
+.cov-eye{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--sky);opacity:.65;margin-bottom:18px}
+.cov-h{font-family:'Syne',sans-serif;font-size:clamp(44px,6vw,76px);font-weight:800;color:#fff;line-height:.95;letter-spacing:-2px}
+.cov-desc{font-size:16px;color:rgba(255,255,255,.7);font-weight:300;max-width:800px;line-height:1.7;margin:24px 0 28px}
+.sec{background:#fff;padding:40px 52px; margin-top: 4px; border-top: 3px solid var(--sky)}
+.sec-h{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--dark);margin-bottom:20px;line-height:1.2}
+.body{font-size:16px;color:#3A3A3A;line-height:1.72;font-weight:300; margin-bottom: 16px}
+  
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="pg">
+  <div class="cover">
+    <div class="cov-eye">Capítulo 1 · El Problema y la Solución</div>
+    <div class="cov-h">ACCET<br>Real Estate<br>Tokenization</div>
+    <p class="cov-desc">El puente entre el ladrillo ilíquido colombiano y el inversionista de capital digital. La primera plataforma de tokenización basada en modelo cooperativo en Colombia.</p>
+  </div>
+  <div class="sec">
+    <div class="sec-h">Desbloqueando la liquidez del ladrillo</div>
+    <p class="body">La demanda de vivienda nueva ha caído y los propietarios tienen su capital atrapado en propiedades ilíquidas. Al mismo tiempo, el acceso a la inversión en bienes raíces es restrictivo (con mínimos de miles de dólares)</p>
+    <p class="body">Nuestra solución permite a los propietarios obtener hasta un 60% del LTV a tasas super competitivas (18% E.A.) y a los inversionistas colocar capital desde solo $100 USD, ganando rendimientos del 17% E.A. garantizados por bienes físicos (RWA) off-chain representados por ERC-3643 on-chain.</p>
+  </div>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="index.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'"> Inicio</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">01</span> DE 37
+  </div>
+  <div>
+    <a href="02_landing_page_accet_rwa.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+
+</html>
+

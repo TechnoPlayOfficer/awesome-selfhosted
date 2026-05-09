@@ -1,0 +1,34 @@
+# PRD: ACCET – THE LEGAL CONNECTIVITY LAYER (VDA)
+
+## 1. Product Vision
+To be the primary Verifiability of Assets (VDA) infrastructure connecting the documentary world (Filecoin), the judicial (Certicámara), and the financial (Avalanche/Base/Polygon), allowing any platform to issue Binding Digital Copies.
+
+## 2. Aesthetics: "Dark Tech Authority"
+- **Palette:** Deep Blue (#020624) background, Vivid Blue (#5AC4EE) accents, Platinum/White for contrast.
+- **Typography:** Space Grotesk (Titles), Poppins (Body).
+- **Effects:** Platinum glassmorphism, Netflix-style cinematic gradients, "light-up" animations for legal validation.
+
+## 3. Screen List
+1. **Landing Page: "The Gateway of Light"**
+   - Hero: Cinematic financial skyline.
+   - Interactive Roadmap: Pre-Seed (Active), Seed, Series A.
+   - "Trinity of Certainty": Memory (Filecoin) → Truth (Oracle) → Law (Certicámara).
+
+2. **Tenant Admin Dashboard (e.g., POK.tech)**
+   - **VDA Pipeline:** Laser-scan PDF ingest, CID visualizer (hex fragmenting), Oracle Live Status (Gray to Cyan), "Seal of Light" button.
+   - Metrics: TVL, API quotas, Oracle health.
+
+3. **Asset Holder Dashboard**
+   - **Legal Twin Vault:** 3D platinum card visualization of titles.
+   - Asset Anatomy Sidebar: Filecoin CID link, network Hash, State Seal (Certicámara).
+   - Keyless Onboarding (Social Login).
+
+4. **Public Verification Portal**
+   - QR scanner input.
+   - Validation page: Proof of immutability, state signature confirmation, MLETR standard highlight.
+
+## 4. Key User Stories
+- Mass PDF ingestion with CID generation.
+- Real-time Oracle status transitions (Digital to Binding).
+- 3D luxury asset visualization for holders.
+- Instant third-party verification via QR/link.

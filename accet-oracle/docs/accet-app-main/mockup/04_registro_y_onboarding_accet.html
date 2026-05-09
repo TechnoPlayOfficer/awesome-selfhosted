@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACCET - Registro y Onboarding</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#0ea5e9", // Sky blue for primary accents
+                "success": "#10b981", // Emerald green for success
+                "background-light": "#f8fafc",
+                "background-dark": "#020617", // Deep navy/black
+                "slate-custom": "#1e293b",
+              },
+              fontFamily: {
+                "display": ["Fraunces", "serif"],
+                "body": ["DM Sans", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'DM Sans', sans-serif; }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .step-active { color: #0ea5e9; }
+        h1, h2, h3 { font-family: 'Fraunces', serif; }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-auto">
+<div class="relative flex h-auto min-h-auto w-full flex-col overflow-x-hidden">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 px-6 py-4 lg:px-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+<div class="flex items-center gap-3">
+<div class="text-primary">
+<svg class="w-8 h-8" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-xl font-display font-bold tracking-tight">ACCET</h2>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</header>
+<main class="flex-1 max-w-4xl mx-auto w-full px-6 py-10">
+<!-- Progress Stepper -->
+<div class="mb-12">
+<div class="flex items-center justify-between mb-4">
+<div class="flex flex-col">
+<span class="text-xs uppercase tracking-widest text-primary font-bold">Paso 2 de 3</span>
+<h3 class="text-lg font-bold">Verificación KYC</h3>
+</div>
+<span class="text-sm font-medium text-slate-500">66% completado</span>
+</div>
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-2 rounded-full overflow-visible">
+<div class="bg-primary h-full transition-all duration-500" style="width: 66%;"></div>
+</div>
+<div class="flex justify-between mt-3 text-xs text-slate-500 font-medium">
+<span class="text-success flex items-center gap-1"><span class="material-symbols-outlined text-[14px]">check_circle</span> Info Personal</span>
+<span class="text-primary underline underline-offset-4">KYC Verification</span>
+<span>Wallet Setup</span>
+</div>
+</div>
+<!-- Profile Selection Intro (Hidden in step 2 but shown for context of the user request) -->
+<section class="mb-12 hidden">
+<div class="text-center mb-10">
+<h1 class="text-4xl font-display font-bold mb-4">Bienvenido a ACCET</h1>
+<p class="text-slate-500 text-lg">Selecciona tu perfil para comenzar tu viaje en activos digitales</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Profile Card: Investor -->
+<div class="glass p-8 rounded-xl border-2 border-primary group cursor-pointer hover:bg-primary/5 transition-all">
+<div class="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center text-primary mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">trending_up</span>
+</div>
+<h3 class="text-2xl font-display font-bold mb-2">Soy Inversor</h3>
+<p class="text-slate-400 mb-6">Busco diversificar mi portafolio con activos respaldados por propiedades reales.</p>
+<div class="flex items-center text-primary font-bold gap-2">
+                                Continuar <span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+<!-- Profile Card: Owner -->
+<div class="glass p-8 rounded-xl border-2 border-transparent hover:border-primary/50 group cursor-pointer transition-all">
+<div class="w-16 h-16 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 mb-6 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">real_estate_agent</span>
+</div>
+<h3 class="text-2xl font-display font-bold mb-2 text-slate-300">Soy Propietario</h3>
+<p class="text-slate-500 mb-6">Quiero tokenizar mis activos inmobiliarios para acceder a liquidez global.</p>
+<div class="flex items-center text-slate-500 font-bold gap-2">
+                                Continuar <span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+<!-- KYC Verification Screen -->
+<section class="max-w-2xl mx-auto">
+<div class="glass rounded-2xl overflow-visible shadow-2xl border border-white/5">
+<div class="bg-primary/10 p-6 border-b border-white/5">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-white">
+<span class="material-symbols-outlined">verified_user</span>
+</div>
+<div>
+<h2 class="text-xl font-bold">Verificación de Identidad</h2>
+<p class="text-sm text-slate-400">Cumplimiento institucional de seguridad</p>
+</div>
+</div>
+</div>
+<div class="p-8 space-y-8">
+<!-- Facial Recognition Placeholder -->
+<div class="relative aspect-video rounded-xl overflow-visible bg-slate-900 border-2 border-dashed border-slate-700 flex flex-col items-center justify-center group cursor-pointer">
+<div class="absolute inset-0 bg-gradient-to-t from-background-dark/80 to-transparent z-10"></div>
+<div class="relative z-20 flex flex-col items-center text-center px-6">
+<div class="w-24 h-24 mb-4 relative">
+<div class="absolute inset-0 border-2 border-primary rounded-full animate-pulse"></div>
+<div class="absolute inset-2 border-2 border-primary/40 rounded-full"></div>
+<div class="flex items-center justify-center h-full">
+<span class="material-symbols-outlined text-5xl text-primary">face</span>
+</div>
+</div>
+<h4 class="text-lg font-bold mb-1">Reconocimiento Facial</h4>
+<p class="text-xs text-slate-400 max-w-[280px]">Coloca tu rostro dentro del marco y asegúrate de tener buena iluminación.</p>
+<button class="mt-6 px-6 py-2 bg-primary rounded-full text-white font-bold text-sm hover:bg-primary/90 transition-all">
+                                        Iniciar Cámara
+                                    </button>
+</div>
+<img alt="Futuristic scanner background" class="absolute inset-0 w-full h-full object-cover opacity-20 grayscale" data-alt="Abstract cyber security blue light grid" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA29wbDr9cRCU_wCPb3Kxu9a-qA817sMhKiDN-TlHfA_X50XaDbqnPL1FpaohUOvZryWuM_hJmQI1FUqObDqTOL67hnhs_kSORqQM1N5pHGyHoU2fF_VTzdy-02pAHl3m2vc-Rw-mugajAPgaZSx0TgzyOLFFztK6zN3Wu6lpIj5Sb1zHM3LMkcIo2YKlNAJZ-_YSyQcoU1C5f33WXCqqDgtsNR2di-Gg9kDzJNXIPToaDLbFJKuNhkzrEeF_QNJ35p6nrjhyx8FU4O"/>
+</div>
+<!-- Document Upload -->
+<div class="space-y-4">
+<label class="block text-sm font-bold text-slate-300">Documentación Requerida</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- ID Document -->
+<div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-primary/50 cursor-pointer transition-colors group">
+<div class="flex items-center justify-between mb-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">badge</span>
+<span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-300">PDF, JPG</span>
+</div>
+<p class="text-sm font-bold">Documento de Identidad</p>
+<p class="text-xs text-slate-500 mt-1">Frente y dorso</p>
+<div class="mt-4 flex items-center gap-2 text-primary text-xs font-bold">
+<span class="material-symbols-outlined text-sm">upload</span> Subir archivo
+                                        </div>
+</div>
+<!-- NIT/Tax ID -->
+<div class="p-4 rounded-xl border border-slate-700 bg-slate-800/50 hover:border-primary/50 cursor-pointer transition-colors group">
+<div class="flex items-center justify-between mb-3">
+<span class="material-symbols-outlined text-slate-400 group-hover:text-primary">description</span>
+<span class="text-[10px] bg-slate-700 px-2 py-0.5 rounded text-slate-300">PDF</span>
+</div>
+<p class="text-sm font-bold">NIT / RUT</p>
+<p class="text-xs text-slate-500 mt-1">Registro tributario actualizado</p>
+<div class="mt-4 flex items-center gap-2 text-primary text-xs font-bold">
+<span class="material-symbols-outlined text-sm">upload</span> Subir archivo
+                                        </div>
+</div>
+</div>
+</div>
+<div class="flex items-start gap-3 p-4 bg-slate-800/40 rounded-lg">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-xs text-slate-400 leading-relaxed">
+                                    Tus datos están protegidos bajo estándares militares de cifrado AES-256. ACCET no almacena tus biométricos directamente, son procesados por proveedores certificados.
+                                </p>
+</div>
+</div>
+<div class="px-8 py-6 bg-slate-900/50 flex flex-col sm:flex-row gap-4 items-center justify-between">
+<button class="text-slate-400 font-bold hover:text-white transition-colors flex items-center gap-2 order-2 sm:order-1">
+<span class="material-symbols-outlined">arrow_back</span> Atrás
+                            </button>
+<button class="w-full sm:w-auto px-10 py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all order-1 sm:order-2">
+                                Continuar a Wallet Setup
+                            </button>
+</div>
+</div>
+<!-- Footer Help -->
+<div class="mt-10 flex flex-col items-center justify-center gap-4 text-slate-500 text-sm">
+<p>¿Necesitas ayuda con tu verificación?</p>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-lg">support_agent</span> Soporte en vivo
+                            </a>
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-lg">menu_book</span> Guía de KYC
+                            </a>
+</div>
+</div>
+</section>
+<!-- Success State Overlay (Hidden by default) -->
+<div class="relative inset-0 z-[100] bg-background-dark/95 backdrop-blur-xl flex items-center justify-center p-6 hidden">
+<div class="max-w-md w-full glass p-10 rounded-3xl text-center border-t-4 border-success">
+<div class="w-20 h-20 bg-success/20 rounded-full flex items-center justify-center text-success mx-auto mb-6">
+<span class="material-symbols-outlined text-5xl">check_circle</span>
+</div>
+<h2 class="text-3xl font-display font-bold mb-4">Verificación Exitosa</h2>
+<p class="text-slate-400 mb-8">Tu identidad ha sido validada. Ahora procederemos a configurar tu billetera institucional segura.</p>
+<button class="w-full py-4 bg-success text-white font-bold rounded-xl hover:bg-success/90 transition-all">
+                            Configurar Wallet
+                        </button>
+</div>
+</div>
+</main>
+</div>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="03_narrative_owner_journey.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">04</span> DE 37
+  </div>
+  <div>
+    <a href="05_verificaci_n_kyc_subir_documento_accet.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACCET - Institutional RWA Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#1ed278",
+                "background-light": "#f6f8f7",
+                "background-dark": "#0b120e",
+                "neutral-800": "#1a2a22",
+                "neutral-700": "#293830",
+              },
+              fontFamily: {
+                "display": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+      </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(30, 210, 120, 0.15);
+            border-color: rgba(30, 210, 120, 0.4);
+        }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-300">
+<div class="relative flex min-h-auto w-full flex-col overflow-x-hidden">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-neutral-700 bg-background-dark/80 backdrop-blur-md px-6 lg:px-20 py-4">
+<div class="max-w-[1440px] mx-auto flex items-center justify-between gap-8">
+<div class="flex items-center gap-10">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined font-bold">account_balance</span>
+</div>
+<h2 class="text-xl font-bold tracking-tight">ACCET</h2>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-primary text-sm font-semibold" href="#">Marketplace</a>
+<a class="text-slate-400 hover:text-slate-100 text-sm font-medium transition-colors" href="#">Portfolio</a>
+<a class="text-slate-400 hover:text-slate-100 text-sm font-medium transition-colors" href="#">Compliance</a>
+<a class="text-slate-400 hover:text-slate-100 text-sm font-medium transition-colors" href="#">Governance</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end items-center gap-6">
+<div class="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-neutral-800 rounded-lg border border-neutral-700">
+<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+<span class="text-xs font-semibold text-slate-300">ERC-3643 Whitelisted</span>
+</div>
+<button class="flex items-center justify-center gap-2 rounded-lg h-10 px-6 bg-primary text-background-dark text-sm font-bold hover:brightness-110 transition-all">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span>Connect Wallet</span>
+</button>
+<div class="w-10 h-10 rounded-full border border-neutral-700 bg-neutral-800 overflow-visible" data-alt="User profile avatar placeholder">
+<img alt="Avatar" class="w-full h-full object-cover" data-alt="Professional user portrait" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0zNJCZoNek7QjGofJDBC6K-8-6I6dJyYuyChi9KNJwivTSpDk3qkbjetEGDGsvjBLr2s5FLqZNWx2WimmF-dslbKmkjHNc7CFEFquJRBp5RZ0M-lqLxVvWLVRQtqG4otTd9AROiq7M9JoOacGwHAUCmw8t0yoZxJB4P39TO9SVHYdptzQCanOouyalH99wjoHuS5KpYCULH8K6YniolPqY0AQdJwTVi0tQgPetJscIhDHfZdNuAlxpRQcpLfhIdZRVrS0szm06c_8"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto w-full px-6 lg:px-20 py-10">
+<!-- Hero & Title Section -->
+<div class="mb-12">
+<h1 class="text-4xl font-bold mb-4 tracking-tight">Institutional RWA Marketplace</h1>
+<p class="text-slate-400 max-w-2xl text-lg">Access tokenized commercial real estate and infrastructure with on-chain compliance and institutional-grade security.</p>
+</div>
+<!-- Filters & Search -->
+<div class="flex flex-col gap-6 mb-12">
+<div class="flex flex-col lg:flex-row gap-4 items-center">
+<div class="relative w-full lg:max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full h-12 pl-12 pr-4 bg-neutral-800 border-neutral-700 rounded-xl focus:ring-primary focus:border-primary text-slate-100 placeholder:text-slate-500" placeholder="Search by asset name or city..." type="text"/>
+</div>
+<div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+<button class="flex items-center gap-2 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                            City: London
+                            <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors">
+<span class="material-symbols-outlined text-sm">category</span>
+                            Type: Commercial
+                            <span class="material-symbols-outlined text-sm">expand_more</span>
+</button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-lg text-sm font-medium text-primary">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+                            Returns &gt;18% EA
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-neutral-800 border border-neutral-700 rounded-lg text-sm font-medium hover:bg-neutral-700 transition-colors">
+<span class="material-symbols-outlined text-sm">account_balance</span>
+                            LTV &lt;60%
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 text-slate-400 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                            More Filters
+                        </button>
+</div>
+</div>
+</div>
+<!-- Asset Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<div class="group bg-neutral-800/40 border border-neutral-700 rounded-2xl overflow-visible glow-hover transition-all duration-300">
+<div class="relative h-64 overflow-visible">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Modern glass skyscraper in business district" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD16pSZHKPadCLV7zse9VtBxLSNhbCjrlqUgb3bhQQBnFJSCO4Brb2iQwFJwFb1-9ECYZUfNWzgOgFVAaUYPJd1v0cNI96qzsh1dtFDKZN2S4ZUNyywhbyKveDkhf58Yh8MAJfvK7sVBmivzO-Vyg-9Or23LtLpDbA_cF3COMzYr2ofqHlBeBp1_I_cSVqy9z6QpWhDv3ng22T1BzGDp4-k3BubYfr3U_7bVzN95nGJlrDU-smC2mJ588hD1DXGEyOuqXolskacDC25"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-primary text-background-dark text-xs font-bold rounded-full">PRE-SALE</span>
+<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-white text-xs font-bold rounded-full">COMMERCIAL</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-neutral-900/80 backdrop-blur-md p-2 rounded-lg border border-neutral-700 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400 text-sm">link</span>
+<span class="text-[10px] text-slate-300 font-bold uppercase tracking-widest">Oracle Verified</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-100">London Zenith Tower</h3>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary">bookmark</span>
+</div>
+<div class="flex items-center gap-1 text-slate-400 text-sm mb-6">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                            Canary Wharf, London
+                        </div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="p-3 rounded-xl bg-neutral-800 border border-neutral-700">
+<p class="text-[10px] text-slate-500 font-bold uppercase mb-1">Projected IRR</p>
+<p class="text-lg font-bold text-primary">21.4%</p>
+</div>
+<div class="p-3 rounded-xl bg-neutral-800 border border-neutral-700">
+<p class="text-[10px] text-slate-500 font-bold uppercase mb-1">LTV (Chainlink)</p>
+<p class="text-lg font-bold text-slate-100">54.2%</p>
+</div>
+</div>
+<div class="mb-6">
+<div class="flex justify-between text-xs font-bold mb-2">
+<span class="text-slate-400 uppercase">Funding Progress</span>
+<span class="text-primary">72% — 1.8M USDC</span>
+</div>
+<div class="w-full h-2 bg-neutral-700 rounded-full overflow-visible">
+<div class="h-full bg-primary" style="width: 72%"></div>
+</div>
+</div>
+<button class="w-full py-3 bg-neutral-700 hover:bg-neutral-600 border border-neutral-600 text-white font-bold rounded-xl transition-colors">
+                            View Investment Details
+                        </button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-neutral-800/40 border border-neutral-700 rounded-2xl overflow-visible glow-hover transition-all duration-300">
+<div class="relative h-64 overflow-visible">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="High-end luxury apartment complex exterior" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdCRjowH_J_2zRyBxzKvXdJhgNHFqFNgEPaD_4MQHIFOTkcXwExzmXPdgb5khP20CByd10yVGapbaBt46DP8AVUyXeGp2n41Xphy_jTBrxn_ER9zDB06FXtkx9N1f5vQfwzM6w2eZxa5RK5mRYVmrenEnMzGLbc1dIaW3U7YPmPFdwkVQdpaa3OIxyWt47swqCMDEymhmaxMC9mvuvtVh9huxmzWxypnZEt6G9l9RICzCfbbroknWaiex3dojeuTwlC6MIyp3JJ2EX"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-slate-500 text-white text-xs font-bold rounded-full">RENTING</span>
+<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-white text-xs font-bold rounded-full">RESIDENTIAL</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-neutral-900/80 backdrop-blur-md p-2 rounded-lg border border-neutral-700 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400 text-sm">link</span>
+<span class="text-[10px] text-slate-300 font-bold uppercase tracking-widest">Oracle Verified</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-100">The Helix Residences</h3>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary">bookmark</span>
+</div>
+<div class="flex items-center gap-1 text-slate-400 text-sm mb-6">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                            Berlin, Germany
+                        </div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="p-3 rounded-xl bg-neutral-800 border border-neutral-700">
+<p class="text-[10px] text-slate-500 font-bold uppercase mb-1">Projected IRR</p>
+<p class="text-lg font-bold text-primary">19.8%</p>
+</div>
+<div class="p-3 rounded-xl bg-neutral-800 border border-neutral-700">
+<p class="text-[10px] text-slate-500 font-bold uppercase mb-1">LTV (Chainlink)</p>
+<p class="text-lg font-bold text-slate-100">48.5%</p>
+</div>
+</div>
+<div class="mb-6">
+<div class="flex justify-between text-xs font-bold mb-2">
+<span class="text-slate-400 uppercase">Funding Progress</span>
+<span class="text-primary">100% — Sold Out</span>
+</div>
+<div class="w-full h-2 bg-neutral-700 rounded-full overflow-visible">
+<div class="h-full bg-primary" style="width: 100%"></div>
+</div>
+</div>
+<button class="w-full py-3 bg-neutral-700/50 border border-neutral-600 text-slate-400 font-bold rounded-xl cursor-not-allowed">
+                            Trading on Secondary Market
+                        </button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-neutral-800/40 border border-neutral-700 rounded-2xl overflow-visible glow-hover transition-all duration-300">
+<div class="relative h-64 overflow-visible">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Solar panel farm in open field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-sUKmiryn8mYzth5Vo4EfRnZTiM1FI1iSqEb_V3l8JgYn9lXYKx_YllFID86Pymrt0-czj-5xTfWiqwDyuDpqMMnKnYNdtupjOkYg2N6GRVb4v8Z1ik4GuUT4KQMxaLIauoLlcfK73FciETrrH8ABD2waejASkFVc2ViDb_PFg-XwsVZWshqWQqxFEoiDF56yIs0uh6SJPE84WioW-v7m4BlTWCZsqfS5wuTcEoNUAoyAyDKyYarZYu_HtB5JQ73H5TUUdgA_x4Uo"/>
+<div class="absolute top-4 left-4 flex gap-2">
+<span class="px-3 py-1 bg-primary text-background-dark text-xs font-bold rounded-full">PRE-SALE</span>
+<span class="px-3 py-1 bg-black/60 backdrop-blur-md text-white text-xs font-bold rounded-full">INFRASTRUCTURE</span>
+</div>
+<div class="absolute bottom-4 right-4 bg-neutral-900/80 backdrop-blur-md p-2 rounded-lg border border-neutral-700 flex items-center gap-2">
+<span class="material-symbols-outlined text-blue-400 text-sm">link</span>
+<span class="text-[10px] text-slate-300 font-bold uppercase tracking-widest">Oracle Verified</span>
+</div>
+</div>
+<div class="p-6">
+<div class="flex justify-between items-start mb-2">
+<h3 class="text-xl font-bold text-slate-100">Andalusia Solar Park</h3>
+<span class="material-symbols-outlined text-slate-500 cursor-pointer hover:text-primary">bookmark</span>
+</div>
+<div class="flex items-center gap-1 text-slate-400 text-sm mb-6">
+<span class="material-symbols-outlined text-sm">location_on</span>
+                            Seville, Spain
+                        </div>
+<div class="grid grid-cols-2 gap-4 mb-6">
+<div class="p-3 rounded-xl bg-neutral-800 border border-neutral-700">
+<p class="text-[10px] text-slate-500 font-bold uppercase mb-1">Projected IRR</p>
+<p class="text-lg font-bold text-primary">24.1%</p>
+</div>
+<div class="p-3 rounded-xl bg-neutral-800 border border-neutral-700">
+<p class="text-[10px] text-slate-500 font-bold uppercase mb-1">LTV (Chainlink)</p>
+<p class="text-lg font-bold text-slate-100">32.0%</p>
+</div>
+</div>
+<div class="mb-6">
+<div class="flex justify-between text-xs font-bold mb-2">
+<span class="text-slate-400 uppercase">Funding Progress</span>
+<span class="text-primary">35% — 850k USDC</span>
+</div>
+<div class="w-full h-2 bg-neutral-700 rounded-full overflow-visible">
+<div class="h-full bg-primary" style="width: 35%"></div>
+</div>
+</div>
+<button class="w-full py-3 bg-primary hover:brightness-110 text-background-dark font-bold rounded-xl transition-all">
+                            Participate in Pre-sale
+                        </button>
+</div>
+</div>
+<!-- Additional Assets Row Placeholder -->
+<div class="group bg-neutral-800/40 border border-neutral-700 rounded-2xl overflow-visible glow-hover transition-all duration-300 opacity-90">
+<div class="relative h-64 overflow-visible">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Futuristic architectural facade" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB54MVAc3Ya47i1RnZJn8yoldoVUwT8DbPN9TAg2obxdrnM6F_myxU48uNBt6ueD2QYuTmpNJn9UPeqRpPIrLDSSIbWkNzkFra_YVuCLq6rhEZVFQs0xVcW6IYfQO2I2aGw54zXWVcOxDrNl07zfcoUAzijD0oTa8kP99jN_K5yVMsva1geW5hX_G0Uo3nQypBj9J7JquMGSpoi_jRzMBpHavBwj4QadLYW-7QYGC6u6_WjerK4f6qa8aK8OU6ZXLEvtdg6rLU4wFxT"/>
+<div class="absolute inset-0 bg-background-dark/40 flex items-center justify-center">
+<span class="px-4 py-2 bg-neutral-900 border border-neutral-700 text-white rounded-lg font-bold">Coming Soon</span>
+</div>
+</div>
+<div class="p-6">
+<h3 class="text-xl font-bold text-slate-500">Neo-Tokyo Data Hub</h3>
+<p class="text-slate-600 text-sm mt-2">Whitelist opening in Q4 2024</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Compliance Sidebar Info - Sticky Desktop -->
+<div class="relative bottom-8 left-8 hidden xl:flex flex-col gap-4 max-w-xs">
+<div class="bg-neutral-800/90 backdrop-blur-md p-4 rounded-xl border border-neutral-700 shadow-2xl">
+<div class="flex items-center gap-3 mb-3">
+<div class="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm">security</span>
+</div>
+<h4 class="font-bold text-sm">Compliance Status</h4>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-400">KYC/KYB Profile</span>
+<span class="text-primary flex items-center gap-1 font-bold">
+                            Verified <span class="material-symbols-outlined text-[14px]">check_circle</span>
+</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-400">ERC-3643 Token</span>
+<span class="text-primary font-bold">Enabled</span>
+</div>
+<div class="flex justify-between items-center text-xs">
+<span class="text-slate-400">Oracle Latency</span>
+<span class="text-slate-200">1.2s</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer -->
+<footer class="mt-auto w-full border-t border-neutral-700 bg-neutral-800/30 py-12 px-6 lg:px-20">
+<div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
+<div class="col-span-1 md:col-span-1">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-6 h-6 bg-primary rounded flex items-center justify-center text-background-dark">
+<span class="material-symbols-outlined text-sm font-bold">account_balance</span>
+</div>
+<h2 class="text-lg font-bold tracking-tight">ACCET</h2>
+</div>
+<p class="text-slate-500 text-sm leading-relaxed">The future of real-world asset investing. Institutional grade, compliant, and accessible on-chain.</p>
+</div>
+<div>
+<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-slate-400">Protocol</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Documentation</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Risk Assessment</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Security Audits</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Legal Framework</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-slate-400">Ecosystem</h4>
+<ul class="space-y-4 text-sm text-slate-500">
+<li><a class="hover:text-primary transition-colors" href="#">Partners</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Oracles</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Governance</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Secondary Market</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-sm mb-6 uppercase tracking-widest text-slate-400">Compliance</h4>
+<div class="bg-neutral-800 p-4 rounded-xl border border-neutral-700">
+<p class="text-xs text-slate-400 mb-3">ACCET utilizes the ERC-3643 standard for identity management and compliance.</p>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">verified</span>
+<span class="text-[10px] font-bold text-slate-200">ON-CHAIN KYC REQUIRED</span>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-[1440px] mx-auto mt-12 pt-8 border-t border-neutral-700 flex flex-col md:flex-row justify-between items-center gap-4">
+<p class="text-slate-500 text-xs">© 2024 ACCET Protocol. All rights reserved.</p>
+<div class="flex gap-6">
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">public</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">share</span></a>
+<a class="text-slate-500 hover:text-white transition-colors" href="#"><span class="material-symbols-outlined">description</span></a>
+</div>
+</div>
+</footer>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="11_narrative_investor_journey.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">12</span> DE 37
+  </div>
+  <div>
+    <a href="13_marketplace_rwa_accet_2.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

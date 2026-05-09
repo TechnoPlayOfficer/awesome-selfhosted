@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            400: '#34d399',
+                            500: '#10b981',
+                            600: '#059669',
+                        },
+                        cyan: {
+                            400: '#22d3ee',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                        }
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans", "sans-serif"],
+                        "body": ["Public Sans", "sans-serif"],
+                        "label": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .neon-border-emerald {
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-slate-50 font-body text-slate-900 antialiased min-h-auto">
+<!-- Top Navigation Bar -->
+<header class="bg-gray-950/50 backdrop-blur-xl text-cyan-400 font-sans antialiased docked full-width top-0 sticky border-b border-white/10 shadow-[0_0_15px_rgba(34,211,238,0.1)] flex justify-between items-center px-6 py-3 w-full z-50">
+<div class="flex items-center gap-8">
+<span class="text-xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">RWA Nexus</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-cyan-400 border-b-2 border-cyan-400 pb-1" href="#">Market</a>
+<a class="text-gray-400 hover:text-white transition-colors" href="#">Portfolio</a>
+<a class="text-gray-400 hover:text-white transition-colors" href="#">Liquidity</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex items-center bg-white/5 rounded-full px-4 py-1.5 border border-white/10">
+<span class="material-symbols-outlined text-sm mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-white placeholder-gray-500 w-48" placeholder="Search assets..." type="text"/>
+</div>
+<button class="p-2 text-gray-400 hover:bg-white/5 transition-all rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-gray-400 hover:bg-white/5 transition-all rounded-full">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-gradient-to-br from-cyan-400 to-emerald-400 p-0.5">
+<img alt="User profile" class="rounded-full w-full h-full object-cover" data-alt="Professional user profile avatar headshot" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuNadOoGhE4IvDx6FG9tD7psFofT9shhUJ624K5ChlJm1K80j8VJrmS1QvAsg0TH5y2jktU2680rYDqEqXKzMXNe-KHekEBWEQqkMvHMgSXeoFQmkQQxrzOcuZmpvjhVfh67AVNi3Tte36VW_ZRIJFl3r0ywgk1OipnZchxKAeegnfUiMINVcuY_mGHyXOq6jY-KC3boi6GwmSsXlXWRjJ62uN9U0kdynQ9vtlIVYyDuw9jK5IN7OKAaY2hf6HqvL1Ue_VQ2y4ex7b"/>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-6 py-10 lg:grid lg:grid-cols-12 lg:gap-8">
+<!-- Left Column: Asset Identity & Transparency -->
+<div class="lg:col-span-7 space-y-8">
+<!-- Asset Header -->
+<section class="space-y-4">
+<div class="flex items-center gap-3">
+<span class="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-600 text-xs font-bold tracking-widest uppercase">Activo Verificado</span>
+<span class="text-slate-400 text-sm font-mono">ID: 0.0.9283456</span>
+</div>
+<h1 class="text-5xl font-black text-slate-900 tracking-tight">Skyline Tower A</h1>
+<p class="text-lg text-slate-600 leading-relaxed max-w-2xl">
+                    Participación fraccionada en desarrollo comercial premium de alta demanda. Ubicación estratégica con contratos de arrendamiento corporativos a largo plazo.
+                </p>
+</section>
+<!-- Main Visual Bento -->
+<div class="grid grid-cols-2 gap-4">
+<div class="col-span-2 h-80 rounded-2xl overflow-visible relative shadow-xl">
+<img alt="Skyline Tower A Architecture" class="w-full h-full object-cover" data-alt="Modern glass skyscraper architecture at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAz2JQQ8_kSsy1cGsyr5XRKPTSfbrDek1HGfrmmJWmlUoVd5yvD-5jvYeacXgejX1T_XI2on32UZ1u_LHuCWBoCYFleGpv6mxV1ts2t_T0OzKRTu92NSE1eCt4zr6yCot92E1eJRKcbMKENTz8fo2Dm107uzD5M5myjTNIv1k9QtNVkcdIXJCbduI3O9Qf-9zUB8DoOshkCdeVQvsLX76I4i08JxhRRlB4k7MMEugbmxly0AULsJPHOfy8pSuNFkvG0pqi2L9vrG3YF"/>
+<div class="absolute bottom-4 left-4 flex gap-2">
+<span class="bg-black/60 backdrop-blur-md text-white px-3 py-1.5 rounded-lg text-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">location_on</span> Dubai, UAE
+                        </span>
+</div>
+</div>
+<div class="h-40 rounded-2xl overflow-visible shadow-lg">
+<img alt="Interior Office" class="w-full h-full object-cover" data-alt="Modern luxury office interior design" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCWEQ3ReR4LnK9uJr1-0uL8EG0bZJeGF3k_M79cYfdbiVUfzsRbMl2i1Md7qMUN3NBEMIUlNCD3MA-rpRW1Nkwltqnpcfk6nTD1x71ouHxwPgZo6KaHdxA0GtO-kDZ0RmPVFcq5jfujDB5egCtkdIIvxryTPFdTI21i_e3QGSQ4_v7157h1gEJbWH4fPCicJqoUiZRSMU2JnUrHr_2wC_IrS3sjcXUqa08nbgroYjy-RkkzqXlujDNYpQppno34NrE9THI-mbeuexbQ"/>
+</div>
+<div class="h-40 rounded-2xl overflow-visible shadow-lg relative">
+<img alt="Asset Map" class="w-full h-full object-cover" data-alt="City map layout of business district" data-location="Dubai" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAoq3ZTiPMuW1bG6FRLQmwHqJM8xtl1L0ULsVODwlR-6eZdIgZ0dsiRdKgeevvlL8AX2-W6xXzQF9_H5mmMXclvtpclpQJE-kdCnOpI4uagxNktApSSgNFk7AaxM4XTlG1_jpxcC43PBcgoGNCHXNDl4nP_M7pmIM2c0JY1JUML2pU4asEAlJuI_f1v2LLPTXHascZARA2FVTe7H2mxbOdyawFFAABo5BbYMypuiTEl_JjrH6BaGoY1sJVsqH2We0i3LAUGeks2FEGj"/>
+<div class="absolute inset-0 bg-cyan-600/20 mix-blend-multiply"></div>
+</div>
+</div>
+<!-- Transparency & Smart Contract -->
+<section class="glass-card rounded-2xl p-6 border-emerald-500/20 border neon-border-emerald">
+<div class="flex items-center gap-4 mb-6">
+<div class="p-3 rounded-xl bg-emerald-500 text-white">
+<span class="material-symbols-outlined">security</span>
+</div>
+<div>
+<h3 class="font-bold text-slate-900">Transparencia de Smart Contract</h3>
+<p class="text-xs text-slate-500 uppercase tracking-wider">Hedera Token Service (HTS)</p>
+</div>
+</div>
+<div class="grid md:grid-cols-2 gap-6">
+<div class="space-y-4">
+<div class="bg-slate-100/50 p-4 rounded-xl border border-slate-200">
+<p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Hash de Contrato (HTS)</p>
+<div class="flex items-center justify-between">
+<code class="text-xs text-emerald-600 font-mono truncate mr-4">0x71C7656EC7ab88b098defB751B7401B5f6d8976F</code>
+<button class="text-slate-400 hover:text-emerald-500 transition-colors">
+<span class="material-symbols-outlined text-lg">content_copy</span>
+</button>
+</div>
+</div>
+<div class="flex items-center gap-2 text-sm text-slate-600">
+<span class="material-symbols-outlined text-emerald-500" style="font-variation-settings: 'FILL' 1;">verified</span>
+<span>Auditado por CertiK Labs (Q3 2023)</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-slate-100/50 p-4 rounded-xl border border-slate-200">
+<p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Términos Legales Firmados</p>
+<div class="flex items-center justify-between">
+<span class="text-sm font-medium text-slate-700">SPV_Skyline_A_Deed.pdf</span>
+<button class="text-cyan-600 flex items-center gap-1 text-xs font-bold">
+                                    VER <span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+</div>
+<p class="text-[10px] text-slate-400 italic">
+                            Esta inversión representa una participación en el fideicomiso que posee el activo inmobiliario.
+                        </p>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Investment Simulator & CTA -->
+<aside class="lg:col-span-5 mt-10 lg:mt-0">
+<div class="sticky top-24 space-y-6">
+<!-- Investment Simulator Card -->
+<div class="glass-card rounded-3xl p-8 shadow-2xl border-white relative overflow-visible">
+<!-- Accent Decoration -->
+<div class="absolute -top-12 -right-12 w-32 h-32 bg-cyan-400/20 blur-3xl rounded-full"></div>
+<div class="absolute -bottom-12 -left-12 w-32 h-32 bg-emerald-400/20 blur-3xl rounded-full"></div>
+<h2 class="text-2xl font-bold text-slate-900 mb-8">Suscribir a Skyline Tower</h2>
+<div class="space-y-6 relative">
+<!-- Input Field -->
+<div>
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Monto de Inversión (USD)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 text-2xl font-black text-slate-300">$</span>
+<input class="w-full bg-white border-2 border-slate-100 focus:border-cyan-400 focus:ring-0 rounded-2xl py-4 pl-10 pr-4 text-3xl font-black text-slate-900 transition-all" type="number" value="1000"/>
+</div>
+</div>
+<!-- Projections Grid -->
+<div class="grid grid-cols-2 gap-4">
+<div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100">
+<p class="text-[10px] text-emerald-700 font-bold uppercase tracking-wider mb-1">Retorno (E.A.)</p>
+<p class="text-2xl font-black text-emerald-600">18.5%</p>
+</div>
+<div class="bg-cyan-50 p-4 rounded-2xl border border-cyan-100">
+<p class="text-[10px] text-cyan-700 font-bold uppercase tracking-wider mb-1">Dividendos Mens.</p>
+<p class="text-2xl font-black text-cyan-600">$15.42</p>
+</div>
+</div>
+<!-- Divider -->
+<div class="h-px bg-slate-200 w-full"></div>
+<!-- Payment Methods -->
+<div>
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Método de Pago</label>
+<div class="grid grid-cols-3 gap-3">
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border-2 border-cyan-500 bg-cyan-50 text-cyan-600 transition-all">
+<span class="material-symbols-outlined mb-1">payments</span>
+<span class="text-[10px] font-bold">PSE</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border-2 border-slate-100 hover:border-cyan-200 transition-all">
+<span class="material-symbols-outlined mb-1">currency_exchange</span>
+<span class="text-[10px] font-bold">USDC</span>
+</button>
+<button class="flex flex-col items-center justify-center p-3 rounded-xl border-2 border-slate-100 hover:border-cyan-200 transition-all">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">account_balance_wallet</span>
+<span class="text-[10px] font-bold">WALLET</span>
+</button>
+</div>
+</div>
+<!-- Summary -->
+<div class="space-y-3 pt-2">
+<div class="flex justify-between text-sm">
+<span class="text-slate-500">Comisión de Gestión (0.5%)</span>
+<span class="text-slate-900 font-medium">$5.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-slate-500">Gas Fee (HTS Network)</span>
+<span class="text-emerald-600 font-medium">~$0.001</span>
+</div>
+<div class="flex justify-between text-lg font-bold border-t border-slate-100 pt-3">
+<span class="text-slate-900">Total a Pagar</span>
+<span class="text-cyan-600">$1,005.00</span>
+</div>
+</div>
+<!-- Primary CTA -->
+<button class="w-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-black py-5 rounded-2xl shadow-xl shadow-cyan-500/20 transition-all active:scale-[0.98] uppercase tracking-wider flex items-center justify-center gap-3">
+                            Confirmar Suscripción On-Chain
+                            <span class="material-symbols-outlined">bolt</span>
+</button>
+</div>
+</div>
+<!-- Secondary Info -->
+<div class="px-4 py-2 flex items-center gap-3 text-slate-400">
+<span class="material-symbols-outlined text-sm">info</span>
+<p class="text-xs leading-tight">Tu inversión quedará bloqueada por un periodo mínimo de 12 meses según el smart contract.</p>
+</div>
+</div>
+</aside>
+</main>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden relative bottom-0 left-0 w-full bg-white border-t border-slate-100 px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-cyan-600">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="text-[10px] font-bold">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">account_balance</span>
+<span class="text-[10px] font-bold">Assets</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">history_edu</span>
+<span class="text-[10px] font-bold">History</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-slate-400">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-bold">Settings</span>
+</button>
+</nav>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="15_ficha_de_activo_torre_chic.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">16</span> DE 37
+  </div>
+  <div>
+    <a href="17_inversi_n_exitosa_skyline_tower_a.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

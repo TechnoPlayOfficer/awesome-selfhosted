@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Tenant {
+  id        String     @id @default(uuid())
+  name      String
+  type      String     // e.g., "UNIVERSITY", "CASA_DE_BOLSA"
+  documents Document[]
+  users     User[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model User {
+  id            String     @id @default(uuid())
+  email         String     @unique
+  walletAddress String?    @unique
+  name          String?
+  tenantId      String?
+  tenant        Tenant?    @relation(fields: [tenantId], references: [id])
+  documents     Document[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Document {
+  id           String        @id @default(uuid())
+  title        String
+  size         Int?
+  cid          String?       // Filecoin CID
+  status       DocumentStatus @default(UPLOADED)
+  tenantId     String
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+  userId       String?
+  user         User?         @relation(fields: [userId], references: [id])
+  txHash       String?       // Blockchain Transaction Hash
+  signatureUrl String?       // URL to the signed PDF (Docuseal)
+  signatures   Signature[]
+  transactions Transaction[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([cid])
+  @@index([tenantId])
+}
+
+model Signature {
+  id            String   @id @default(uuid())
+  documentId    String
+  document      Document @relation(fields: [documentId], references: [id])
+  signatureData String   // Could be a hash or signature payload
+  provider      String   // e.g., "CERTICAMARA", "DOCUSEAL"
+  createdAt     DateTime @default(now())
+}
+
+model Transaction {
+  id         String   @id @default(uuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id])
+  txHash     String   @unique
+  network    String   // e.g., "BASE_MAINNET", "AVALANCHE_C_CHAIN"
+  status     String   // e.g., "PENDING", "CONFIRMED", "FAILED"
+  createdAt  DateTime @default(now())
+}
+
+enum DocumentStatus {
+  UPLOADED
+  ORACLE_VALIDATING
+  ORACLE_PASSED
+  CERTICAMARA_PENDING
+  SEALED
+  TOKEN_MINTED
+}

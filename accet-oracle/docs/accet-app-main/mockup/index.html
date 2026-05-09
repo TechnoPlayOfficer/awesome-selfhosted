@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCET · Prototipo Interactivo</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --sky:#5EC8F2; --teal:#377D8C; --light:#F2F2F2; --dark:#0D0D0D;
+}
+body { background: var(--dark); color: #fff; font-family: 'DM Sans', sans-serif; margin: 0; padding: 0; }
+header { background: #000; padding: 40px 20px; border-bottom: 4px solid var(--sky); text-align: center; }
+.container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+h1 { font-family: 'Syne', sans-serif; font-size: 42px; color: var(--sky); margin-bottom: 10px; margin-top: 0; }
+p { color: rgba(255,255,255,0.6); margin-bottom: 30px; font-size: 16px; text-align: center; }
+.list { display: flex; flex-direction: column; gap: 10px; }
+.item { background: rgba(255,255,255,0.05); padding: 15px 20px; border-radius: 8px; text-decoration: none; color: #fff; display: flex; align-items: center; border-left: 3px solid var(--sky); transition: 0.2s; }
+.item:hover { background: rgba(94,200,242,0.1); border-color: var(--teal); transform: translateX(5px); }
+.num { font-family: 'JetBrains Mono', monospace; color: var(--sky); font-size: 14px; font-weight: bold; width: 40px; }
+.name { font-size: 15px; }
+  
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>ACCET Journey Index</h1>
+  <p>Haga clic en cualquier paso para iniciar la navegación interactiva.</p>
+</header>
+<div class="container">
+  <div class="list">
+    <a href="01_narrative_intro.html" class="item"><span class="num">01</span><span class="name">Narrative Intro</span></a>
+    <a href="02_landing_page_accet_rwa.html" class="item"><span class="num">02</span><span class="name">Landing Page Accet Rwa</span></a>
+    <a href="03_narrative_owner_journey.html" class="item"><span class="num">03</span><span class="name">Narrative Owner Journey</span></a>
+    <a href="04_registro_y_onboarding_accet.html" class="item"><span class="num">04</span><span class="name">Registro Y Onboarding Accet</span></a>
+    <a href="05_verificaci_n_kyc_subir_documento_accet.html" class="item"><span class="num">05</span><span class="name">Verificaci N Kyc Subir Documento Accet</span></a>
+    <a href="06_verificaci_n_kyc_prueba_de_vida_accet.html" class="item"><span class="num">06</span><span class="name">Verificaci N Kyc Prueba De Vida Accet</span></a>
+    <a href="07_verificaci_n_kyc_en_procesamiento_accet.html" class="item"><span class="num">07</span><span class="name">Verificaci N Kyc En Procesamiento Accet</span></a>
+    <a href="08_verificaci_n_kyc_exitosa_accet.html" class="item"><span class="num">08</span><span class="name">Verificaci N Kyc Exitosa Accet</span></a>
+    <a href="09_portal_del_propietario_simulador.html" class="item"><span class="num">09</span><span class="name">Portal Del Propietario Simulador</span></a>
+    <a href="10_owner_asset_portfolio_accet.html" class="item"><span class="num">10</span><span class="name">Owner Asset Portfolio Accet</span></a>
+    <a href="11_narrative_investor_journey.html" class="item"><span class="num">11</span><span class="name">Narrative Investor Journey</span></a>
+    <a href="12_marketplace_rwa_accet_1.html" class="item"><span class="num">12</span><span class="name">Marketplace Rwa Accet 1</span></a>
+    <a href="13_marketplace_rwa_accet_2.html" class="item"><span class="num">13</span><span class="name">Marketplace Rwa Accet 2</span></a>
+    <a href="14_marketplace_new_listing_skyline_tower_a.html" class="item"><span class="num">14</span><span class="name">Marketplace New Listing Skyline Tower A</span></a>
+    <a href="15_ficha_de_activo_torre_chic.html" class="item"><span class="num">15</span><span class="name">Ficha De Activo Torre Chic</span></a>
+    <a href="16_inversi_n_suscripci_n_skyline_tower_a.html" class="item"><span class="num">16</span><span class="name">Inversi N Suscripci N Skyline Tower A</span></a>
+    <a href="17_inversi_n_exitosa_skyline_tower_a.html" class="item"><span class="num">17</span><span class="name">Inversi N Exitosa Skyline Tower A</span></a>
+    <a href="18_investor_dashboard_accet.html" class="item"><span class="num">18</span><span class="name">Investor Dashboard Accet</span></a>
+    <a href="19_investor_dashboard_updated_portafolio_1.html" class="item"><span class="num">19</span><span class="name">Investor Dashboard Updated Portafolio 1</span></a>
+    <a href="20_investor_dashboard_updated_portafolio_2.html" class="item"><span class="num">20</span><span class="name">Investor Dashboard Updated Portafolio 2</span></a>
+    <a href="21_wallet_finance_center_accet.html" class="item"><span class="num">21</span><span class="name">Wallet Finance Center Accet</span></a>
+    <a href="22_historial_de_transacciones_de_wallet_accet.html" class="item"><span class="num">22</span><span class="name">Historial De Transacciones De Wallet Accet</span></a>
+    <a href="23_configuraci_n_de_retiros_destino_usdc_accet.html" class="item"><span class="num">23</span><span class="name">Configuraci N De Retiros Destino Usdc Accet</span></a>
+    <a href="24_configuraci_n_de_retiros_autom_ticos_accet.html" class="item"><span class="num">24</span><span class="name">Configuraci N De Retiros Autom Ticos Accet</span></a>
+    <a href="25_configuraci_n_de_retiros_guardada_accet.html" class="item"><span class="num">25</span><span class="name">Configuraci N De Retiros Guardada Accet</span></a>
+    <a href="26_user_settings_security_accet.html" class="item"><span class="num">26</span><span class="name">User Settings Security Accet</span></a>
+    <a href="27_narrative_admin_journey.html" class="item"><span class="num">27</span><span class="name">Narrative Admin Journey</span></a>
+    <a href="28_admin_dashboard_operations_compliance.html" class="item"><span class="num">28</span><span class="name">Admin Dashboard Operations Compliance</span></a>
+    <a href="29_admin_asset_management_minting_accet.html" class="item"><span class="num">29</span><span class="name">Admin Asset Management Minting Accet</span></a>
+    <a href="30_admin_live_asset_minting_accet.html" class="item"><span class="num">30</span><span class="name">Admin Live Asset Minting Accet</span></a>
+    <a href="31_admin_minting_success_accet_1.html" class="item"><span class="num">31</span><span class="name">Admin Minting Success Accet 1</span></a>
+    <a href="32_admin_minting_success_accet_2.html" class="item"><span class="num">32</span><span class="name">Admin Minting Success Accet 2</span></a>
+    <a href="33_admin_dashboard_advanced_control_center.html" class="item"><span class="num">33</span><span class="name">Admin Dashboard Advanced Control Center</span></a>
+    <a href="34_admin_dashboard_ltv_risk_alert_simulation.html" class="item"><span class="num">34</span><span class="name">Admin Dashboard Ltv Risk Alert Simulation</span></a>
+    <a href="35_admin_dashboard_risk_mitigation_resolved.html" class="item"><span class="num">35</span><span class="name">Admin Dashboard Risk Mitigation Resolved</span></a>
+    <a href="36_mitigation_transaction_history_accet.html" class="item"><span class="num">36</span><span class="name">Mitigation Transaction History Accet</span></a>
+    <a href="37_narrative_conclusion.html" class="item"><span class="num">37</span><span class="name">Narrative Conclusion</span></a>
+  </div>
+</div>
+</body>
+</html>
+

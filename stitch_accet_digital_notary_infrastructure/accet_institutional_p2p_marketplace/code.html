@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACCET | Institutional P2P Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .glass-panel {
+            background: rgba(26, 28, 28, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 221, 255, 0.1);
+        }
+        .platinum-border {
+            border: 1px solid rgba(227, 226, 224, 0.2);
+        }
+        .cinematic-vignette {
+            background: radial-gradient(circle, transparent 0%, rgba(12, 15, 15, 0.8) 100%);
+            pointer-events: none;
+        }
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(107, 211, 253, 0.2);
+            border-color: #94ddff;
+        }
+        .scanline {
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #94ddff, transparent);
+            opacity: 0.1;
+        }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #0c0f0f; }
+        ::-webkit-scrollbar-thumb { background: #3e484e; border-radius: 2px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#e2e2e2",
+                      "primary": "#94ddff",
+                      "on-secondary-fixed": "#1b1c1b",
+                      "primary-fixed": "#bde9ff",
+                      "surface-container-low": "#1a1c1c",
+                      "secondary-fixed-dim": "#c7c6c4",
+                      "surface-variant": "#333535",
+                      "surface-container-lowest": "#0c0f0f",
+                      "on-error-container": "#ffdad6",
+                      "on-error": "#690005",
+                      "secondary-container": "#464746",
+                      "surface-tint": "#6bd3fd",
+                      "surface-container-highest": "#333535",
+                      "secondary": "#c7c6c4",
+                      "on-secondary-container": "#b5b5b3",
+                      "surface": "#121414",
+                      "primary-container": "#5ac4ee",
+                      "tertiary": "#cdd2f9",
+                      "outline-variant": "#3e484e",
+                      "secondary-fixed": "#e3e2e0",
+                      "on-tertiary-container": "#414767",
+                      "surface-container": "#1e2020",
+                      "inverse-on-surface": "#2f3131",
+                      "on-tertiary-fixed": "#131937",
+                      "error-container": "#93000a",
+                      "primary-fixed-dim": "#6bd3fd",
+                      "tertiary-container": "#b1b6dc",
+                      "on-secondary": "#303130",
+                      "on-secondary-fixed-variant": "#464746",
+                      "surface-dim": "#121414",
+                      "inverse-primary": "#006684",
+                      "error": "#ffb4ab",
+                      "outline": "#889298",
+                      "on-surface": "#e2e2e2",
+                      "tertiary-fixed-dim": "#bfc4eb",
+                      "surface-container-high": "#282a2b",
+                      "background": "#121414",
+                      "on-tertiary-fixed-variant": "#3f4565",
+                      "on-surface-variant": "#bdc8cf",
+                      "on-primary": "#003546",
+                      "on-primary-container": "#004f66",
+                      "on-tertiary": "#292e4d",
+                      "surface-bright": "#37393a",
+                      "on-primary-fixed": "#001f2a",
+                      "tertiary-fixed": "#dee1ff",
+                      "on-primary-fixed-variant": "#004d64",
+                      "inverse-surface": "#e2e2e2"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "container-max": "1440px",
+                      "section-padding": "120px",
+                      "unit": "8px",
+                      "margin-page": "64px"
+              },
+              "fontFamily": {
+                      "label-caps": ["Space Grotesk"],
+                      "h1": ["Space Grotesk"],
+                      "h2": ["Space Grotesk"],
+                      "h3": ["Space Grotesk"],
+                      "body-lg": ["Poppins"],
+                      "body-md": ["Poppins"]
+              },
+              "fontSize": {
+                      "label-caps": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                      "h1": ["4rem", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "h2": ["2.5rem", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "h3": ["1.75rem", {"lineHeight": "1.3", "letterSpacing": "0em", "fontWeight": "500"}],
+                      "body-lg": ["1.125rem", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-md": ["1rem", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary/30">
+<!-- Top Navigation -->
+<header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center px-gutter py-4 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-12">
+<div class="font-h2 text-h2 font-bold tracking-tighter text-on-surface">ACCET</div>
+<nav class="hidden md:flex gap-8">
+<a class="font-label-caps text-label-caps tracking-tight text-on-surface-variant hover:text-on-surface transition-colors" href="#">Gateway</a>
+<a class="font-label-caps text-label-caps tracking-tight text-primary border-b-2 border-primary pb-1" href="#">Pipeline</a>
+<a class="font-label-caps text-label-caps tracking-tight text-on-surface-variant hover:text-on-surface transition-colors" href="#">Vault</a>
+<a class="font-label-caps text-label-caps tracking-tight text-on-surface-variant hover:text-on-surface transition-colors" href="#">Verification</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-primary-container/10 p-2 rounded-full transition-all" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:bg-primary-container/10 p-2 rounded-full transition-all" data-icon="settings">settings</span>
+</div>
+<button class="bg-primary text-on-primary px-6 py-2 font-label-caps text-label-caps tracking-widest hover:shadow-[0_0_15px_rgba(107,211,253,0.3)] transition-all active:scale-95">Connect Identity</button>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-section-padding px-gutter max-w-container-max mx-auto grid grid-cols-12 gap-6 relative">
+<!-- Background Vignette for Cinematic Depth -->
+<div class="fixed inset-0 cinematic-vignette z-[-1]"></div>
+<!-- Sidebar: Trade Execution & Compliance -->
+<aside class="col-span-12 lg:col-span-3 space-y-6">
+<div class="glass-panel p-6 platinum-border flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<h2 class="font-label-caps text-label-caps text-primary tracking-[0.2em]">P2P TERMINAL</h2>
+<span class="material-symbols-outlined text-primary text-sm" data-icon="gavel">gavel</span>
+</div>
+<div class="space-y-4">
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-[10px] text-on-surface-variant">TARGET ASSET CID</label>
+<div class="platinum-border bg-surface-container-lowest px-4 py-3 flex justify-between items-center">
+<span class="text-xs font-mono">0x71C...49fA2</span>
+<span class="material-symbols-outlined text-sm text-outline" data-icon="content_copy">content_copy</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-caps text-[10px] text-on-surface-variant">TRANSFER QUANTITY</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary outline-none px-4 py-3 font-h3 text-lg text-primary text-right" type="text" value="1.000"/>
+</div>
+<!-- Compliance Check Section -->
+<div class="p-4 bg-primary-container/10 border border-primary/20 rounded-sm space-y-3">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-[10px] text-on-surface">ERC-3643 WHITELIST</span>
+<span class="flex items-center gap-1 text-[10px] text-primary">
+<span class="material-symbols-outlined text-sm" data-icon="verified" data-weight="fill" style="font-variation-settings: 'FILL' 1;">verified</span>
+                                ACTIVE
+                            </span>
+</div>
+<div class="h-1 w-full bg-outline-variant/30 overflow-hidden">
+<div class="h-full bg-primary w-full shadow-[0_0_8px_#94ddff]"></div>
+</div>
+<p class="text-[9px] text-on-surface-variant leading-tight">Identity verified via Institutional Node v2.4. Legal connectivity layer confirmed.</p>
+</div>
+</div>
+<button class="w-full py-4 bg-on-background text-surface font-label-caps text-label-caps font-bold tracking-[0.3em] hover:shadow-[0_0_20px_#fff] transition-all group relative overflow-hidden">
+<span class="relative z-10">SEAL OF LIGHT</span>
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-10 transition-opacity"></div>
+</button>
+<p class="text-[9px] text-center text-outline uppercase tracking-tighter">Biding legal transfer protocol active</p>
+</div>
+<!-- Market Pulse: Real-time Charts -->
+<div class="glass-panel p-6 platinum-border space-y-4">
+<div class="flex justify-between items-center">
+<h3 class="font-label-caps text-label-caps text-on-surface tracking-widest">MARKET PULSE</h3>
+<div class="flex gap-1">
+<div class="w-1 h-3 bg-primary/40"></div>
+<div class="w-1 h-3 bg-primary/20"></div>
+<div class="w-1 h-3 bg-primary"></div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="relative h-24 w-full">
+<div class="absolute inset-0 flex items-end justify-between gap-1">
+<!-- Visual representation of a chart -->
+<div class="w-full bg-primary/10 h-[40%] hover:bg-primary/30 transition-all"></div>
+<div class="w-full bg-primary/10 h-[60%] hover:bg-primary/30 transition-all"></div>
+<div class="w-full bg-primary/10 h-[45%] hover:bg-primary/30 transition-all"></div>
+<div class="w-full bg-primary/10 h-[80%] hover:bg-primary/30 transition-all"></div>
+<div class="w-full bg-primary/10 h-[55%] hover:bg-primary/30 transition-all"></div>
+<div class="w-full bg-primary/10 h-[90%] hover:bg-primary/30 transition-all"></div>
+<div class="w-full bg-primary/10 h-[70%] hover:bg-primary/30 transition-all"></div>
+</div>
+</div>
+<div class="flex justify-between border-t border-outline-variant pt-3">
+<div>
+<p class="text-[10px] text-on-surface-variant font-label-caps">TVL SECURED</p>
+<p class="text-sm font-bold text-primary">$4.2B</p>
+</div>
+<div class="text-right">
+<p class="text-[10px] text-on-surface-variant font-label-caps">VDA VOLUME</p>
+<p class="text-sm font-bold text-on-surface">12.8k TX</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Marketplace Section -->
+<section class="col-span-12 lg:col-span-9 flex flex-col gap-6">
+<!-- Liquid Assets Grid Header -->
+<div class="flex items-end justify-between px-2">
+<div>
+<h1 class="font-h2 text-h2 tracking-tighter text-on-surface">Liquid Assets</h1>
+<p class="font-label-caps text-label-caps text-primary/60 mt-1">INSTITUTIONAL P2P ENGINE // NODE-04</p>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 px-4 py-2 border border-outline-variant text-[10px] font-label-caps">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                        LIVE NETWORK
+                    </div>
+<div class="flex items-center gap-2 px-4 py-2 border border-outline-variant text-[10px] font-label-caps">
+<span class="material-symbols-outlined text-sm" data-icon="filter_list">filter_list</span>
+                        FILTER
+                    </div>
+</div>
+</div>
+<!-- Market Grid -->
+<div class="glass-panel platinum-border overflow-hidden">
+<table class="w-full text-left border-collapse">
+<thead class="bg-surface-container-high/50 border-b border-outline-variant/50">
+<tr>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Asset Identity</th>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Issuing Institution</th>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">TVL Secured</th>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Connectivity</th>
+<th class="px-6 py-4 font-label-caps text-[10px] text-on-surface-variant tracking-widest uppercase">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/10">
+<!-- Asset Row 1 -->
+<tr class="hover:bg-primary-container/5 transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container-highest platinum-border flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="school">school</span>
+</div>
+<div>
+<div class="text-sm font-bold text-on-surface">Juris Doctorate #882</div>
+<div class="text-[10px] font-mono text-outline">CID: bafy...p4m</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full bg-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A minimalist logo for a prestigious legal institution, featuring sharp geometric lines in silver and navy blue, centered against a dark, slightly textured carbon fiber background. The lighting is focused and dramatic, highlighting the logo's polished edges." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDc3fqjLoh7IkS4XAy89-BgLGcgfbA2-XBw4Wc1Ohq5oCulxZCcHGvDf4cChtQ2kT9jPf1Bhqfnd2Bi-TigtjgDHnNt4-4-tpcQlmCPbMyvDDU_ZAxTHnCwNIjpWcBxkiShRdJ14i3bZ7kO8p3CccigTcREpDAFF8XIg4EYrplz3V0qvn--KPTv8tVs0mLTCg2GPhLtOU6frf_giwq6gFDQjWW53-09km3gTYrh8LBe91Sh8ei_izVReQKMU8ujXxOT5-rnCRC7Qt-Y"/>
+</div>
+<span class="text-xs font-medium">POK.tech</span>
+</div>
+</td>
+<td class="px-6 py-5 font-mono text-xs text-primary">$1,240,000</td>
+<td class="px-6 py-5">
+<div class="flex gap-1">
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary/30"></span>
+<span class="w-1 h-4 bg-primary/30"></span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-primary/10 text-primary text-[9px] font-bold border border-primary/20 tracking-tighter uppercase">Binding</span>
+</td>
+</tr>
+<!-- Asset Row 2 -->
+<tr class="hover:bg-primary-container/5 transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container-highest platinum-border flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="domain">domain</span>
+</div>
+<div>
+<div class="text-sm font-bold text-on-surface">Prime Manhattan Real Estate</div>
+<div class="text-[10px] font-mono text-outline">CID: z82j...9k2</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full bg-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Corporate branding identity with a professional crest, deep grey background with brushed metal accents. Cinematic lighting casting soft shadows to emphasize the high-end institutional authority of the brand." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAEejRboRwVoXr14wbAjDIKjTrjGgv1koaidOTl2B7dwUcoAGqCw4qdrHNjKxo62KIOVdFwKi7Pg6MCOszhEwzcj8IsILB8QxNaJnlgGZEf6lJnjhz27ti-JgaknpSI-5MNlVPq6ABdF43SrfKvp-HjKYtOcxihCYHQIvQTkYDGO2QxFt04UovtAd5p5nlhmr_vpk0H2rJay64mVKEFCe0BSx0_s90UmiHx5Eo_ORV8D9k1GDP8UK0D_g8zx-LntdbHUkw4Q94UUcpo"/>
+</div>
+<span class="text-xs font-medium">Arch Vault</span>
+</div>
+</td>
+<td class="px-6 py-5 font-mono text-xs text-primary">$85,500,000</td>
+<td class="px-6 py-5">
+<div class="flex gap-1">
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary/30"></span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-primary/10 text-primary text-[9px] font-bold border border-primary/20 tracking-tighter uppercase">Binding</span>
+</td>
+</tr>
+<!-- Asset Row 3 -->
+<tr class="hover:bg-primary-container/5 transition-colors group cursor-pointer">
+<td class="px-6 py-5">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-surface-container-highest platinum-border flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="history_edu">history_edu</span>
+</div>
+<div>
+<div class="text-sm font-bold text-on-surface">Cambridge Patent #110A</div>
+<div class="text-[10px] font-mono text-outline">CID: x17l...m3v</div>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full bg-white/10 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A logo for a world-renowned university, featuring a heraldic crest with intricate lion and book symbols, set against a dark blue background. The style is classic institutional, rendered with sharp digital clarity and subtle atmospheric lighting that creates a sense of history and prestige." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMF4XzW0x5rqkGsuvdljm9YrI0HaXZ09cYU6GlY45om2_BKWPTd0BaYZ8hgG0sQRA8tTR8soFHshql8ymLrSRRGoRzXK3dtpqVBfFO-zHtAgK3ZucaQ1Ks8-aitIKMmDREdB7FOT0BzK2RNzGS2KhP2bAwaitXE3dMJYz0hQC5EtMLlEbT3GcvTD0gXpD_xTr7iNJhgYnKvIbju-ixEAqYR5qgyxMG-COrwaDvkJa6Ew35HCN6GyGSxo1VI1aSijzTJwYbP2l6B5Vq"/>
+</div>
+<span class="text-xs font-medium">Cambridge Legal</span>
+</div>
+</td>
+<td class="px-6 py-5 font-mono text-xs text-primary">$2,450,000</td>
+<td class="px-6 py-5">
+<div class="flex gap-1">
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary"></span>
+<span class="w-1 h-4 bg-primary"></span>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="px-2 py-1 bg-primary/10 text-primary text-[9px] font-bold border border-primary/20 tracking-tighter uppercase">Binding</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Order Book & Depth -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Order Book Side -->
+<div class="glass-panel platinum-border p-6 space-y-4">
+<div class="flex justify-between items-center border-b border-outline-variant/30 pb-3">
+<h3 class="font-label-caps text-label-caps text-on-surface tracking-[0.2em]">ORDER BOOK</h3>
+<div class="flex gap-4 text-[10px] font-label-caps text-outline">
+<span>PRICE</span>
+<span>QTY</span>
+<span>TOTAL</span>
+</div>
+</div>
+<div class="space-y-1">
+<!-- Sells (Asks) -->
+<div class="flex justify-between text-xs py-1 relative group overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 bg-error/10 w-[20%] z-0"></div>
+<span class="text-error font-mono z-10">1.24050</span>
+<span class="text-on-surface-variant font-mono z-10">0.550</span>
+<span class="text-on-surface font-mono z-10">0.6822</span>
+</div>
+<div class="flex justify-between text-xs py-1 relative group overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 bg-error/10 w-[45%] z-0"></div>
+<span class="text-error font-mono z-10">1.24040</span>
+<span class="text-on-surface-variant font-mono z-10">1.200</span>
+<span class="text-on-surface font-mono z-10">1.4884</span>
+</div>
+<div class="flex justify-between text-xs py-1 relative group overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 bg-error/10 w-[15%] z-0"></div>
+<span class="text-error font-mono z-10">1.24035</span>
+<span class="text-on-surface-variant font-mono z-10">0.240</span>
+<span class="text-on-surface font-mono z-10">0.2976</span>
+</div>
+<!-- Spread -->
+<div class="py-3 flex justify-center items-center border-y border-outline-variant/20 my-2">
+<span class="text-[10px] font-label-caps tracking-widest text-primary">SPREAD: 0.00010 (0.01%)</span>
+</div>
+<!-- Buys (Bids) -->
+<div class="flex justify-between text-xs py-1 relative group overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 bg-primary/10 w-[60%] z-0"></div>
+<span class="text-primary font-mono z-10">1.24025</span>
+<span class="text-on-surface-variant font-mono z-10">1.850</span>
+<span class="text-on-surface font-mono z-10">2.2944</span>
+</div>
+<div class="flex justify-between text-xs py-1 relative group overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 bg-primary/10 w-[30%] z-0"></div>
+<span class="text-primary font-mono z-10">1.24015</span>
+<span class="text-on-surface-variant font-mono z-10">0.900</span>
+<span class="text-on-surface font-mono z-10">1.1161</span>
+</div>
+<div class="flex justify-between text-xs py-1 relative group overflow-hidden">
+<div class="absolute right-0 top-0 bottom-0 bg-primary/10 w-[10%] z-0"></div>
+<span class="text-primary font-mono z-10">1.24000</span>
+<span class="text-on-surface-variant font-mono z-10">0.100</span>
+<span class="text-on-surface font-mono z-10">0.1240</span>
+</div>
+</div>
+</div>
+<!-- Visual Depth Chart -->
+<div class="glass-panel platinum-border p-6 space-y-4 flex flex-col">
+<h3 class="font-label-caps text-label-caps text-on-surface tracking-[0.2em]">MARKET DEPTH</h3>
+<div class="flex-grow relative mt-4">
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 60">
+<!-- Bid Curve -->
+<path d="M 0 60 L 0 20 L 20 25 L 40 35 L 50 55 L 50 60 Z" fill="rgba(148, 221, 255, 0.2)" stroke="#94ddff" stroke-width="0.5"></path>
+<!-- Ask Curve -->
+<path d="M 100 60 L 100 15 L 80 20 L 60 30 L 50 55 L 50 60 Z" fill="rgba(255, 180, 171, 0.2)" stroke="#ffb4ab" stroke-width="0.5"></path>
+<!-- Middle Line -->
+<line stroke="rgba(255,255,255,0.1)" stroke-dasharray="2,2" x1="50" x2="50" y1="0" y2="60"></line>
+</svg>
+<div class="absolute top-0 left-0 text-[8px] font-mono text-primary">BIDS</div>
+<div class="absolute top-0 right-0 text-[8px] font-mono text-error">ASKS</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/30">
+<div class="flex justify-between items-center">
+<span class="text-[10px] text-on-surface-variant font-label-caps">LAST TRADE</span>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xs" data-icon="trending_up">trending_up</span>
+<span class="font-mono text-sm font-bold">1.24025 ACCET/VDA</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="relative w-full py-section-padding bg-surface-container-highest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-page gap-gutter w-full max-w-container-max mx-auto">
+<div class="flex flex-col gap-2">
+<div class="font-h3 text-h3 text-on-surface font-bold">ACCET</div>
+<p class="font-body-md text-body-md text-secondary">© 2024 ACCET. The Legal Connectivity Layer.</p>
+</div>
+<div class="flex flex-wrap gap-8 justify-center">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Protocol</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Security Audit</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">API Documentation</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Whitepaper</a>
+</div>
+</div>
+</footer>
+<!-- Bottom Navigation Shell (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 glass-panel border-t border-outline-variant/30 z-50 px-6 py-4 flex justify-between">
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[9px] font-label-caps">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-primary">
+<span class="material-symbols-outlined" data-icon="sync_alt">sync_alt</span>
+<span class="text-[9px] font-label-caps">Trade</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span class="text-[9px] font-label-caps">Wallet</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="verified_user">verified_user</span>
+<span class="text-[9px] font-label-caps">Verify</span>
+</div>
+</nav>
+<!-- FAB for Task Alignment -->
+<div class="fixed bottom-24 right-8 z-50 md:bottom-8">
+<button class="w-14 h-14 bg-primary text-on-primary rounded-full shadow-[0_0_20px_#94ddff] flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add_box" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add_box</span>
+</button>
+</div>
+</body></html>

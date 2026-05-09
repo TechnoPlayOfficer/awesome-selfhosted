@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCET · Los Ladrillones · Spot 2 — La Cola del Banco</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════ ACCET DESIGN SYSTEM ════════════════ */
+:root {
+  --sky:   #5EC8F2;
+  --ice:   #5ED7F2;
+  --teal:  #377D8C;
+  --dark:  #0D0D0D;
+  --sky04: rgba(94,200,242,.04);
+  --sky10: rgba(94,200,242,.10);
+  --sky20: rgba(94,200,242,.20);
+  --sky35: rgba(94,200,242,.35);
+  --amber: #ffaa00;
+  --floor: #2a2828;
+  --wall:  #1e1e1e;
+  --counter:#2c2418;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--dark);
+  background-image:
+    linear-gradient(var(--sky04) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sky04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  width:100%; height:100vh;
+  overflow:hidden;
+  font-family:'DM Sans', sans-serif;
+  user-select:none;
+}
+
+#stage { width:100%; height:100%; position:relative; overflow:hidden; }
+
+/* ─── Signature accent line ─── */
+.accent-line {
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));
+  z-index:200;
+}
+
+/* ─── Progress bar ─── */
+.prog-bar {
+  position:absolute; bottom:0; left:0; height:3px; width:0%;
+  background:var(--sky); box-shadow:0 0 10px rgba(94,200,242,.7);
+  z-index:999; transition:width .08s linear;
+}
+
+/* ─── Scenes ─── */
+.scene {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity .5s ease;
+}
+.scene.active { opacity:1; pointer-events:auto; }
+
+/* ─── INTRO/END shared ─── */
+.card-scene {
+  background:var(--dark);
+  background-image:
+    linear-gradient(var(--sky04) 1px,transparent 1px),
+    linear-gradient(90deg,var(--sky04) 1px,transparent 1px);
+  background-size:40px 40px;
+  flex-direction:column;
+  z-index:80;
+}
+.card-scene::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));
+}
+
+/* ─── BANK INTERIOR ENVIRONMENT ─── */
+.bank-bg {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background:linear-gradient(180deg, #111008 0%, #0e0e0c 40%, #1a1812 100%);
+}
+
+/* Ceiling fluorescent strips */
+.ceiling-strip {
+  position:absolute; top:0; left:0; width:100%; height:4px;
+  background:linear-gradient(90deg,
+    transparent 0%, rgba(255,240,180,.06) 20%,
+    rgba(255,240,180,.12) 50%, rgba(255,240,180,.06) 80%, transparent 100%);
+}
+.ceiling-strip::after {
+  content:''; position:absolute; top:4px; left:15%; width:70%; height:1px;
+  background:rgba(255,240,180,.04);
+}
+
+/* Banco wall panels */
+.wall-panel {
+  position:absolute; top:0; width:100%; height:62%;
+  background:
+    linear-gradient(180deg, #181610 0%, #141210 100%);
+  border-bottom: 2px solid rgba(255,220,100,.08);
+}
+.wall-panel::before {
+  content:'';
+  position:absolute; top:12px; left:0; right:0; height:1px;
+  background:rgba(255,220,100,.05);
+}
+
+/* Banco sign */
+.banco-sign {
+  position:absolute; top:18px; left:50%; transform:translateX(-50%);
+  font-family:'Syne',sans-serif; font-weight:800;
+  font-size:clamp(14px,2vw,22px); letter-spacing:6px;
+  color:rgba(255,220,100,.5);
+  text-transform:uppercase;
+  text-shadow:0 0 20px rgba(255,200,0,.15);
+  z-index:5;
+}
+
+/* Counter / taquilla */
+.counter {
+  position:absolute; bottom:36%; left:50%; transform:translateX(-50%);
+  width:min(420px,72%); height:55px;
+  background:linear-gradient(180deg,#2c2418,#221c12);
+  border-top:3px solid rgba(255,200,80,.2);
+  border-radius:4px 4px 0 0;
+  z-index:4;
+}
+.counter-glass {
+  position:absolute; top:0; left:0; width:100%; height:38px;
+  background:rgba(255,255,255,.03);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.teller-label {
+  position:absolute; top:10px; left:50%; transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace; font-size:8px;
+  letter-spacing:3px; color:rgba(255,200,80,.3);
+  text-transform:uppercase;
+}
+
+/* Floor */
+.floor {
+  position:absolute; bottom:0; left:0; width:100%; height:37%;
+  background:linear-gradient(180deg,#1c1a16 0%,#141210 100%);
+  border-top:1px solid rgba(255,200,80,.07);
+}
+.floor::before {
+  content:'';
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 48px,rgba(255,255,255,.025) 48px,rgba(255,255,255,.025) 49px),
+    repeating-linear-gradient(0deg,transparent,transparent 48px,rgba(255,255,255,.02) 48px,rgba(255,255,255,.02) 49px);
+}
+
+/* QUEUE LINE posts */
+.queue-line {
+  position:absolute; bottom:36.5%; left:0; width:100%; height:3px;
+  background:repeating-linear-gradient(90deg,
+    rgba(255,180,0,.18) 0px, rgba(255,180,0,.18) 40px,
+    transparent 40px, transparent 60px);
+  z-index:2;
+}
+
+/* Turnero display */
+.turnero {
+  position:absolute; top:28px; right:14%; z-index:6;
+  background:#0a0a08; border:1px solid rgba(255,60,60,.25);
+  padding:6px 14px; border-radius:3px;
+  box-shadow:0 0 18px rgba(255,40,40,.12);
+  text-align:center;
+}
+.turnero-label {
+  font-family:'JetBrains Mono',monospace; font-size:7px;
+  letter-spacing:2px; color:rgba(255,60,60,.45); margin-bottom:3px;
+}
+.turnero-num {
+  font-family:'JetBrains Mono',monospace; font-size:22px;
+  font-weight:500; color:#ff4444;
+  text-shadow:0 0 12px rgba(255,40,40,.5);
+  letter-spacing:1px;
+  animation:blink-num 2s step-start infinite;
+}
+@keyframes blink-num {
+  0%,49%{opacity:1} 50%,100%{opacity:.3}
+}
+
+/* Clock */
+.clock {
+  position:absolute; top:28px; left:14%; z-index:6;
+  background:#0a0a08; border:1px solid rgba(255,200,80,.15);
+  padding:6px 12px; border-radius:3px;
+}
+.clock-face {
+  font-family:'JetBrains Mono',monospace; font-size:18px;
+  font-weight:500; color:rgba(255,200,80,.5);
+  text-shadow:0 0 8px rgba(255,200,0,.2);
+}
+.clock-elapsed {
+  font-family:'JetBrains Mono',monospace; font-size:7px;
+  letter-spacing:1px; color:rgba(255,200,80,.2);
+  text-align:center; margin-top:2px;
+}
+
+/* Waiting sign */
+.wait-sign {
+  position:absolute; bottom:62%; left:12%; z-index:5;
+  font-family:'JetBrains Mono',monospace; font-size:8px;
+  letter-spacing:2px; color:rgba(255,60,60,.3);
+  padding:4px 8px; border:1px solid rgba(255,60,60,.15);
+  background:rgba(0,0,0,.4);
+}
+
+/* ─────────────────────────────────────────
+   BRICK CHARACTERS
+   ───────────────────────────────────────── */
+.brick-char {
+  position:absolute;
+  display:flex; flex-direction:column;
+  align-items:center;
+  pointer-events:none;
+}
+
+.body {
+  position:relative;
+  border-radius:10px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:6px;
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,.14),
+    inset 0 -4px 6px rgba(0,0,0,.35),
+    0 8px 28px rgba(0,0,0,.6);
+  transition:transform .15s, background .4s;
+}
+
+.eyes { display:flex; gap:5px; margin-bottom:3px; }
+.eye {
+  background:white; border-radius:50%;
+  position:relative; overflow:visible;
+  display:flex; align-items:center; justify-content:center;
+}
+.pupil { width:42%; height:42%; background:#111; border-radius:50%; }
+.brow {
+  position:absolute; top:-5px; left:-1px;
+  width:calc(100% + 2px); height:3px;
+  background:#3a3a3a; border-radius:2px;
+}
+
+.mouth-bored {
+  width:20px; height:3px;
+  background:#333; border-radius:2px;
+  margin:4px auto 0;
+}
+.mouth-happy {
+  width:22px; height:12px;
+  border:3px solid #222;
+  border-bottom:none;
+  border-radius:12px 12px 0 0;
+  margin:2px auto 0;
+}
+.mouth-open {
+  width:16px; height:16px;
+  background:#222; border-radius:50%;
+  margin:3px auto 0;
+}
+.mouth-shock {
+  width:14px; height:18px;
+  background:#222; border-radius:50% 50% 46% 46%;
+  margin:3px auto 0;
+}
+
+/* Speech bubble */
+.bubble {
+  position:absolute;
+  background:white; border-radius:8px;
+  padding:7px 11px;
+  font-family:'DM Sans',sans-serif;
+  font-size:11px; line-height:1.4; color:#1a1a1a;
+  white-space:nowrap;
+  box-shadow:0 4px 20px rgba(0,0,0,.45);
+  opacity:0; transition:opacity .3s;
+  z-index:30; pointer-events:none;
+}
+.bubble::after {
+  content:''; position:absolute; bottom:-9px; left:50%;
+  transform:translateX(-50%);
+  border:9px solid transparent;
+  border-top-color:white; border-bottom:none;
+}
+.bubble.left::after  { left:18%; }
+.bubble.right::after { left:72%; }
+.bubble.top::after {
+  bottom:auto; top:-9px;
+  border-top:none; border-bottom:9px solid white;
+}
+
+/* Caption */
+.caption {
+  position:absolute; bottom:22px; left:50%;
+  transform:translateX(-50%);
+  background:rgba(13,13,13,.82); backdrop-filter:blur(8px);
+  border:1px solid rgba(94,200,242,.12);
+  border-top:1px solid rgba(94,200,242,.25);
+  color:rgba(255,255,255,.85);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px; letter-spacing:.3px;
+  padding:7px 18px; border-radius:4px;
+  white-space:nowrap; opacity:0; z-index:50;
+  transition:opacity .25s; pointer-events:none;
+}
+
+/* ─── CEMEN ─── */
+#cemen {
+  bottom:37%; left:-120px;
+  z-index:10;
+  transition:left .8s cubic-bezier(.34,1.56,.64,1);
+}
+#cemen .body {
+  width:72px; height:62px;
+  background:linear-gradient(135deg,#787868,#626255,#464638);
+}
+.crack-l1,.crack-l2 {
+  position:absolute; background:rgba(0,0,0,.35); border-radius:1px;
+}
+/* Long beard — grown from waiting */
+.beard-long {
+  position:absolute; bottom:-22px; left:50%;
+  transform:translateX(-50%);
+  width:30px; height:22px;
+  background:linear-gradient(180deg,#888 0%,#666 60%,#444 100%);
+  border-radius:0 0 8px 8px;
+  clip-path:polygon(0 0,100% 0,90% 100%,50% 85%,10% 100%);
+  transition:height 1.2s ease;
+}
+.beard-long.grow { height:38px; }
+/* Number ticket */
+.ticket {
+  position:absolute; top:-36px; right:-24px;
+  background:#1a1a18; border:1px solid rgba(255,180,0,.3);
+  padding:3px 7px; border-radius:3px; z-index:20;
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px; color:rgba(255,180,0,.7); letter-spacing:1px;
+  white-space:nowrap;
+}
+/* Spiral eyes from boredom */
+@keyframes spin-eye {
+  from{transform:rotate(0deg)} to{transform:rotate(360deg)}
+}
+.eye-spiral { animation:spin-eye 1.8s linear infinite; }
+/* Cemen fall-asleep nod */
+@keyframes nod {
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  30%{transform:translateY(3px) rotate(8deg)}
+  60%{transform:translateY(1px) rotate(-2deg)}
+}
+/* Cemen suprise bounce */
+@keyframes shock-bounce {
+  0%{transform:translateY(0) scale(1)}
+  25%{transform:translateY(-14px) scale(1.08,.92)}
+  50%{transform:translateY(0) scale(.94,1.06)}
+  70%{transform:translateY(-5px) scale(1.03,.97)}
+  100%{transform:translateY(0) scale(1)}
+}
+/* Beard fall off */
+@keyframes beard-fall {
+  0%{transform:translateX(-50%) translateY(0) rotate(0deg); opacity:1}
+  100%{transform:translateX(-50%) translateY(50px) rotate(25deg); opacity:0}
+}
+
+/* ─── TOKKO ─── */
+#tokko {
+  bottom:37%; right:-120px;
+  z-index:9;
+  transition:right .6s cubic-bezier(.34,1.56,.64,1);
+}
+#tokko .body {
+  width:46px; height:46px;
+  background:linear-gradient(135deg,#d08800,#a86a00,#7a4a00);
+}
+.glasses-t {
+  position:absolute; top:-13px; left:50%;
+  transform:translateX(-50%);
+  display:flex; align-items:center; gap:1px;
+}
+.lens-t {
+  width:17px; height:13px;
+  border:2px solid #555; border-radius:4px;
+  background:rgba(94,200,242,.12);
+}
+.bridge-t { width:3px; height:2px; background:#555; margin-bottom:3px; }
+/* Tokko running */
+@keyframes run-in {
+  0%  {right:-120px; transform:rotate(8deg)}
+  30% {transform:rotate(-10deg)}
+  60% {transform:rotate(6deg)}
+  100%{right:28%; transform:rotate(0deg)}
+}
+@keyframes bounce-idle {
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+
+/* ─── LÍQUI ─── */
+#liqui {
+  bottom:37%; right:-120px;
+  z-index:11;
+  transition:right .75s cubic-bezier(.25,.46,.45,.94);
+}
+#liqui .body {
+  width:54px; height:86px;
+  background:linear-gradient(135deg,#a0d4e8,#7ab8d0,#5090a8);
+  box-shadow:
+    inset 0 4px 8px rgba(255,255,255,.32),
+    0 0 22px rgba(94,200,242,.22),
+    0 8px 28px rgba(0,0,0,.5);
+}
+.shine-l {
+  position:absolute; top:8px; left:7px;
+  width:10px; height:26px;
+  background:rgba(255,255,255,.35); border-radius:5px;
+  transform:rotate(-8deg);
+}
+
+/* ─── PHONE / COUNTDOWN UI ─── */
+.phone-big {
+  position:absolute;
+  width:68px; height:108px;
+  background:#0a0a0a;
+  border-radius:10px;
+  border:2px solid rgba(94,200,242,.3);
+  box-shadow:0 0 22px rgba(94,200,242,.2), 0 0 50px rgba(94,200,242,.08);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  opacity:0;
+  transition:opacity .5s, transform .3s;
+  z-index:25;
+  padding:6px;
+}
+.phone-app-bar {
+  width:100%; height:18px;
+  background:linear-gradient(90deg,var(--sky),var(--teal));
+  border-radius:6px 6px 0 0;
+  display:flex; align-items:center; justify-content:center;
+  margin-bottom:4px;
+}
+.app-logo-mini {
+  font-family:'Syne',sans-serif; font-size:7px; font-weight:800;
+  color:#0D0D0D; letter-spacing:1px;
+}
+.countdown-display {
+  width:52px; height:52px;
+  background:rgba(94,200,242,.08);
+  border:1.5px solid rgba(94,200,242,.25);
+  border-radius:6px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+}
+.cd-num {
+  font-family:'Syne',sans-serif; font-size:22px; font-weight:800;
+  color:var(--sky); line-height:1;
+  transition:all .2s cubic-bezier(.34,1.56,.64,1);
+}
+.cd-unit {
+  font-family:'JetBrains Mono',monospace; font-size:6px;
+  letter-spacing:1px; color:rgba(94,200,242,.5);
+  margin-top:2px;
+}
+.phone-status {
+  font-family:'JetBrains Mono',monospace; font-size:6px;
+  letter-spacing:.5px; color:rgba(94,200,242,.4);
+  margin-top:5px; text-align:center;
+}
+/* Phone tap flash */
+@keyframes tap-flash {
+  0%{border-color:var(--sky); box-shadow:0 0 22px rgba(94,200,242,.2)}
+  30%{border-color:var(--ice); box-shadow:0 0 40px rgba(94,200,242,.7), 0 0 80px rgba(94,200,242,.3)}
+  100%{border-color:var(--sky); box-shadow:0 0 22px rgba(94,200,242,.2)}
+}
+
+/* ─── NOTIFICATION CARD (DING!) ─── */
+.notif-card {
+  position:absolute; top:22%; left:50%;
+  transform:translateX(-50%) translateY(-30px);
+  background:var(--dark);
+  border:1px solid rgba(94,200,242,.3);
+  border-top:2px solid var(--sky);
+  border-radius:6px;
+  padding:12px 20px;
+  text-align:center;
+  opacity:0;
+  transition:opacity .4s, transform .4s cubic-bezier(.34,1.56,.64,1);
+  z-index:40; pointer-events:none;
+  min-width:220px;
+  box-shadow:0 0 30px rgba(94,200,242,.15), 0 8px 28px rgba(0,0,0,.5);
+}
+.notif-card.show {
+  opacity:1; transform:translateX(-50%) translateY(0);
+}
+.notif-icon { font-size:22px; margin-bottom:4px; }
+.notif-title {
+  font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+  color:var(--sky); margin-bottom:3px;
+}
+.notif-body {
+  font-family:'JetBrains Mono',monospace; font-size:9px;
+  letter-spacing:.5px; color:rgba(255,255,255,.45);
+}
+.notif-tag {
+  display:inline-block; margin-top:7px;
+  font-family:'JetBrains Mono',monospace; font-size:8px;
+  letter-spacing:1px; padding:2px 8px;
+  background:var(--sky10); border:1px solid rgba(94,200,242,.3);
+  color:var(--sky);
+}
+
+/* ─── ZZZ sleep bubbles ─── */
+.zzz {
+  position:absolute;
+  font-family:'JetBrains Mono',monospace; font-weight:500;
+  color:rgba(255,255,255,.35);
+  opacity:0;
+  pointer-events:none;
+}
+@keyframes zzz-float {
+  0%{opacity:0; transform:translateY(0) scale(.6)}
+  20%{opacity:.7}
+  100%{opacity:0; transform:translateY(-40px) scale(1.1)}
+}
+
+/* ─── QUEUE GHOSTS (fila larga) ─── */
+.queue-ghost {
+  position:absolute; bottom:37%; z-index:3;
+  opacity:0; transition:opacity .6s;
+}
+.ghost-body {
+  width:28px; height:32px;
+  border-radius:6px;
+  background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.05);
+  display:flex; align-items:center; justify-content:center;
+}
+.ghost-eye-row { display:flex; gap:4px; }
+.ghost-dot {
+  width:6px; height:6px;
+  background:rgba(255,255,255,.15); border-radius:50%;
+}
+
+/* ─── TYPOGRAPHY ─── */
+.spot-eyebrow {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px; letter-spacing:3px;
+  color:rgba(94,200,242,.55); text-transform:uppercase;
+  margin-bottom:14px;
+  opacity:0; animation:fadeup .6s .3s forwards;
+}
+.spot-headline {
+  font-family:'Syne',sans-serif;
+  font-size:clamp(30px,6vw,58px); font-weight:900;
+  color:white; text-align:center; line-height:1.05;
+  opacity:0; animation:fadeup .6s .6s forwards;
+}
+.spot-headline .accent { color:var(--sky); }
+.spot-sub {
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px; letter-spacing:3px;
+  color:rgba(94,200,242,.35); margin-top:14px; text-transform:uppercase;
+  opacity:0; animation:fadeup .6s .9s forwards;
+}
+.tagline {
+  font-family:'Syne',sans-serif;
+  font-size:clamp(22px,4.5vw,46px); font-weight:900;
+  color:white; text-align:center; line-height:1.15;
+  max-width:580px;
+  opacity:0; transform:translateY(18px);
+  transition:opacity .8s, transform .8s;
+}
+.t-sky { color:var(--sky); }
+.t-ice { color:var(--ice); }
+.end-sep {
+  width:280px; height:1px;
+  background:rgba(94,200,242,.15);
+  margin:18px auto 0;
+  opacity:0; transition:opacity .4s .4s;
+}
+.end-tags {
+  display:flex; gap:8px; margin-top:16px;
+  flex-wrap:wrap; justify-content:center;
+  opacity:0; transition:opacity .6s .5s;
+}
+.etag {
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px; letter-spacing:1.5px;
+  padding:3px 8px;
+  border:1px solid rgba(94,200,242,.3);
+  color:rgba(94,200,242,.6);
+  background:var(--sky10);
+}
+.end-brand {
+  font-family:'Syne',sans-serif;
+  font-size:20px; font-weight:800;
+  color:var(--sky); margin-top:22px;
+  opacity:0; transition:opacity .5s .9s;
+}
+.end-info {
+  font-family:'JetBrains Mono',monospace;
+  font-size:8px; letter-spacing:1px;
+  color:rgba(255,255,255,.18);
+  margin-top:5px;
+  opacity:0; transition:opacity .4s 1.1s;
+}
+
+@keyframes fadeup {
+  from{opacity:0;transform:translateY(16px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+/* ─── SCENE LABEL ─── */
+.scene-label {
+  position:absolute; top:14px; left:50%;
+  transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px; letter-spacing:3px;
+  color:rgba(94,200,242,.2); text-transform:uppercase;
+  z-index:50; pointer-events:none;
+}
+
+/* ─── REPLAY ─── */
+#replay-btn {
+  position:absolute; bottom:28px; right:28px;
+  background:var(--sky); color:#0D0D0D;
+  border:none; padding:10px 22px;
+  border-radius:4px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px; letter-spacing:2px; font-weight:500;
+  cursor:pointer; z-index:999;
+  opacity:0; pointer-events:none;
+  transition:opacity .4s, transform .15s;
+}
+#replay-btn:hover { transform:scale(1.06); }
+#replay-btn.show { opacity:1; pointer-events:auto; }
+
+/* ─── CONFETTI ─── */
+.conf { position:absolute; border-radius:2px; pointer-events:none; z-index:90; }
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <div class="accent-line"></div>
+  <div class="prog-bar" id="prog"></div>
+
+  <!-- ══════════════ INTRO CARD ══════════════ -->
+  <div class="scene card-scene active" id="scene-intro">
+    <div style="text-align:center">
+      <div class="spot-eyebrow">Los Ladrillones · Spot 2 de 4</div>
+      <div class="spot-headline">La Cola<br><span class="accent">del Banco</span></div>
+      <div class="spot-sub">Animación de marca ACCET · 30s</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MAIN SCENE ══════════════ -->
+  <div class="scene" id="scene-main">
+
+    <!-- Environment -->
+    <div class="bank-bg"></div>
+    <div class="ceiling-strip"></div>
+    <div class="wall-panel"></div>
+    <div class="banco-sign" id="banco-sign">BANCO TRADICIONAL</div>
+    <div class="floor"></div>
+    <div class="queue-line"></div>
+
+    <!-- Turnero -->
+    <div class="turnero" id="turnero">
+      <div class="turnero-label">TURNO ACTUAL</div>
+      <div class="turnero-num" id="turno-num">0003</div>
+    </div>
+
+    <!-- Clock -->
+    <div class="clock" id="clock-widget">
+      <div class="clock-face" id="clock-face">09:12</div>
+      <div class="clock-elapsed" id="clock-elapsed">ESPERANDO...</div>
+    </div>
+
+    <!-- Wait sign -->
+    <div class="wait-sign" id="wait-sign">TIEMPO ESTIMADO: ∞</div>
+
+    <!-- Counter -->
+    <div class="counter">
+      <div class="counter-glass"></div>
+      <div class="teller-label">VENTANILLA 1 — CERRADA</div>
+    </div>
+
+    <!-- QUEUE GHOSTS (fila larga) -->
+    <div class="queue-ghost" id="ghost1" style="left:62%">
+      <div class="ghost-body"><div class="ghost-eye-row"><div class="ghost-dot"></div><div class="ghost-dot"></div></div></div>
+    </div>
+    <div class="queue-ghost" id="ghost2" style="left:69%">
+      <div class="ghost-body" style="width:24px;height:28px"><div class="ghost-eye-row"><div class="ghost-dot"></div><div class="ghost-dot"></div></div></div>
+    </div>
+    <div class="queue-ghost" id="ghost3" style="left:75%">
+      <div class="ghost-body" style="width:32px;height:36px"><div class="ghost-eye-row"><div class="ghost-dot"></div><div class="ghost-dot"></div></div></div>
+    </div>
+    <div class="queue-ghost" id="ghost4" style="left:80%">
+      <div class="ghost-body" style="width:22px;height:24px"><div class="ghost-eye-row"><div class="ghost-dot"></div><div class="ghost-dot"></div></div></div>
+    </div>
+
+    <!-- CEMEN -->
+    <div class="brick-char" id="cemen">
+      <div class="ticket" id="ticket">TURNO #4872</div>
+      <!-- ZZZ -->
+      <div class="zzz" id="zzz1" style="top:-18px;right:-8px;font-size:14px">z</div>
+      <div class="zzz" id="zzz2" style="top:-32px;right:-2px;font-size:18px">z</div>
+      <div class="zzz" id="zzz3" style="top:-50px;right:4px;font-size:22px">Z</div>
+      <div class="body" id="cemen-body">
+        <div class="crack-l1" style="width:2px;height:18px;position:absolute;top:7px;left:20px;transform:rotate(14deg);background:rgba(0,0,0,.35);border-radius:1px;"></div>
+        <div class="crack-l2" style="width:1px;height:14px;position:absolute;top:30px;right:14px;transform:rotate(-8deg);background:rgba(0,0,0,.35);border-radius:1px;"></div>
+        <div class="eyes" style="margin-top:4px" id="cemen-eyes">
+          <div class="eye" style="width:19px;height:19px">
+            <div class="brow" style="transform:rotate(14deg)"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:19px;height:19px">
+            <div class="brow" style="transform:rotate(-14deg)"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-bored" id="cemen-mouth"></div>
+        <div class="beard-long" id="cemen-beard"></div>
+      </div>
+      <div class="bubble left" id="bub-cemen1" style="bottom:88px;left:65px;font-size:10px;">
+        Número 4.872... ya<br>casi me llaman... 🥱
+      </div>
+      <div class="bubble left" id="bub-cemen2" style="bottom:88px;left:65px;font-size:10px;">
+        ¡CÓMO! ¿¿72 horas?? 😱
+      </div>
+      <div class="bubble left" id="bub-cemen3" style="bottom:88px;left:65px;font-size:10px;">
+        ...la barba... 🤯
+      </div>
+    </div>
+
+    <!-- TOKKO -->
+    <div class="brick-char" id="tokko">
+      <div class="glasses-t">
+        <div class="lens-t"></div>
+        <div class="bridge-t"></div>
+        <div class="lens-t"></div>
+      </div>
+      <div class="body">
+        <div class="eyes">
+          <div class="eye" style="width:14px;height:14px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:14px;height:14px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-open"></div>
+      </div>
+      <div class="bubble right" id="bub-tokko" style="bottom:64px;right:46px;font-size:10px;">
+        ¡¡CEMEN!! ¡Hay algo<br>mucho mejor! 🏃
+      </div>
+    </div>
+
+    <!-- LÍQUI -->
+    <div class="brick-char" id="liqui">
+      <div class="body">
+        <div class="shine-l"></div>
+        <div class="eyes" style="margin-top:12px">
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-happy" style="width:20px;height:10px;border-color:#225566;"></div>
+      </div>
+      <div class="bubble right" id="bub-liqui" style="bottom:98px;right:52px;font-size:10px;">
+        Sin colas.<br>72 horas. 😊
+      </div>
+    </div>
+
+    <!-- BIG PHONE (countdown) -->
+    <div class="phone-big" id="phone-big" style="position:absolute;bottom:46%;left:50%;transform:translateX(-50%)">
+      <div class="phone-app-bar"><div class="app-logo-mini">ACCET</div></div>
+      <div class="countdown-display">
+        <div class="cd-num" id="cd-num">72</div>
+        <div class="cd-unit">HORAS</div>
+      </div>
+      <div class="phone-status" id="phone-status">PROCESANDO...</div>
+    </div>
+
+    <!-- NOTIFICATION CARD -->
+    <div class="notif-card" id="notif-card">
+      <div class="notif-icon">🔔</div>
+      <div class="notif-title">¡Liquidez Activada!</div>
+      <div class="notif-body">Tu token ha sido emitido<br>en la blockchain de Hedera</div>
+      <div class="notif-tag">+60% LTV · USDT · 72h</div>
+    </div>
+
+    <!-- Caption -->
+    <div class="caption" id="caption"></div>
+
+    <!-- Scene label -->
+    <div class="scene-label">ACCET · La Cola del Banco</div>
+
+  </div><!-- /scene-main -->
+
+  <!-- ══════════════ END CARD ══════════════ -->
+  <div class="scene card-scene" id="scene-end">
+    <div style="text-align:center">
+      <div class="tagline" id="tagline">
+        Liquidez en<br>
+        <span class="t-sky">72 horas.</span><br>
+        <span class="t-ice">Sin colas.</span>
+      </div>
+      <div class="end-sep" id="end-sep"></div>
+      <div class="end-tags" id="end-tags">
+        <span class="etag">72 HORAS</span>
+        <span class="etag">SIN FILAS</span>
+        <span class="etag">HEDERA HTS</span>
+        <span class="etag">ERC-3643</span>
+      </div>
+      <div class="end-brand" id="end-brand">ACCET</div>
+      <div class="end-info" id="end-info">Real Estate Tokenization · Liquidez en 72h</div>
+    </div>
+  </div>
+
+  <button id="replay-btn" onclick="run()">↺ REPLAY</button>
+
+</div><!-- /stage -->
+
+<script>
+const TOTAL = 30000;
+let timers=[], progInterval=null, t0=null;
+const $ = id => document.getElementById(id);
+
+function tick(ms,fn){ timers.push(setTimeout(fn,ms)); }
+function clearAll(){ timers.forEach(clearTimeout); timers=[]; if(progInterval) clearInterval(progInterval); }
+function show(id){ document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active')); $(id).classList.add('active'); }
+
+function caption(txt,dur=2600){
+  const el=$('caption');
+  el.textContent=txt; el.style.opacity='1';
+  tick(dur,()=>el.style.opacity='0');
+}
+function bubble(id,dur=2400){ const el=$(id); el.style.opacity='1'; tick(dur,()=>el.style.opacity='0'); }
+
+function confetti(n=50){
+  const stage=document.getElementById('stage');
+  const cols=['#5EC8F2','#5ED7F2','#377D8C','#ffaa00','#ffffff','#b0e0f5'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div'); el.className='conf';
+    const w=Math.random()*10+3, h=Math.random()>.5?w:w*2.2;
+    const col=cols[Math.floor(Math.random()*cols.length)];
+    const sx=20+Math.random()*60, delay=Math.random()*600, dur=900+Math.random()*1300;
+    const dx=(Math.random()-.5)*100;
+    el.style.cssText=`width:${w}px;height:${h}px;background:${col};left:${sx}%;top:20%;border-radius:${Math.random()>.5?'50%':'2px'};opacity:1;`;
+    stage.appendChild(el);
+    setTimeout(()=>{
+      el.style.transition=`transform ${dur}ms ease-in,opacity ${dur}ms ease-in`;
+      el.style.transform=`translate(${dx}px,${260+Math.random()*200}px) rotate(${Math.random()*700}deg)`;
+      el.style.opacity='0';
+      setTimeout(()=>el.remove(),dur+100);
+    },delay+30);
+  }
+}
+
+// Clock ticking
+let clockTick=null;
+const clockTimes=['09:12','09:13','09:47','10:22','11:55','02:30','06:18'];
+let clockIdx=0;
+function startClock(){
+  clockTick=setInterval(()=>{
+    clockIdx=(clockIdx+1)%clockTimes.length;
+    $('clock-face').textContent=clockTimes[clockIdx];
+  },2200);
+}
+function stopClock(){ if(clockTick) clearInterval(clockTick); }
+
+// Turnero counting slowly up
+let turneroTick=null;
+let turnoVal=3;
+function startTurnero(){
+  turneroTick=setInterval(()=>{
+    turnoVal++;
+    $('turno-num').textContent=String(turnoVal).padStart(4,'0');
+  },3500);
+}
+function stopTurnero(){ if(turneroTick) clearInterval(turneroTick); }
+
+// ZZZ animation
+let zzzTick=null;
+function startZzz(){
+  const zzz1=$('zzz1'), zzz2=$('zzz2'), zzz3=$('zzz3');
+  let phase=0;
+  zzzTick=setInterval(()=>{
+    const delay=phase*0;
+    zzz1.style.animation=''; zzz2.style.animation=''; zzz3.style.animation='';
+    void zzz1.offsetWidth;
+    zzz1.style.animation='zzz-float 1.8s ease-out forwards';
+    setTimeout(()=>{ zzz2.style.animation='zzz-float 1.8s ease-out forwards'; }, 400);
+    setTimeout(()=>{ zzz3.style.animation='zzz-float 1.8s ease-out forwards'; }, 800);
+    phase++;
+  },2200);
+}
+function stopZzz(){ if(zzzTick) clearInterval(zzzTick); }
+
+function resetState(){
+  // Cemen
+  $('cemen').style.cssText='position:absolute;bottom:37%;left:-120px;z-index:10;transition:none;';
+  $('cemen').style.transform='';
+  $('cemen-body').style.animation='';
+  $('cemen-mouth').className='mouth-bored';
+  $('cemen-beard').className='beard-long';
+  $('cemen-beard').style.animation='';
+  $('cemen-beard').style.opacity='1';
+  ['bub-cemen1','bub-cemen2','bub-cemen3'].forEach(id=>{ $(id).style.opacity='0'; });
+  ['zzz1','zzz2','zzz3'].forEach(id=>{ $(id).style.animation=''; $(id).style.opacity='0'; });
+
+  // Tokko
+  $('tokko').style.cssText='position:absolute;bottom:37%;right:-120px;z-index:9;transition:none;';
+  $('bub-tokko').style.opacity='0';
+
+  // Líqui
+  $('liqui').style.cssText='position:absolute;bottom:37%;right:-120px;z-index:11;transition:none;';
+  $('bub-liqui').style.opacity='0';
+
+  // Queue ghosts
+  ['ghost1','ghost2','ghost3','ghost4'].forEach(id=>{ $(id).style.opacity='0'; });
+
+  // Phone
+  $('phone-big').style.opacity='0';
+  $('phone-big').style.transform='translateX(-50%) scale(.8)';
+  $('cd-num').textContent='72';
+  $('cd-num').style.color='var(--sky)';
+  $('phone-status').textContent='PROCESANDO...';
+
+  // Notif
+  $('notif-card').classList.remove('show');
+
+  // Ticket
+  $('ticket').style.opacity='1';
+
+  // Turnero/clock
+  $('turno-num').textContent='0003';
+  $('clock-face').textContent='09:12';
+  $('clock-elapsed').textContent='ESPERANDO...';
+  turnoVal=3; clockIdx=0;
+
+  // End card
+  $('tagline').style.opacity='0'; $('tagline').style.transform='translateY(18px)';
+  $('end-sep').style.opacity='0';
+  $('end-tags').style.opacity='0';
+  $('end-brand').style.opacity='0';
+  $('end-info').style.opacity='0';
+
+  $('caption').style.opacity='0';
+  $('replay-btn').classList.remove('show');
+  $('prog').style.width='0%';
+
+  document.querySelectorAll('.conf').forEach(el=>el.remove());
+  stopClock(); stopTurnero(); stopZzz();
+}
+
+// ════════════════════════════════════════
+//  MAIN ANIMATION — 30 Seconds
+// ════════════════════════════════════════
+function run(){
+  clearAll(); resetState();
+  t0=Date.now();
+
+  progInterval=setInterval(()=>{
+    const pct=Math.min(((Date.now()-t0)/TOTAL)*100,100);
+    $('prog').style.width=pct+'%';
+    if(pct>=100) clearInterval(progInterval);
+  },60);
+
+  show('scene-intro');
+
+  // ── INTRO CARD: 0–2400ms ──────────────────────────────
+  tick(2400, ()=>{
+    show('scene-main');
+
+    // ◆ BEAT 1 — Cemen entra a la fila (0–3500ms rel)
+    $('cemen').style.transition='left .9s cubic-bezier(.34,1.56,.64,1)';
+    $('cemen').style.left='22%';
+
+    startClock(); startTurnero();
+
+    // Fila de fantasmas aparece
+    tick(600,  ()=>{ ['ghost1','ghost2','ghost3','ghost4'].forEach(id=>{ $(id).style.opacity='1'; }); });
+    tick(1000, ()=>{ bubble('bub-cemen1',2600); });
+    tick(1100, ()=>caption('Cemen lleva... días aquí. El turno: 4.872. 🥱',2800));
+
+    // ◆ BEAT 2 — Cemen se empieza a dormir (3500ms rel)
+    tick(3500, ()=>{
+      $('clock-elapsed').textContent='DÍA 3...';
+      startZzz();
+      $('cemen-beard').classList.add('grow');
+      $('cemen-body').style.animation='nod 2.2s ease-in-out infinite';
+      caption('La barba crece... el turno avanza... 0.001/hora. 💀',2800);
+
+      // Brow angry → sleepy
+      const brows=$('cemen').querySelectorAll('.brow');
+      brows.forEach(b=>b.style.transform='rotate(0deg)');
+    });
+
+    // ◆ BEAT 3 — Tokko llega CORRIENDO (6800ms rel)
+    tick(6800, ()=>{
+      stopZzz();
+      $('cemen-body').style.animation='';
+      ['zzz1','zzz2','zzz3'].forEach(id=>{ $(id).style.opacity='0'; });
+
+      $('tokko').style.transition='right 1.2s cubic-bezier(.34,1.56,.64,1)';
+      $('tokko').style.right='34%';
+
+      // Tokko bounces on arrival
+      tick(1000,()=>{
+        $('tokko').style.animation='bounce-idle .5s ease-in-out 3';
+        bubble('bub-tokko',2800);
+        caption('Tokko: "¡¡CEMEN!! ¡¡Hay algo MUCHO MEJOR!!" 🏃',2500);
+      });
+    });
+
+    // ◆ BEAT 4 — Líqui aparece con el teléfono (9800ms rel)
+    tick(9800, ()=>{
+      $('liqui').style.transition='right .75s cubic-bezier(.25,.46,.45,.94)';
+      $('liqui').style.right='14%';
+
+      tick(900, ()=>{
+        bubble('bub-liqui',2200);
+        caption('Líqui: "Sin colas. 72 horas. Confíen." 😊',2200);
+
+        // Big phone slides up
+        tick(600,()=>{
+          $('phone-big').style.opacity='1';
+          $('phone-big').style.transform='translateX(-50%) scale(1)';
+          $('phone-big').style.transition='opacity .5s, transform .5s cubic-bezier(.34,1.56,.64,1)';
+        });
+      });
+    });
+
+    // ◆ BEAT 5 — COUNTDOWN 72 → 48 → 24 → 0 (12200ms rel)
+    tick(12200, ()=>{
+      caption('Contador en marcha: 72... 48... 24... ⏱️',3500);
+
+      // 72h
+      $('cd-num').textContent='72';
+      $('phone-big').style.animation='tap-flash .4s ease-out';
+
+      // 48h
+      tick(1100,()=>{
+        $('cd-num').style.transition='transform .25s cubic-bezier(.34,1.56,.64,1), color .3s';
+        $('cd-num').style.transform='scale(1.4)';
+        $('cd-num').style.color=  '#ffaa00';
+        tick(120,()=>{
+          $('cd-num').style.transform='scale(1)';
+          $('cd-num').textContent='48';
+          $('cd-num').style.color=var_sky();
+        });
+      });
+
+      // 24h
+      tick(2300,()=>{
+        $('cd-num').style.transform='scale(1.4)';
+        $('cd-num').style.color='#ffaa00';
+        tick(120,()=>{
+          $('cd-num').style.transform='scale(1)';
+          $('cd-num').textContent='24';
+          $('cd-num').style.color=var_sky();
+        });
+      });
+
+      // 0h — DING!
+      tick(3500,()=>{
+        $('cd-num').style.transform='scale(1.5)';
+        $('cd-num').style.color='#3DD68C';
+        tick(120,()=>{
+          $('cd-num').style.transform='scale(1)';
+          $('cd-num').textContent='✓';
+          $('phone-status').textContent='¡COMPLETADO!';
+          $('phone-big').style.borderColor='#3DD68C';
+          $('phone-big').style.boxShadow='0 0 28px rgba(61,214,140,.4), 0 0 60px rgba(61,214,140,.15)';
+          caption('¡¡DING!! 🔔 Listo. 72 horas. Sin colas.',2800);
+        });
+      });
+    });
+
+    // ◆ BEAT 6 — Notif llega a Cemen (16500ms rel)
+    tick(16500,()=>{
+      $('notif-card').classList.add('show');
+      stopTurnero(); stopClock();
+
+      // Cemen shocks
+      tick(600,()=>{
+        $('cemen-body').style.animation='shock-bounce .7s cubic-bezier(.34,1.56,.64,1)';
+        $('cemen-mouth').className='mouth-shock';
+
+        // Beard falls off!
+        tick(400,()=>{
+          const beard=$('cemen-beard');
+          beard.style.animation='beard-fall .7s ease-in forwards';
+          tick(700,()=>{ beard.style.opacity='0'; });
+        });
+
+        // Ticket disappears
+        tick(500,()=>{ $('ticket').style.opacity='0'; });
+
+        bubble('bub-cemen2',2200);
+        caption('Cemen: "¡¡¿¿72 HORAS??!! ¿¿Sin cola??!" 😱',2500);
+      });
+    });
+
+    // ◆ BEAT 7 — Cemen lo celebra, la barba cayó (19500ms rel)
+    tick(19500,()=>{
+      $('cemen-mouth').className='mouth-happy';
+      $('cemen-body').style.animation='bounce-idle .5s ease-in-out 4';
+      bubble('bub-cemen3',2000);
+      caption('La barba... se fue. El turno... también. 🎉',2200);
+      confetti(55);
+
+      // Ghosts disappear (bank queue vanishes)
+      tick(800,()=>{
+        ['ghost1','ghost2','ghost3','ghost4'].forEach(id=>{ $(id).style.opacity='0'; });
+        $('banco-sign').style.opacity='0.15';
+        $('turnero').style.opacity='0.15';
+      });
+    });
+
+  }); // /scene-main
+
+  // ── END CARD: 26000ms absolute ────────────────────────
+  tick(26000,()=>{
+    stopClock(); stopTurnero(); stopZzz();
+    show('scene-end');
+
+    const tg=$('tagline');
+    tg.style.transition='opacity .85s, transform .85s';
+    tick(60,()=>{ tg.style.opacity='1'; tg.style.transform='translateY(0)'; });
+    tick(400,()=>{ $('end-sep').style.transition='opacity .4s'; $('end-sep').style.opacity='1'; });
+    tick(500,()=>{ $('end-tags').style.opacity='1'; });
+    tick(700,()=>{ $('end-brand').style.opacity='1'; });
+    tick(900,()=>{ $('end-info').style.opacity='1'; });
+    tick(400,()=>confetti(35));
+    tick(2200,()=>$('replay-btn').classList.add('show'));
+    $('prog').style.width='100%';
+  });
+}
+
+function var_sky(){ return '#5EC8F2'; }
+
+// Inject keyframes
+const ks=document.createElement('style');
+ks.textContent=`
+@keyframes nod{0%,100%{transform:translateY(0) rotate(0deg)}30%{transform:translateY(3px) rotate(8deg)}60%{transform:translateY(1px) rotate(-2deg)}}
+@keyframes shock-bounce{0%{transform:translateY(0) scale(1)}25%{transform:translateY(-14px) scale(1.08,.92)}50%{transform:translateY(0) scale(.94,1.06)}70%{transform:translateY(-5px) scale(1.03,.97)}100%{transform:translateY(0) scale(1)}}
+@keyframes bounce-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes zzz-float{0%{opacity:0;transform:translateY(0) scale(.6)}20%{opacity:.7}100%{opacity:0;transform:translateY(-40px) scale(1.1)}}
+@keyframes beard-fall{0%{transform:translateX(-50%) translateY(0) rotate(0deg);opacity:1}100%{transform:translateX(-50%) translateY(50px) rotate(25deg);opacity:0}}
+@keyframes tap-flash{0%{box-shadow:0 0 22px rgba(94,200,242,.2)}50%{box-shadow:0 0 40px rgba(94,200,242,.7),0 0 80px rgba(94,200,242,.3)}100%{box-shadow:0 0 22px rgba(94,200,242,.2)}}
+`;
+document.head.appendChild(ks);
+
+window.addEventListener('load',()=>setTimeout(run,200));
+</script>
+</body>
+</html>

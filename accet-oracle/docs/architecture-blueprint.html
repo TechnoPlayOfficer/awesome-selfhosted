@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ACCET Oracle: Deep Technical Architecture</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Fira+Code:wght@400;500&display=swap');
+        
+        :root {
+            --bg: #020624;
+            --surface: #070B2E;
+            --primary: #5AC4EE;
+            --secondary: #a78bfa;
+            --success: #10B981;
+            --text: #E5E4E2;
+            --muted: #B0B0C0;
+            --border: rgba(229, 228, 226, 0.15);
+        }
+
+        body {
+            font-family: 'Space+Grotesk', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background-color: var(--bg);
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--surface);
+            padding: 60px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        header::after {
+            content: "DEEP TECH BLUEPRINT v1.1";
+            position: absolute;
+            right: 0;
+            bottom: -25px;
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--primary);
+        }
+
+        h1 { font-size: 42px; margin: 0; color: var(--primary); font-weight: 700; letter-spacing: -1px; }
+        h2 { font-size: 24px; margin-top: 50px; color: var(--secondary); border-left: 4px solid var(--secondary); padding-left: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        h3 { font-size: 18px; margin-top: 30px; color: var(--primary); }
+
+        p { margin-bottom: 20px; font-weight: 300; font-size: 17px; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 40px 0; }
+        .card { padding: 25px; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); }
+        .card strong { display: block; font-size: 18px; margin-bottom: 10px; color: var(--primary); }
+
+        code { font-family: 'Fira Code', monospace; background: rgba(0,0,0,0.3); padding: 2px 6px; border-radius: 4px; color: var(--secondary); }
+        pre { background: #010419; padding: 20px; border-radius: 8px; border: 1px solid var(--border); overflow-x: auto; font-size: 14px; color: #fff; }
+
+        .tech-spec { border-collapse: collapse; width: 100%; margin: 30px 0; }
+        .tech-spec td, .tech-spec th { border: 1px solid var(--border); padding: 12px; text-align: left; font-size: 14px; }
+        .tech-spec th { background: rgba(90, 196, 238, 0.1); color: var(--primary); }
+
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 700; background: var(--success); color: #000; margin-left: 10px; }
+
+        @media print {
+            body { background: #fff; color: #000; padding: 0; }
+            .container { box-shadow: none; border: none; max-width: 100%; background: #fff; padding: 0; }
+            h1, h2, h3, .card strong { color: #000; }
+            pre { background: #f4f4f4; color: #000; border: 1px solid #ccc; }
+            .card { border: 1px solid #ccc; background: #fff; }
+            .tech-spec th { background: #eee; color: #000; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ACCET Legal Oracle</h1>
+            <p>Institutional Infrastructure for Asset Tokenization & Digital Notarization</p>
+        </header>
+
+        <h2>1. System Architecture Overview</h2>
+        <p>ACCET Oracle is a distributed verifiability system designed to bridge physical legal assets with the Base L2 blockchain. It utilizes <strong>Filecoin</strong> for immutable storage and <strong>Supabase</strong> for high-availability metadata orchestration.</p>
+
+        <div class="grid">
+            <div class="card">
+                <strong>Ingestion Layer</strong>
+                Processes PDF documents via <code>Multer</code>, generates SHA-256 hashes, and initiates the <code>Lighthouse SDK</code> upload to Filecoin.
+            </div>
+            <div class="card">
+                <strong>Oracle Layer</strong>
+                A Node.js/Express engine that interrogates the Filecoin network to verify CID persistence and Zero-Drift compliance.
+            </div>
+            <div class="card">
+                <strong>Law Layer</strong>
+                EVM Smart Contracts (EIP-5192) that bind legal CIDs to on-chain Soulbound Tokens on the <strong>Base Network</strong>.
+            </div>
+            <div class="card">
+                <strong>Identity Layer</strong>
+                Supabase Auth + ERC-3643 conceptual framework for institutional tenant separation and asset holder verification.
+            </div>
+        </div>
+
+        <h2>2. Technical Data Model</h2>
+        <p>The core schema (Prisma/Postgres) ensures referential integrity between legal tenants and their cryptographic assets.</p>
+        <pre>
+model Document {
+  id          String   @id @default(uuid())
+  cid         String   @unique  // Filecoin Hash
+  title       String
+  status      DocStatus @default(UPLOADED) // UPLOADED, SEALED, MINTED
+  txHash      String?  // Base L2 Transaction
+  tenantId    String
+  signatures  Signature[]
+  transactions Transaction[]
+}
+
+model Tenant {
+  id    String @id @default(uuid())
+  name  String
+  type  TenantType // UNIVERSITY, BANK, GOV
+  docs  Document[]
+}</pre>
+
+        <h2>3. The VDA Pipeline (Workflow)</h2>
+        <table class="tech-spec">
+            <thead>
+                <tr>
+                    <th>Step</th>
+                    <th>Process</th>
+                    <th>Technology</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1. Upload</td>
+                    <td>Symmetric encryption + Hash generation</td>
+                    <td>Express / Crypto</td>
+                    <td>Local Hash</td>
+                </tr>
+                <tr>
+                    <td>2. Persist</td>
+                    <td>Decentralized pinning to Filecoin</td>
+                    <td>Lighthouse SDK</td>
+                    <td>CID (v1)</td>
+                </tr>
+                <tr>
+                    <td>3. Validate</td>
+                    <td>Oracle check for data integrity</td>
+                    <td>FVM / Oracle Engine</td>
+                    <td>Zero-Drift Proof</td>
+                </tr>
+                <tr>
+                    <td>4. Seal</td>
+                    <td>Digital signature injection</td>
+                    <td>Certicámara API</td>
+                    <td>Signed PDF</td>
+                </tr>
+                <tr>
+                    <td>5. Mint</td>
+                    <td>On-chain binding to Soulbound Token</td>
+                    <td>Base L2 / Solidity</td>
+                    <td>Asset Token ID</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>4. Security & Compliance</h2>
+        <h3>A. Storage Immutability</h3>
+        <p>All legal assets are stored on Filecoin. Unlike centralized storage, a CID is content-addressable. If a single byte in the deed changes, the CID changes, triggering an <strong>Oracle Alert</strong>.</p>
+        
+        <h3>B. Compliance Standards</h3>
+        <ul>
+            <li><strong>MLETR:</strong> Model Law on Electronic Transferable Records compliant metadata structures.</li>
+            <li><strong>ERC-5192:</strong> Minimal Soulbound Tokens to prevent unauthorized transfer of legal titles.</li>
+            <li><strong>Audit Logs:</strong> Every status change is recorded in Supabase with a cryptographic timestamp.</li>
+        </ul>
+
+        <h2>5. API Endpoints (Institutional Access)</h2>
+        <pre>
+POST /api/v1/documents/upload    // Ingest new legal asset
+GET  /api/v1/documents/:id/status // Poll Oracle for VDA state
+POST /api/v1/onchain/mint        // Bind CID to Base L2 Token
+GET  /api/v1/verify/:cid         // Public verification gateway</pre>
+
+        <div class="footer">
+            CONFIDENTIAL | ACCET ORACLE TECH SPEC | GENERATED BY ANTIGRAVITY FOR TECHPLAYOFFICER
+        </div>
+    </div>
+</body>
+</html>

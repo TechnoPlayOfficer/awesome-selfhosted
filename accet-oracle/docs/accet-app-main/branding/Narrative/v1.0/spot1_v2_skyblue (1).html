@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCET · Los Ladrillones · Spot 1 — El Ladrillo Atrapado v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════════
+   ACCET DESIGN SYSTEM — Variables exactas
+   ════════════════════════════════════════ */
+:root {
+  --sky:    #5EC8F2;
+  --ice:    #5ED7F2;
+  --teal:   #377D8C;
+  --dark:   #0D0D0D;
+  --light:  #F2F2F2;
+  --sky04:  rgba(94,200,242,.04);
+  --sky10:  rgba(94,200,242,.10);
+  --sky20:  rgba(94,200,242,.20);
+  --sky35:  rgba(94,200,242,.35);
+  --teal10: rgba(55,125,140,.10);
+  /* Narrative/character accents (non-system, for characters only) */
+  --amber:  #ffaa00;
+  --ground-top:  #4a4a42;
+  --ground-mid:  #323230;
+  --ground-deep: #1c1c1a;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--dark);
+  background-image:
+    linear-gradient(var(--sky04) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sky04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  width: 100%; height: 100vh;
+  overflow: hidden;
+  font-family: 'DM Sans', sans-serif;
+  user-select: none;
+}
+
+#stage {
+  width: 100%; height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ─── ACCENT LINE (signature 3px ACCET) ─── */
+.accent-line {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sky), var(--ice), var(--teal));
+  z-index: 100;
+}
+
+/* ─── SKY ─── */
+.sky-bg {
+  position: absolute; top:0; left:0; width:100%; height:65%;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% -5%, rgba(94,200,242,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 30% at 20% 80%, rgba(55,125,140,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 30% 25% at 80% 40%, rgba(94,215,242,.03) 0%, transparent 55%),
+    linear-gradient(180deg, #0D0D0D 0%, #0f1214 100%);
+}
+
+/* Stars */
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle var(--d,3s) var(--dl,0s) infinite;
+}
+@keyframes twinkle {
+  0%,100%{opacity:.12; transform:scale(1);}
+  50%{opacity:.75; transform:scale(1.3);}
+}
+
+/* ─── GROUND ─── */
+.ground {
+  position: absolute; bottom:0; left:0;
+  width:100%; height:38%;
+  background: linear-gradient(180deg, var(--ground-top) 0%, var(--ground-mid) 25%, var(--ground-deep) 100%);
+  border-top: 1px solid rgba(94,200,242,.15);
+  overflow: hidden;
+}
+.ground::before {
+  content:'';
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background-image:
+    repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(0,0,0,.12) 60px, rgba(0,0,0,.12) 61px),
+    repeating-linear-gradient(180deg, transparent, transparent 28px, rgba(0,0,0,.08) 28px, rgba(0,0,0,.08) 29px);
+}
+
+/* Ground atmospheric glow — sky blue */
+.ground-glow {
+  position:absolute; bottom:36%; left:50%;
+  transform:translateX(-50%);
+  width:320px; height:65px;
+  background: radial-gradient(ellipse, rgba(94,200,242,.3), transparent 70%);
+  opacity:0; pointer-events:none;
+  filter: blur(14px);
+  transition: opacity .6s;
+}
+
+/* ─── SCENE SYSTEM ─── */
+.scene {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition: opacity .5s ease;
+}
+.scene.active { opacity:1; pointer-events:auto; }
+
+/* ─── PROGRESS BAR — sky blue ─── */
+.prog-bar {
+  position:absolute; bottom:0; left:0;
+  height:3px; width:0%;
+  background: var(--sky);
+  box-shadow: 0 0 10px rgba(94,200,242,.7);
+  z-index:999;
+  transition: width .08s linear;
+}
+
+/* ─── SPEECH BUBBLE ─── */
+.bubble {
+  position:absolute;
+  background: white;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; line-height:1.4;
+  font-weight: 400;
+  color: #1a1a1a;
+  white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,.45);
+  opacity:0;
+  transition: opacity .3s;
+  z-index:20;
+  pointer-events:none;
+}
+.bubble::after {
+  content:'';
+  position:absolute; bottom:-9px; left:50%;
+  transform:translateX(-50%);
+  border:9px solid transparent;
+  border-top-color:white;
+  border-bottom:none;
+}
+.bubble.left::after { left:20%; }
+.bubble.right::after { left:70%; }
+
+/* ─── CAPTION BAR ─── */
+.caption {
+  position:absolute; bottom:22px; left:50%;
+  transform:translateX(-50%);
+  background:rgba(13,13,13,.80);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(94,200,242,.12);
+  border-top: 1px solid rgba(94,200,242,.25);
+  color: rgba(255,255,255,.85);
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px; letter-spacing:.3px;
+  padding:7px 18px;
+  border-radius:4px;
+  white-space:nowrap;
+  opacity:0; z-index:50;
+  transition:opacity .25s;
+  pointer-events:none;
+}
+
+/* ─────────────────────────────────────────
+   BRICK CHARACTERS
+   ───────────────────────────────────────── */
+
+.brick-char {
+  position:absolute;
+  display:flex; flex-direction:column;
+  align-items:center;
+  pointer-events:none;
+}
+
+.body {
+  position:relative;
+  border-radius:10px;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  padding:6px;
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,.18),
+    inset 0 -4px 6px rgba(0,0,0,.3),
+    0 8px 28px rgba(0,0,0,.55);
+  transition: transform .15s, background .4s;
+}
+
+.eyes { display:flex; gap:5px; margin-bottom:3px; }
+.eye {
+  background:white; border-radius:50%;
+  position:relative; overflow:visible;
+  display:flex; align-items:center; justify-content:center;
+}
+.pupil {
+  width:42%; height:42%;
+  background:#111; border-radius:50%;
+  transition:transform .15s;
+}
+.brow {
+  position:absolute;
+  top:-5px; left:-1px;
+  width:calc(100% + 2px); height:3px;
+  background:#3a3a3a; border-radius:2px;
+}
+
+.mouth-sad {
+  width:22px; height:12px;
+  border:3px solid #222;
+  border-top:none;
+  border-radius:0 0 12px 12px;
+  margin:2px auto 0;
+}
+.mouth-ok {
+  width:18px; height:3px;
+  background:#222; border-radius:2px;
+  margin:4px auto 0;
+}
+.mouth-happy {
+  width:22px; height:12px;
+  border:3px solid #222;
+  border-bottom:none;
+  border-radius:12px 12px 0 0;
+  margin:2px auto 0;
+}
+.mouth-open {
+  width:16px; height:16px;
+  background:#222; border-radius:50%;
+  margin:3px auto 0;
+}
+
+/* ─── TEARS ─── */
+.tear {
+  position:absolute;
+  width:5px; height:9px;
+  background:rgba(120,190,255,.85);
+  border-radius:50% 50% 50% 50% / 20% 20% 80% 80%;
+  animation:tearfall 1.1s ease-in infinite;
+}
+.tear.l { left:10px; top:42px; animation-delay:0s; }
+.tear.r { right:10px; top:42px; animation-delay:.55s; }
+@keyframes tearfall {
+  0%{opacity:1;transform:translateY(0)}
+  100%{opacity:0;transform:translateY(22px)}
+}
+
+/* ─── HARD HAT ─── */
+.hard-hat {
+  position:absolute;
+  top:-22px; left:50%;
+  transform:translateX(-50%);
+}
+.hat-dome {
+  width:48px; height:24px;
+  background:linear-gradient(160deg,#ffe033,#f0c000);
+  border-radius:50% 50% 0 0;
+  margin:0 auto;
+  box-shadow:0 -2px 8px rgba(255,200,0,.3);
+}
+.hat-brim {
+  width:68px; height:7px;
+  background:linear-gradient(180deg,#f0c000,#c89000);
+  border-radius:3px;
+  margin:-2px auto 0;
+}
+
+/* ─── BLOQUE — El Propietario ─── */
+#bloque {
+  bottom:36.5%; left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+}
+#bloque .body {
+  width:78px; height:68px;
+  background:linear-gradient(140deg,#d86040,#c44f2a,#a03318);
+}
+
+/* Tuxedo state — sky glow */
+#bloque.tuxedo .body {
+  background:linear-gradient(140deg,#1a1a1a,#111111,#0D0D0D) !important;
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,.1),
+    0 0 28px rgba(94,200,242,.55),
+    0 0 55px rgba(94,200,242,.2),
+    0 8px 28px rgba(0,0,0,.7) !important;
+}
+.bow-tie {
+  position:absolute; bottom:-8px; left:50%;
+  transform:translateX(-50%);
+  width:18px; height:7px;
+  background: var(--sky);         /* ← sky blue */
+  box-shadow: 0 0 8px rgba(94,200,242,.6);
+  clip-path:polygon(0 0, 50% 50%, 100% 0, 100% 100%, 50% 50%, 0 100%);
+  display:none;
+}
+
+@keyframes emerge {
+  0%{bottom:36.5%}
+  100%{bottom:56%}
+}
+@keyframes cry-wobble {
+  0%,100%{transform:translateX(-50%) rotate(-2.5deg)}
+  50%{transform:translateX(calc(-50% + 4px)) rotate(2.5deg)}
+}
+#bloque.crying { animation:cry-wobble .45s ease-in-out infinite; }
+#bloque.emerging { animation:emerge .9s cubic-bezier(.34,1.56,.64,1) forwards; }
+
+/* ─── CRIPTO — El Tecno-Entusiasta ─── */
+#cripto {
+  bottom:38%; right:-130px;
+  z-index:8; transition:right .7s cubic-bezier(.34,1.56,.64,1);
+}
+#cripto .body {
+  width:52px; height:92px;
+  background:
+    repeating-linear-gradient(60deg, rgba(94,200,242,.05) 0, rgba(94,200,242,.05) 2px, transparent 2px, transparent 22px),
+    linear-gradient(150deg, #0e2228, #091619, #060f11);
+}
+.hex-tag {
+  font-size:8px; color:var(--sky);
+  font-family:'JetBrains Mono'; opacity:.6;
+  margin-bottom:2px; letter-spacing:1px;
+}
+#cripto .eye {
+  background:linear-gradient(135deg,var(--sky),var(--teal));
+}
+#cripto .pupil { background:white; }
+.chain-tag {
+  font-size:6px; color:var(--ice);
+  font-family:'JetBrains Mono'; opacity:.45;
+  margin-top:3px; letter-spacing:.5px;
+}
+
+/* ─── TOKKO — El Pequeño Inversor ─── */
+#tokko {
+  bottom:38%; right:-180px;
+  z-index:7; transition:right .6s cubic-bezier(.34,1.56,.64,1);
+}
+#tokko .body {
+  width:44px; height:44px;
+  background:linear-gradient(135deg,#d08800,#a86a00,#7a4a00);
+}
+.glasses {
+  position:absolute; top:-12px; left:50%;
+  transform:translateX(-50%);
+  display:flex; align-items:center; gap:1px;
+}
+.lens {
+  width:17px; height:13px;
+  border:2px solid #555;
+  border-radius:4px;
+  background:rgba(94,200,242,.12);
+}
+.bridge { width:3px; height:2px; background:#555; margin-bottom:3px; }
+
+/* ─── CEMEN — El Escéptico ─── */
+#cemen {
+  bottom:38%; left:-130px;
+  z-index:8; transition:left .7s cubic-bezier(.34,1.56,.64,1), transform .4s;
+}
+#cemen .body {
+  width:68px; height:58px;
+  background:linear-gradient(135deg,#787868,#626255,#464638);
+}
+.crack-line {
+  position:absolute;
+  background:rgba(0,0,0,.35);
+  border-radius:1px;
+}
+.beard {
+  position:absolute; bottom:-5px; left:50%;
+  transform:translateX(-50%);
+  width:28px; height:7px;
+  background:linear-gradient(180deg,#888,#666);
+  border-radius:0 0 5px 5px;
+}
+.pickaxe-icon {
+  position:absolute; top:-32px; right:-10px;
+  font-size:28px; transform:rotate(30deg);
+  opacity:0; transition:opacity .3s;
+}
+@keyframes swing {
+  0%,100%{transform:rotate(20deg) translateY(0)}
+  50%{transform:rotate(-25deg) translateY(-5px)}
+}
+@keyframes recoil {
+  0%{transform:scale(1)}
+  30%{transform:scale(1.08) rotate(-8deg)}
+  60%{transform:scale(.94) rotate(5deg)}
+  100%{transform:scale(1) rotate(0deg)}
+}
+
+/* ─── LÍQUI — La Plataforma (sky pastel) ─── */
+#liqui {
+  bottom:38%; right:-160px;
+  z-index:9; transition:right .9s cubic-bezier(.25,.46,.45,.94);
+}
+#liqui .body {
+  width:54px; height:84px;
+  background:linear-gradient(135deg,#a0d4e8,#7ab8d0,#5090a8);
+  box-shadow:
+    inset 0 4px 8px rgba(255,255,255,.32),
+    0 0 22px rgba(94,200,242,.25),
+    0 8px 28px rgba(0,0,0,.5);
+}
+.shine {
+  position:absolute; top:8px; left:7px;
+  width:10px; height:28px;
+  background:rgba(255,255,255,.38);
+  border-radius:5px;
+  transform:rotate(-8deg);
+}
+
+/* Phone */
+.phone {
+  position:absolute; right:-34px; top:18px;
+  width:24px; height:38px;
+  background:#111;
+  border-radius:5px;
+  border:1.5px solid rgba(94,200,242,.25);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity .4s, transform .1s;
+}
+.phone-screen {
+  width:17px; height:28px;
+  background:linear-gradient(135deg,var(--sky),var(--teal));
+  border-radius:3px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:5px; font-weight:700; color:#fff;
+  font-family:'JetBrains Mono';
+  letter-spacing:.5px; text-align:center;
+}
+
+/* ─── ROPE ─── */
+#rope {
+  position:absolute;
+  bottom:52%; left:50%;
+  height:4px;
+  background:linear-gradient(90deg,#8B6914,#c4a030,#8B6914);
+  border-radius:2px;
+  opacity:0;
+  transform-origin:left center;
+  width:0px;
+  transition:opacity .2s, width .5s ease;
+}
+
+/* ─── TOKEN ERC-3643 ─── */
+#token {
+  position:absolute;
+  bottom:37%; left:50%;
+  transform:translateX(-50%) scale(0);
+  width:52px; height:52px;
+  background:radial-gradient(circle at 35% 30%, #ffe566, #ffaa00, #cc7700);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:#000; font-weight:900; font-size:7px;
+  text-align:center; line-height:1.15;
+  font-family:'JetBrains Mono';
+  box-shadow:0 0 28px rgba(255,190,0,.8), 0 0 60px rgba(255,140,0,.35);
+  opacity:0;
+  z-index:12;
+}
+@keyframes token-rise {
+  0%  {transform:translateX(-50%) scale(0);     opacity:0; bottom:37%}
+  20% {transform:translateX(-50%) scale(1.25);  opacity:1; bottom:42%}
+  100%{transform:translateX(-50%) scale(1);      opacity:1; bottom:72%}
+}
+#token.rising { animation:token-rise 2s cubic-bezier(.25,.46,.45,.94) forwards; }
+
+/* Notification badge — sky blue */
+.notif-badge {
+  position:absolute;
+  background: var(--sky);
+  color: #0D0D0D;
+  font-family:'JetBrains Mono', monospace;
+  font-size:9px; font-weight:500;
+  padding:4px 9px; border-radius:4px;
+  box-shadow:0 0 16px rgba(94,200,242,.6);
+  opacity:0; transition:opacity .3s, transform .3s;
+  transform:translateY(8px);
+  white-space:nowrap; pointer-events:none;
+  z-index:20;
+}
+.notif-badge.show {
+  opacity:1; transform:translateY(0);
+}
+
+/* ─── INTRO CARD ─── */
+#scene-intro {
+  background: var(--dark);
+  background-image:
+    linear-gradient(var(--sky04) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sky04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index:80;
+  flex-direction:column;
+}
+/* Accent line on intro */
+#scene-intro::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));
+  z-index:2;
+}
+
+/* ─── END CARD ─── */
+#scene-end {
+  background: var(--dark);
+  background-image:
+    linear-gradient(var(--sky04) 1px, transparent 1px),
+    linear-gradient(90deg, var(--sky04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index:80;
+  flex-direction:column;
+}
+#scene-end::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));
+  z-index:2;
+}
+
+/* Typography */
+.spot-eyebrow {
+  font-family:'JetBrains Mono', monospace;
+  font-size:9px; letter-spacing:3px;
+  color:rgba(94,200,242,.55);
+  text-transform:uppercase; margin-bottom:14px;
+  opacity:0; animation:fadeup .6s .3s forwards;
+}
+.spot-headline {
+  font-family:'Syne', sans-serif;
+  font-size:clamp(30px,6vw,58px);
+  font-weight:900; color:white; text-align:center; line-height:1.05;
+  opacity:0; animation:fadeup .6s .6s forwards;
+}
+.spot-headline .accent { color:var(--sky); }
+.spot-sub {
+  font-family:'JetBrains Mono', monospace;
+  font-size:9px; letter-spacing:3px;
+  color:rgba(94,200,242,.35); margin-top:14px;
+  opacity:0; animation:fadeup .6s .9s forwards;
+  text-transform:uppercase;
+}
+
+/* End card tagline */
+.tagline {
+  font-family:'Syne', sans-serif;
+  font-size:clamp(22px,4.5vw,46px);
+  font-weight:900; color:white;
+  text-align:center; line-height:1.15;
+  max-width:580px;
+  opacity:0; transform:translateY(18px);
+  transition:opacity .8s, transform .8s;
+}
+.tagline .t-sky  { color:var(--sky); }
+.tagline .t-ice  { color:var(--ice); }
+
+/* End card data tags */
+.end-tags {
+  display:flex; gap:8px; margin-top:22px; flex-wrap:wrap; justify-content:center;
+  opacity:0; transition:opacity .6s .5s;
+}
+.etag {
+  font-family:'JetBrains Mono', monospace;
+  font-size:8px; letter-spacing:1.5px;
+  padding:3px 8px;
+  border:1px solid rgba(94,200,242,.3);
+  color:rgba(94,200,242,.6);
+  background: var(--sky10);
+}
+
+.end-brand {
+  font-family:'Syne', sans-serif;
+  font-size:20px; font-weight:800;
+  color:var(--sky); margin-top:28px;
+  opacity:0; transition:opacity .5s .9s;
+  letter-spacing:-0.5px;
+}
+.end-info {
+  font-family:'JetBrains Mono', monospace;
+  font-size:8px; letter-spacing:1px;
+  color:rgba(255,255,255,.18);
+  margin-top:6px;
+  opacity:0; transition:opacity .4s 1.1s;
+}
+
+/* Separator */
+.end-sep {
+  width:280px; height:1px;
+  background: rgba(94,200,242,.15);
+  margin:18px auto 0;
+  opacity:0; transition:opacity .4s .4s;
+}
+
+@keyframes fadeup {
+  from{opacity:0;transform:translateY(16px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+
+/* ─── REPLAY BUTTON — sky blue ─── */
+#replay-btn {
+  position:absolute; bottom:28px; right:28px;
+  background: var(--sky); color: #0D0D0D;
+  border:none; padding:10px 22px;
+  border-radius:4px;
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px; letter-spacing:2px;
+  font-weight:500;
+  cursor:pointer; z-index:999;
+  opacity:0; pointer-events:none;
+  transition:opacity .4s, transform .15s;
+}
+#replay-btn:hover { transform:scale(1.06); }
+#replay-btn.show { opacity:1; pointer-events:auto; }
+
+/* ─── CONFETTI — paleta ACCET ─── */
+.conf {
+  position:absolute;
+  border-radius:2px;
+  pointer-events:none;
+  z-index:90;
+}
+
+/* ─── SCENE LABEL ─── */
+.scene-label {
+  position:absolute; top:14px; left:50%;
+  transform:translateX(-50%);
+  font-family:'JetBrains Mono', monospace;
+  font-size:9px; letter-spacing:3px;
+  color:rgba(94,200,242,.22);
+  text-transform:uppercase;
+  z-index:50; pointer-events:none;
+}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <!-- Signature accent line -->
+  <div class="accent-line"></div>
+
+  <!-- Progress bar -->
+  <div class="prog-bar" id="prog"></div>
+
+  <!-- ═══════════════ INTRO CARD ═══════════════ -->
+  <div class="scene active" id="scene-intro">
+    <div style="text-align:center">
+      <div class="spot-eyebrow">Los Ladrillones · Spot 1 de 4</div>
+      <div class="spot-headline">El Ladrillo<br><span class="accent">Atrapado</span></div>
+      <div class="spot-sub">Animación de marca ACCET · 30s</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════ MAIN SCENE ═══════════════ -->
+  <div class="scene" id="scene-main">
+
+    <div class="sky-bg" id="sky"></div>
+    <div class="ground-glow" id="glow"></div>
+    <div class="ground"></div>
+    <div class="scene-label" id="scene-label">ACCET · El Ladrillo Atrapado</div>
+
+    <!-- ── BLOQUE ── -->
+    <div class="brick-char" id="bloque">
+      <div class="hard-hat">
+        <div class="hat-dome"></div>
+        <div class="hat-brim"></div>
+      </div>
+      <div class="body">
+        <div class="eyes">
+          <div class="eye" style="width:21px;height:21px">
+            <div class="brow" style="transform:rotate(12deg)"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:21px;height:21px">
+            <div class="brow" style="transform:rotate(-12deg)"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-sad" id="bloque-mouth"></div>
+        <div class="tear l"></div>
+        <div class="tear r"></div>
+        <div class="bow-tie" id="bow-tie"></div>
+      </div>
+      <div class="bubble left" id="bub-bloque" style="bottom:82px;left:50px;font-size:10px;">
+        ¿Alguien me puede<br>ayudar...? 😭
+      </div>
+      <div class="notif-badge" id="notif-bloque" style="bottom:88px;left:-20px;">
+        🎉 ¡Liquidez activada! +60% LTV
+      </div>
+    </div>
+
+    <!-- ── CRIPTO ── -->
+    <div class="brick-char" id="cripto">
+      <div class="body">
+        <div class="hex-tag">⬡⬡⬡</div>
+        <div class="eyes">
+          <div class="eye" style="width:16px;height:16px;background:linear-gradient(135deg,var(--sky),var(--teal))">
+            <div class="brow"></div>
+            <div class="pupil" style="background:#fff"></div>
+          </div>
+          <div class="eye" style="width:16px;height:16px;background:linear-gradient(135deg,var(--sky),var(--teal))">
+            <div class="brow"></div>
+            <div class="pupil" style="background:#fff"></div>
+          </div>
+        </div>
+        <div class="mouth-ok" style="width:16px;background:var(--sky);opacity:.7"></div>
+        <div class="chain-tag">ERC·3643</div>
+      </div>
+      <div class="bubble right" id="bub-cripto" style="bottom:106px;right:40px;font-size:9px;">
+        ¡Es sencillo! Jalen<br>AQUÍ, AQUÍ y AQUÍ... 😅
+      </div>
+    </div>
+
+    <!-- ── TOKKO ── -->
+    <div class="brick-char" id="tokko">
+      <div class="glasses">
+        <div class="lens"></div>
+        <div class="bridge"></div>
+        <div class="lens"></div>
+      </div>
+      <div class="body">
+        <div class="eyes">
+          <div class="eye" style="width:14px;height:14px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:14px;height:14px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-happy" style="width:14px;height:7px;"></div>
+      </div>
+      <div class="bubble" id="bub-tokko" style="bottom:62px;left:-30px;font-size:9px;">
+        ¿Y si pongo $100? 🤩
+      </div>
+    </div>
+
+    <!-- ── CEMEN ── -->
+    <div class="brick-char" id="cemen">
+      <div class="pickaxe-icon" id="pickaxe">⛏️</div>
+      <div class="body">
+        <div class="crack-line" style="width:2px;height:18px;top:6px;left:18px;transform:rotate(14deg)"></div>
+        <div class="crack-line" style="width:1px;height:14px;top:28px;right:12px;transform:rotate(-8deg)"></div>
+        <div class="eyes" style="margin-top:4px">
+          <div class="eye" style="width:18px;height:18px">
+            <div class="brow" style="transform:rotate(18deg)"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:18px;height:18px">
+            <div class="brow" style="transform:rotate(-18deg)"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-ok" style="width:20px"></div>
+        <div class="beard"></div>
+      </div>
+      <div class="bubble left" id="bub-cemen" style="bottom:76px;left:60px;font-size:9px;">
+        En MIS tiempos esto<br>se resolvía así... 😤
+      </div>
+    </div>
+
+    <!-- ── LÍQUI ── -->
+    <div class="brick-char" id="liqui">
+      <div class="body">
+        <div class="shine"></div>
+        <div class="eyes" style="margin-top:12px">
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-happy" style="width:20px;height:10px;border-color:#225566;"></div>
+      </div>
+      <div class="phone" id="phone">
+        <div class="phone-screen">TAP<br>✓</div>
+      </div>
+      <div class="bubble right" id="bub-liqui" style="bottom:98px;right:50px;font-size:10px;">
+        Confíen. Ya. 😊
+      </div>
+    </div>
+
+    <!-- ── TOKEN ── -->
+    <div id="token">ERC<br>3643</div>
+
+    <!-- ── ROPE ── -->
+    <div id="rope"></div>
+
+    <!-- Caption -->
+    <div class="caption" id="caption"></div>
+
+  </div><!-- /scene-main -->
+
+  <!-- ═══════════════ END CARD ═══════════════ -->
+  <div class="scene" id="scene-end">
+    <div style="text-align:center">
+      <div class="tagline" id="tagline">
+        Tu ladrillo,<br>
+        <span class="t-sky">finalmente líquido.</span><br>
+        <span class="t-ice">ACCET.</span>
+      </div>
+      <div class="end-sep" id="end-sep"></div>
+      <div class="end-tags" id="end-tags">
+        <span class="etag">ERC-3643</span>
+        <span class="etag">HEDERA HTS</span>
+        <span class="etag">LTV 60%</span>
+        <span class="etag">$100 USD MÍN.</span>
+      </div>
+      <div class="end-brand" id="end-brand">ACCET</div>
+      <div class="end-info" id="end-info">Real Estate Tokenization · Powered by Hedera HTS</div>
+    </div>
+  </div>
+
+  <button id="replay-btn" onclick="run()">↺ REPLAY</button>
+
+</div><!-- /stage -->
+
+<script>
+const TOTAL = 30000;
+let timers = [], progInterval = null, t0 = null;
+
+const $ = id => document.getElementById(id);
+
+function tick(ms, fn){ timers.push(setTimeout(fn, ms)); }
+function clearAll(){ timers.forEach(clearTimeout); timers=[]; if(progInterval) clearInterval(progInterval); }
+
+function show(id){
+  document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+}
+
+function caption(txt, dur=2600){
+  const el=$('caption');
+  el.textContent=txt; el.style.opacity='1';
+  tick(dur, ()=>el.style.opacity='0');
+}
+
+function bubble(id, dur=2400){
+  const el=$(id); el.style.opacity='1';
+  tick(dur, ()=>el.style.opacity='0');
+}
+
+function buildStars(){
+  const sky=$('sky'); sky.innerHTML='';
+  for(let i=0;i<28;i++){
+    const s=document.createElement('div');
+    s.className='star';
+    const sz=Math.random()*2.2+.4;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*82}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1.5).toFixed(1)}s;--dl:${(Math.random()*3).toFixed(1)}s;`;
+    sky.appendChild(s);
+  }
+}
+
+// ACCET palette confetti
+function confetti(n=55){
+  const stage=document.getElementById('stage');
+  const cols=['#5EC8F2','#5ED7F2','#377D8C','#ffaa00','#ffffff','#b0e0f5','#a0c8e0'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');
+    el.className='conf';
+    const w=Math.random()*10+3;
+    const h=Math.random()>.5? w : w*2.2;
+    const col=cols[Math.floor(Math.random()*cols.length)];
+    const sx=25+Math.random()*50;
+    const delay=Math.random()*500;
+    const dur=900+Math.random()*1300;
+    const dx=(Math.random()-.5)*80;
+    el.style.cssText=`width:${w}px;height:${h}px;background:${col};left:${sx}%;top:18%;border-radius:${Math.random()>.5?'50%':'2px'};opacity:1;`;
+    stage.appendChild(el);
+    setTimeout(()=>{
+      el.style.transition=`transform ${dur}ms ease-in, opacity ${dur}ms ease-in`;
+      el.style.transform=`translate(${dx}px,${280+Math.random()*220}px) rotate(${Math.random()*700}deg)`;
+      el.style.opacity='0';
+      setTimeout(()=>el.remove(), dur+100);
+    }, delay+30);
+  }
+}
+
+function resetState(){
+  $('bloque').style.cssText='position:absolute;bottom:36.5%;left:50%;transform:translateX(-50%);z-index:10;';
+  $('bloque').classList.remove('crying','emerging','tuxedo');
+  $('bloque-mouth').className='mouth-sad';
+  $('bow-tie').style.display='none';
+  $('bub-bloque').style.opacity='0';
+  $('notif-bloque').classList.remove('show');
+  $('bloque').querySelectorAll('.tear').forEach(t=>{ t.style.display='block'; t.style.animation=''; });
+
+  $('cripto').style.cssText='position:absolute;bottom:38%;right:-130px;z-index:8;transition:none;';
+  $('cripto').style.transform='';
+  $('bub-cripto').style.opacity='0';
+
+  $('tokko').style.cssText='position:absolute;bottom:38%;right:-180px;z-index:7;transition:none;';
+  $('tokko').style.transform='';
+  $('bub-tokko').style.opacity='0';
+
+  $('cemen').style.cssText='position:absolute;bottom:38%;left:-130px;z-index:8;transition:none;';
+  $('cemen').style.transform='';
+  $('pickaxe').style.opacity='0';
+  $('pickaxe').style.animation='';
+  $('pickaxe').textContent='⛏️';
+  $('bub-cemen').style.opacity='0';
+
+  $('liqui').style.cssText='position:absolute;bottom:38%;right:-160px;z-index:9;transition:none;';
+  $('phone').style.opacity='0';
+  $('bub-liqui').style.opacity='0';
+
+  $('token').className='';
+  $('token').style.cssText='position:absolute;bottom:37%;left:50%;transform:translateX(-50%) scale(0);width:52px;height:52px;background:radial-gradient(circle at 35% 30%,#ffe566,#ffaa00,#cc7700);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:7px;text-align:center;line-height:1.15;font-family:"JetBrains Mono";box-shadow:0 0 28px rgba(255,190,0,.8),0 0 60px rgba(255,140,0,.35);opacity:0;z-index:12;';
+
+  $('rope').style.cssText='position:absolute;bottom:52%;left:50%;height:4px;background:linear-gradient(90deg,#8B6914,#c4a030,#8B6914);border-radius:2px;opacity:0;transform-origin:left center;width:0px;transition:none;';
+
+  $('glow').style.opacity='0';
+  $('caption').style.opacity='0';
+
+  $('tagline').style.opacity='0'; $('tagline').style.transform='translateY(18px)';
+  $('end-sep').style.opacity='0';
+  $('end-tags').style.opacity='0';
+  $('end-brand').style.opacity='0';
+  $('end-info').style.opacity='0';
+
+  $('replay-btn').classList.remove('show');
+  $('prog').style.width='0%';
+  document.querySelectorAll('.conf').forEach(el=>el.remove());
+}
+
+function run(){
+  clearAll();
+  resetState();
+  buildStars();
+  t0 = Date.now();
+
+  progInterval = setInterval(()=>{
+    const pct = Math.min(((Date.now()-t0)/TOTAL)*100, 100);
+    $('prog').style.width = pct+'%';
+    if(pct>=100) clearInterval(progInterval);
+  }, 60);
+
+  show('scene-intro');
+
+  tick(2400, ()=>{
+    show('scene-main');
+    $('bloque').classList.add('crying');
+
+    tick(600,  ()=>bubble('bub-bloque', 2800));
+    tick(1200, ()=>caption('Bloque tiene su capital... enterrado. Literalmente. 😬', 2800));
+
+    // Cripto & Tokko entran
+    tick(2500, ()=>{
+      $('cripto').style.transition='right .65s cubic-bezier(.34,1.56,.64,1)';
+      $('cripto').style.right='36%';
+
+      tick(500, ()=>{
+        $('tokko').style.transition='right .5s cubic-bezier(.34,1.56,.64,1)';
+        $('tokko').style.right='28%';
+        tick(700, ()=>bubble('bub-cripto', 2200));
+        tick(800, ()=>caption('Cripto: "¡Es sencillo! Jalen AQUÍ, AQUÍ y AQUÍ..." 📡', 2500));
+      });
+    });
+
+    // La cuerda — el fail
+    tick(5200, ()=>{
+      const rope=$('rope');
+      rope.style.opacity='1';
+      rope.style.width='185px';
+      rope.style.transition='opacity .2s, width .45s ease';
+
+      $('cripto').style.transition='transform .3s';
+      $('cripto').style.transform='rotate(-18deg) translateX(-6px)';
+      $('tokko').style.transition='transform .3s';
+      $('tokko').style.transform='rotate(-14deg) scale(.9)';
+
+      tick(900, ()=>{
+        rope.style.transition='opacity .08s';
+        rope.style.opacity='0';
+        caption('💥  BONK  💥  BONK  💥', 1600);
+
+        $('cripto').style.transition='transform .4s ease-in, right .5s';
+        $('cripto').style.transform='rotate(92deg) translateY(18px)';
+        $('cripto').style.right='22%';
+
+        tick(220, ()=>{
+          $('tokko').style.transition='transform .35s ease-in, right .4s';
+          $('tokko').style.transform='rotate(95deg) translateY(12px)';
+          $('tokko').style.right='18%';
+          tick(600, ()=>caption('Cripto: "No... no era ese el protocolo..." 😵‍💫', 2000));
+        });
+      });
+    });
+
+    // Cemen entra
+    tick(8500, ()=>{
+      $('cemen').style.transition='left .7s cubic-bezier(.34,1.56,.64,1)';
+      $('cemen').style.left='15%';
+      $('pickaxe').style.opacity='1';
+      tick(900,  ()=>bubble('bub-cemen', 2200));
+      tick(1000, ()=>caption('Cemen: "En MIS tiempos... esto se resolvía así." 🪨', 2400));
+
+      tick(2200, ()=>{
+        $('pickaxe').style.animation='swing .28s ease-in-out 4';
+
+        tick(1200, ()=>{
+          $('pickaxe').style.animation='';
+          $('pickaxe').textContent='💔';
+          $('cemen').style.animation='recoil .5s ease-in-out';
+          caption('¡¡EL PICO SE ROMPIÓ!! 🔨😱', 1600);
+
+          tick(800, ()=>{
+            $('cemen').style.transition='transform .45s ease-in';
+            $('cemen').style.transform='rotate(-100deg) translateY(12px)';
+            $('cemen').style.animation='';
+          });
+        });
+      });
+    });
+
+    // Pausa dramática
+    tick(12500, ()=>caption('...', 700));
+
+    // Líqui entra
+    tick(13400, ()=>{
+      $('liqui').style.transition='right .85s cubic-bezier(.25,.46,.45,.94)';
+      $('liqui').style.right='18%';
+
+      tick(1000, ()=>{
+        bubble('bub-liqui', 2000);
+        caption('Líqui: "Confíen. Ya." 😊', 2000);
+        $('phone').style.opacity='1';
+      });
+
+      // TAP
+      tick(2400, ()=>{
+        const ph=$('phone');
+        ph.style.transform='scale(1.35)';
+        tick(150, ()=>{
+          ph.style.transform='scale(1)';
+          $('glow').style.opacity='1';
+
+          tick(200, ()=>{
+            $('token').style.opacity='1';
+            $('token').style.transform='translateX(-50%) scale(1)';
+            $('token').classList.add('rising');
+            caption('⚡ Token ERC-3643 liberado... ✨', 2000);
+
+            // Bloque emerge
+            tick(1000, ()=>{
+              $('bloque').classList.remove('crying');
+              $('bloque').classList.add('emerging');
+              $('bloque').querySelectorAll('.tear').forEach(t=>{ t.style.display='none'; });
+              $('bloque-mouth').className='mouth-happy';
+
+              tick(600, ()=>{
+                $('bloque').classList.add('tuxedo');
+                $('bow-tie').style.display='block';
+                caption('¡BLOQUE! ... en esmoquin. 🎩✨', 2000);
+
+                tick(500, ()=>$('notif-bloque').classList.add('show'));
+
+                // Confetti
+                tick(1200, ()=>{
+                  confetti(60);
+                  caption('🎉 ¡Tu patrimonio, finalmente LIBRE! 🎉', 2400);
+
+                  tick(400, ()=>{
+                    ['cripto','tokko'].forEach(id=>{
+                      const el=$(id);
+                      el.style.transition='transform .5s cubic-bezier(.34,1.56,.64,1)';
+                      el.style.transform='rotate(0deg) scaleY(1.15) scaleX(.88)';
+                      tick(300,()=>{ el.style.transform='rotate(0deg) scale(1)'; });
+                    });
+                    $('cemen').style.transition='transform .5s cubic-bezier(.34,1.56,.64,1)';
+                    $('cemen').style.transform='rotate(0deg) scale(1)';
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
+  }); // /scene-main
+
+  // END CARD
+  tick(26000, ()=>{
+    show('scene-end');
+
+    const tg=$('tagline');
+    tg.style.transition='opacity .85s, transform .85s';
+    tick(60,  ()=>{ tg.style.opacity='1'; tg.style.transform='translateY(0)'; });
+    tick(400, ()=>{ $('end-sep').style.transition='opacity .4s'; $('end-sep').style.opacity='1'; });
+    tick(500, ()=>{ $('end-tags').style.opacity='1'; });
+    tick(700, ()=>{ $('end-brand').style.opacity='1'; });
+    tick(900, ()=>{ $('end-info').style.opacity='1'; });
+    tick(400, ()=>confetti(38));
+    tick(2200,()=>$('replay-btn').classList.add('show'));
+    $('prog').style.width='100%';
+  });
+}
+
+window.addEventListener('load', ()=>setTimeout(run, 200));
+
+// Keyframes via JS (needed for pickaxe + recoil)
+const ks = document.createElement('style');
+ks.textContent=`
+@keyframes swing{0%,100%{transform:rotate(20deg) translateY(0)}50%{transform:rotate(-25deg) translateY(-5px)}}
+@keyframes recoil{0%{transform:scale(1)}30%{transform:scale(1.08) rotate(-8deg)}60%{transform:scale(.94) rotate(5deg)}100%{transform:scale(1) rotate(0deg)}}
+`;
+document.head.appendChild(ks);
+</script>
+</body>
+</html>

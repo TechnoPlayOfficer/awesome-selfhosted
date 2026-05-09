@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#0ea5e9', // sky-500
+                            dark: '#0284c7',
+                        },
+                        secondary: {
+                            DEFAULT: '#14b8a6', // teal-500
+                            dark: '#0d9488',
+                        }
+                    },
+                    fontFamily: {
+                        "headline": ["Public Sans"],
+                        "body": ["Public Sans"],
+                        "label": ["Public Sans"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Public Sans', sans-serif; }
+        .neon-glow-green {
+            box-shadow: 0 0 20px rgba(20, 184, 166, 0.4), 0 0 40px rgba(20, 184, 166, 0.2);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-auto flex flex-col">
+<!-- TopNavBar Execution -->
+<nav class="flex justify-between items-center h-16 px-4 md:px-8 w-full sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 font-sans">
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">ACCET RWA</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="hidden md:flex items-center gap-8">
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors" href="#">Assets</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-colors" href="#">Portfolio</a>
+<a class="text-blue-600 dark:text-blue-400 font-semibold" href="#">Verification</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 cursor-pointer scale-95 active:opacity-80 transition-all">help</span>
+<span class="material-symbols-outlined text-slate-500 dark:text-slate-400 cursor-pointer scale-95 active:opacity-80 transition-all">notifications</span>
+<div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center overflow-visible">
+<img alt="User profile" data-alt="User profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnScFe-F38wdUqmILkVsXW12VvnRKhV7UDvhsyH8aMl3rIfBuGZH5W2vZNIWiiZLguddZ8ZXSbI61phV8ckEvEEjc_X3GTDYDp-XmA1dhcSPjuRL-OrxCy0TEIwHInjEel9Ze6B0kuISDkK17bmnzZK62HDShwwcfwA5ZS5yZFBnc8WGHKOpC5GZCyGEw-wnzaJkLrkan0v6_95_i1Wyfm4sv2oP74Kfv2sqmr-R_q65qu09gbT8QvnMcMzQBkOzv3MvVYS8OqUfYM"/>
+</div>
+</div>
+</div>
+</nav>
+<div class="flex flex-1 overflow-visible">
+<!-- SideNavBar Execution -->
+<aside class="hidden md:flex flex-col w-64 h-auto sticky top-0 p-4 gap-2 bg-slate-50 dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800">
+<div class="mb-6 px-4">
+<h2 class="text-lg font-bold text-slate-900 dark:text-white">KYC Verification</h2>
+<p class="text-xs text-slate-500 dark:text-slate-400">Step 4 of 4</p>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">badge</span>
+<span class="text-sm font-medium">Identity</span>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">description</span>
+<span class="text-sm font-medium">Documents</span>
+</div>
+<div class="flex items-center gap-3 text-slate-600 dark:text-slate-400 px-4 py-3 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer">
+<span class="material-symbols-outlined">face</span>
+<span class="text-sm font-medium">Liveness</span>
+</div>
+<div class="flex items-center gap-3 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-lg px-4 py-3 cursor-pointer transition-transform duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-sm font-medium">Status</span>
+</div>
+<div class="mt-auto px-4 py-4">
+<div class="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-visible">
+<div class="bg-secondary h-full w-full"></div>
+</div>
+<p class="text-[10px] mt-2 text-slate-500 uppercase tracking-widest font-bold text-center">100% Completed</p>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 overflow-y-auto relative bg-slate-950 flex items-center justify-center p-6">
+<!-- Background Decorative Elements -->
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-full pointer-events-none opacity-20">
+<div class="absolute top-20 left-10 w-64 h-64 bg-primary/30 blur-[100px] rounded-full"></div>
+<div class="absolute bottom-20 right-10 w-64 h-64 bg-secondary/30 blur-[100px] rounded-full"></div>
+</div>
+<!-- Success Card -->
+<div class="relative w-full max-w-2xl">
+<div class="glass-panel rounded-3xl p-8 md:p-12 text-center shadow-2xl overflow-visible">
+<!-- Celebratory Icon -->
+<div class="relative inline-flex mb-8">
+<div class="w-24 h-24 rounded-full bg-secondary/10 flex items-center justify-center neon-glow-green border border-secondary/30">
+<span class="material-symbols-outlined text-secondary text-5xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Decorative particles -->
+<div class="absolute -top-2 -right-2 w-4 h-4 bg-primary rounded-full blur-[2px]"></div>
+<div class="absolute bottom-0 -left-4 w-2 h-2 bg-secondary rounded-full blur-[1px]"></div>
+</div>
+<!-- Message -->
+<h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4">Identity Verified</h1>
+<p class="text-slate-400 text-lg mb-10 max-w-md mx-auto">Your account is now fully compliant and ready for the real-world asset ecosystem.</p>
+<!-- Summary Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 text-left">
+<div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 flex flex-col gap-1">
+<span class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Verified Holder</span>
+<span class="text-slate-200 font-medium">Alexander J. Sterling</span>
+</div>
+<div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 flex flex-col gap-1">
+<span class="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Document Hash</span>
+<span class="text-slate-400 font-mono text-xs truncate">0x71C7...531f82D9a</span>
+</div>
+<div class="bg-slate-900/50 border border-slate-800 rounded-2xl p-5 md:col-span-2 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">verified</span>
+<div>
+<p class="text-sm font-semibold text-slate-200">On-chain Identity Minted</p>
+<p class="text-xs text-slate-500">ERC-725 Identity Proxy Active</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-slate-500 text-sm">open_in_new</span>
+</div>
+</div>
+<!-- Call to Action -->
+<div class="flex flex-col sm:flex-row gap-4 justify-center">
+<button class="bg-primary hover:bg-primary-dark text-white font-bold py-4 px-10 rounded-xl transition-all scale-95 active:scale-90 flex items-center justify-center gap-2">
+<span>Start Investing</span>
+<span class="material-symbols-outlined text-sm">trending_up</span>
+</button>
+<button class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold py-4 px-10 rounded-xl transition-all scale-95 active:scale-90">
+                            View Profile
+                        </button>
+</div>
+<!-- Success Tag -->
+<div class="mt-12 flex items-center justify-center gap-2 text-slate-500 text-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span>Trust Score: 98/100</span>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile BottomNavBar -->
+<div class="md:hidden relative bottom-0 left-0 right-0 bg-white dark:bg-slate-950 flex justify-around items-center h-16 z-50">
+<div class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px]">Home</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">account_balance_wallet</span>
+<span class="text-[10px]">Assets</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-blue-600 dark:text-blue-400 font-semibold">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+<span class="text-[10px]">KYC</span>
+</div>
+<div class="flex flex-col items-center gap-1 text-slate-500 dark:text-slate-400">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px]">Profile</span>
+</div>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="07_verificaci_n_kyc_en_procesamiento_accet.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">08</span> DE 37
+  </div>
+  <div>
+    <a href="09_portal_del_propietario_simulador.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

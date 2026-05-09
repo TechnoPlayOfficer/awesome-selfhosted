@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ACCET Admin - RWA Mission Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,700&amp;family=DM+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1ed278",
+                        "accent-sky": "#0ea5e9",
+                        "accent-teal": "#14b8a6",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#060a09",
+                        "surface-dark": "#0d1612",
+                        "border-dark": "#1a2e26",
+                    },
+                    fontFamily: {
+                        "display": ["Fraunces", "serif"],
+                        "sans": ["DM Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(13, 22, 18, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(30, 210, 120, 0.1);
+        }
+        .neon-glow-emerald {
+            box-shadow: 0 0 15px rgba(30, 210, 120, 0.15);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+      
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Hide Navigation and UI Junk */
+    nav, .print-btn, .filter-row, .tab-nav, .orb, body::before, body::after, .bg-canvas, .grid-lines, ::-webkit-scrollbar, .top-nav, footer { 
+      display: none !important; 
+    }
+
+    /* Standardized Container Flow */
+    main, .wrapper, .wrap, .pg, .container, section, .section {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      position: relative !important;
+      margin: 0 !important;
+      padding: 20px !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+
+    /* Grid & Flex Corrrection for PDF */
+    .grid, .g2, .g3, .g4, .flex, .flex-row, .grid-cols-1, .grid-cols-2, .grid-cols-3, .grid-cols-4 {
+      display: block !important;
+    }
+
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* Forced visibility for hidden sections (reveal on scroll bypass) */
+    .visible, .visible-on-scroll { opacity: 1 !important; transform: none !important; }
+
+    /* Typography */
+    h1, h2, h3, h4, .cov-h, .sec-h { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 10px !important;
+    }
+    p, li, span, div, a { color: #E8F0F8 !important; text-decoration: none !important; }
+
+    /* Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+    .cover:first-of-type { page-break-before: avoid !important; break-before: avoid !important; }
+  }
+  /* --- ULTRA-COMPATIBILITY PDF ENGINE (ACCET 126Q AUDITED) --- */
+  @media print {
+    /* 1. Reset Global & Force Static Flow */
+    *, *::before, *::after {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      position: static !important; /* Desbloquea elementos fijos y absolutos */
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+      transition: none !important;
+      animation: none !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
+      float: none !important;
+      overflow: visible !important;
+    }
+    
+    html, body { 
+      background: #050A0F !important; 
+      color: #E8F0F8 !important; 
+      width: 100% !important; 
+      height: auto !important;
+      margin: 0 !important; 
+      padding: 0 !important;
+      overflow: visible !important;
+      font-size: 12pt !important;
+    }
+
+    /* 2. Remove UI / Interactive / Decorative Noise */
+    nav, aside, .top-nav, .sidebar, header.relative, footer, .print-btn, .filter-row, .tab-nav, .orb, .bg-canvas, .grid-lines, ::-webkit-scrollbar, button, .no-print { 
+      display: none !important; 
+      height: 0 !important;
+      width: 0 !important;
+    }
+
+    /* 3. Flatten Container Architecture */
+    main, .wrapper, .wrap, .pg, .container, section, .section, .relative, .flex, .grid {
+      display: block !important; /* Force block for linear reading */
+      width: 100% !important;
+      height: auto !important;
+      min-height: auto !important;
+      margin: 0 !important;
+      padding: 10px 0 !important;
+      position: relative !important; /* Required for internal static flow */
+    }
+
+    /* 4. PDF-Safe Card & Grid Items */
+    .card, .sec, .cov-inner, .block, .story-card, .us-card, .bg-glass, .glass, .glass-panel, .bg-surface-dark, .bg-background-dark {
+      background: rgba(255,255,255,0.05) !important;
+      border: 1px solid rgba(255,255,255,0.1) !important;
+      margin-bottom: 20px !important;
+      padding: 20px !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+      display: block !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    /* 5. Typography Integrity (ACCET Sky-Blue) */
+    h1, h2, h3, h4, h5, h6, .cov-h, .sec-h, .text-primary, .text-accent-blue, .text-sky-400 { 
+      color: #5EC8F2 !important; 
+      page-break-after: avoid !important;
+      margin-top: 15px !important;
+      line-height: 1.2 !important;
+    }
+    p, li, span, div, a, td, th { 
+      color: #E8F0F8 !important; 
+      text-decoration: none !important;
+      line-height: 1.5 !important;
+    }
+
+    /* 6. Strategic Page Breaks */
+    section, .pg, .page-section, .cover {
+      page-break-before: always !important;
+      break-before: page !important;
+      padding-top: 20px !important;
+    }
+    .cover:first-of-type, .hdr:first-of-type { 
+      page-break-before: avoid !important; 
+      break-before: avoid !important; 
+    }
+
+    /* 7. Image & Icon Compatibility */
+    img, svg, .material-symbols-outlined {
+      max-width: 100% !important;
+      height: auto !important;
+      filter: brightness(1.2) !important;
+    }
+  }
+</style>
+</head>
+<body class="bg-background-dark text-slate-100 font-sans selection:bg-primary/30">
+<div class="flex h-auto overflow-visible">
+<!-- Sidebar Navigation -->
+<aside class="w-72 flex-shrink-0 border-r border-border-dark bg-surface-dark/50 flex flex-col">
+<div class="p-6 border-b border-border-dark flex items-center gap-3">
+<div class="size-10 bg-primary rounded-lg flex items-center justify-center neon-glow-emerald">
+<span class="material-symbols-outlined text-background-dark font-bold">token</span>
+</div>
+<div>
+<h1 class="font-display text-2xl font-bold tracking-tight text-white leading-none">ACCET</h1>
+<span class="text-[10px] uppercase tracking-widest text-primary font-bold">Mission Control</span>
+</div>
+</div>
+<nav class="flex-1 overflow-y-auto p-4 space-y-1 hide-scrollbar">
+<div class="text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2">Core Operations</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary border border-primary/20" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-sm font-medium">Global Command</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">apartment</span>
+<span class="text-sm font-medium">Asset Inventory</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">verified_user</span>
+<span class="text-sm font-medium">Compliance Hub</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="text-sm font-medium">Treasury &amp; Batch</span>
+</a>
+<div class="pt-8 text-[10px] font-bold text-slate-500 uppercase tracking-widest px-3 mb-2">System Infrastructure</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">hub</span>
+<span class="text-sm font-medium">Hedera Nodes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">settings_input_component</span>
+<span class="text-sm font-medium">Oracle Feeds</span>
+</a>
+</nav>
+<div class="p-4 border-t border-border-dark space-y-4">
+<div class="bg-background-dark/50 rounded-lg p-3 border border-border-dark">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-bold text-slate-500 uppercase">Network Status</span>
+<div class="size-1.5 bg-primary rounded-full animate-pulse"></div>
+</div>
+<p class="text-xs text-slate-300 font-medium italic">Hedera Mainnet | ERC-3643</p>
+</div>
+<button class="w-full bg-primary text-background-dark font-bold py-2.5 rounded-lg text-sm flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+                    New Tokenization Request
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col overflow-visible">
+<!-- Top Navbar -->
+<header class="h-16 border-b border-border-dark flex items-center justify-between px-8 bg-surface-dark/30 backdrop-blur-md">
+<div class="flex items-center gap-4">
+<div class="relative flex items-center bg-background-dark border border-border-dark rounded-full px-4 py-1.5 focus-within:border-primary/50 transition-all">
+<span class="material-symbols-outlined text-slate-500 text-[18px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-64 placeholder:text-slate-600" placeholder="Search tokens, wallets, properties..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-white">notifications</span>
+<div class="size-2 bg-accent-sky rounded-full absolute -top-1 -right-1 border border-background-dark"></div>
+</div>
+<div class="flex items-center gap-3 pl-6 border-l border-border-dark">
+<div class="text-right">
+<p class="text-xs font-bold text-white">Chief Operator</p>
+<p class="text-[10px] text-slate-500">Admin-4929-HED</p>
+</div>
+<div class="size-9 rounded-full bg-gradient-to-br from-primary to-accent-teal p-[1px]">
+<div class="size-full rounded-full bg-surface-dark flex items-center justify-center overflow-visible">
+<img class="w-full h-full object-cover" data-alt="Admin user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDN6kTDzrZanEmOsCzNKtCxQ4_jq0cJEFo0jbWXAq9UqM97GoxjWZH1kxqjVgoWwr8xOwn99Go3OSWfVyY8xxTjhi-CmON1D9vgErkJ_EAYHmX90hRLqU_LPORdJ9Oj2IZqi8eSNXcV925p5FghI5B7nJgthxm6hQrRrr3szuhEMw4la63MqGdlIJeiDC6tkIY0_MRS6IOKraHSZIinUuZDL_Z76Q-8XxTAvDoHZVgVW8nkm3GhFrQFQbIVLXlc3v0OxkwdAVHgJAmP"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-8 hide-scrollbar">
+<!-- Global KPIs -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="glass-panel p-6 rounded-xl hover:border-primary/40 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/10 rounded-lg text-primary">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded uppercase">+12.4%</span>
+</div>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Total AUM</h3>
+<p class="font-display text-2xl font-bold text-white">$16.3B <span class="text-sm font-sans text-slate-500">COP</span></p>
+</div>
+<div class="glass-panel p-6 rounded-xl hover:border-accent-sky/40 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-accent-sky/10 rounded-lg text-accent-sky">
+<span class="material-symbols-outlined">real_estate_agent</span>
+</div>
+</div>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Active Assets</h3>
+<p class="font-display text-2xl font-bold text-white">3 <span class="text-sm font-sans text-slate-500">Verified Properties</span></p>
+</div>
+<div class="glass-panel p-6 rounded-xl hover:border-accent-teal/40 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-accent-teal/10 rounded-lg text-accent-teal">
+<span class="material-symbols-outlined">health_and_safety</span>
+</div>
+<div class="h-1.5 w-16 bg-white/10 rounded-full mt-3 overflow-visible">
+<div class="h-full bg-accent-teal w-[98%]"></div>
+</div>
+</div>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Portfolio Health</h3>
+<p class="font-display text-2xl font-bold text-white">98.4%</p>
+</div>
+<div class="glass-panel p-6 rounded-xl border-primary/20 transition-all group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary/20 rounded-lg text-primary">
+<span class="material-symbols-outlined">verified</span>
+</div>
+<span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded uppercase">ISO 9001</span>
+</div>
+<h3 class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Compliance Status</h3>
+<p class="font-display text-2xl font-bold text-white">Verified</p>
+</div>
+</section>
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-8 mb-8">
+<!-- Operations Pipeline -->
+<div class="xl:col-span-2 glass-panel rounded-xl overflow-visible flex flex-col">
+<div class="px-6 py-4 border-b border-border-dark flex justify-between items-center">
+<h2 class="font-display text-lg font-bold">Operations Pipeline</h2>
+<button class="text-primary text-xs font-bold flex items-center gap-1">View Full Queue <span class="material-symbols-outlined text-[14px]">arrow_forward</span></button>
+</div>
+<div class="p-6">
+<div class="relative flex justify-between">
+<!-- Pipeline Trace Line -->
+<div class="absolute top-[18px] left-0 right-0 h-[2px] bg-border-dark z-0"></div>
+<div class="absolute top-[18px] left-0 h-[2px] bg-primary w-[75%] z-0 transition-all"></div>
+<!-- Stages -->
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-background-dark shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">magnification_large</span>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold text-white">Due Diligence</p>
+<span class="text-[10px] font-bold text-primary py-0.5 px-2 rounded-full bg-primary/10 border border-primary/20">5 Pending</span>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-background-dark shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">gavel</span>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold text-white">Legal Review</p>
+<span class="text-[10px] font-bold text-orange-400 py-0.5 px-2 rounded-full bg-orange-400/10 border border-orange-400/20">2 Flagged</span>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center text-background-dark shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined">drive_file_rename_outline</span>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold text-white">Pending Approval</p>
+<span class="text-[10px] font-bold text-primary py-0.5 px-2 rounded-full bg-primary/10 border border-primary/20">1 Final Sig</span>
+</div>
+</div>
+<div class="relative z-10 flex flex-col items-center gap-3 opacity-50">
+<div class="size-10 rounded-full bg-border-dark border border-white/10 flex items-center justify-center text-slate-400">
+<span class="material-symbols-outlined">generating_tokens</span>
+</div>
+<div class="text-center">
+<p class="text-xs font-bold text-slate-400">Minting</p>
+<span class="text-[10px] font-bold text-slate-500">Waitlist</span>
+</div>
+</div>
+</div>
+<div class="mt-8 space-y-3">
+<div class="bg-background-dark/40 border border-border-dark rounded-lg p-3 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded bg-accent-teal/20 text-accent-teal flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">domain</span>
+</div>
+<div>
+<p class="text-xs font-bold text-white">Torre El Faro - Bogotá DC</p>
+<p class="text-[10px] text-slate-500">ID: ACC-7729-PROP | 12,400 Units</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="text-right">
+<p class="text-xs font-bold text-slate-300">ISO Verification</p>
+<div class="flex gap-1 justify-end">
+<div class="size-1 bg-primary rounded-full"></div>
+<div class="size-1 bg-primary rounded-full"></div>
+<div class="size-1 bg-primary rounded-full"></div>
+<div class="size-1 bg-slate-700 rounded-full"></div>
+</div>
+</div>
+<button class="bg-white/5 hover:bg-white/10 p-1.5 rounded text-slate-400 transition-all">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Batch Distributions -->
+<div class="glass-panel rounded-xl overflow-visible border-accent-sky/20 flex flex-col">
+<div class="px-6 py-4 border-b border-border-dark flex justify-between items-center bg-accent-sky/5">
+<h2 class="font-display text-lg font-bold">Batch Distributions</h2>
+<span class="material-symbols-outlined text-accent-sky text-[20px]">calendar_today</span>
+</div>
+<div class="p-6 space-y-6">
+<div>
+<label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-2">Next Execution Window</label>
+<div class="bg-accent-sky/10 border border-accent-sky/20 rounded-lg p-4 flex items-center justify-between">
+<div>
+<p class="text-lg font-display font-bold text-white">Feb 28, 2024</p>
+<p class="text-[10px] text-accent-sky uppercase tracking-tighter font-bold">Monthly Interest Yield</p>
+</div>
+<div class="text-right font-mono text-sm text-slate-300">
+                                        04d : 12h : 30m
+                                    </div>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between text-xs">
+<span class="text-slate-400">Projected Distribution</span>
+<span class="text-white font-bold">$1.2M COP</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-400">Total Recipients</span>
+<span class="text-white font-bold">4,192 Wallets</span>
+</div>
+<div class="h-[1px] bg-border-dark"></div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-400">Multi-sig Required</span>
+<span class="text-accent-sky font-bold">2 of 3 Signs</span>
+</div>
+</div>
+<button class="w-full bg-accent-sky text-background-dark font-bold py-3 rounded-lg text-sm shadow-lg shadow-accent-sky/10 hover:brightness-110 transition-all">
+                                Execute Distribution Sequence
+                            </button>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Compliance & Risk Monitor -->
+<div class="glass-panel rounded-xl overflow-visible">
+<div class="px-6 py-4 border-b border-border-dark flex justify-between items-center">
+<h2 class="font-display text-lg font-bold">Compliance &amp; Risk Monitor</h2>
+<div class="flex gap-2">
+<span class="text-[10px] font-bold text-primary border border-primary/20 bg-primary/5 px-2 py-0.5 rounded">All Clear</span>
+</div>
+</div>
+<div class="p-6 space-y-6">
+<div class="grid grid-cols-3 gap-4">
+<div class="bg-background-dark/50 p-4 rounded-lg border border-border-dark flex flex-col items-center">
+<p class="text-[10px] text-slate-500 uppercase mb-2 font-bold">LTV Ratio</p>
+<div class="relative size-16 flex items-center justify-center">
+<svg class="size-full rotate-[-90deg]">
+<circle class="text-slate-800" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-width="4"></circle>
+<circle class="text-primary" cx="32" cy="32" fill="transparent" r="28" stroke="currentColor" stroke-dasharray="175" stroke-dashoffset="61" stroke-width="4"></circle>
+</svg>
+<span class="absolute text-sm font-bold">65%</span>
+</div>
+<p class="text-[10px] text-slate-400 mt-2">Oracle Updated 2m ago</p>
+</div>
+<div class="bg-background-dark/50 p-4 rounded-lg border border-border-dark flex flex-col items-center">
+<p class="text-[10px] text-slate-500 uppercase mb-2 font-bold">KYC/AML</p>
+<span class="material-symbols-outlined text-primary text-3xl">shield</span>
+<p class="text-[10px] text-primary mt-2 font-bold tracking-widest">SECURE</p>
+</div>
+<div class="bg-background-dark/50 p-4 rounded-lg border border-border-dark flex flex-col items-center">
+<p class="text-[10px] text-slate-500 uppercase mb-2 font-bold">ISO 9001</p>
+<span class="material-symbols-outlined text-accent-teal text-3xl">task_alt</span>
+<p class="text-[10px] text-accent-teal mt-2 font-bold tracking-widest">ADHERENT</p>
+</div>
+</div>
+<div>
+<h4 class="text-xs font-bold text-slate-400 mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-teal text-[16px]">notifications_active</span> Recent Alerts
+                                </h4>
+<div class="space-y-2">
+<div class="flex items-start gap-3 p-3 bg-white/5 rounded-lg">
+<span class="material-symbols-outlined text-accent-sky text-[18px] mt-0.5">info</span>
+<div>
+<p class="text-xs font-bold text-white">Periodic identity re-verification</p>
+<p class="text-[10px] text-slate-500">Scheduled for 124 token holders in 48h</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- On-chain Infrastructure -->
+<div class="glass-panel rounded-xl overflow-visible">
+<div class="px-6 py-4 border-b border-border-dark flex justify-between items-center">
+<h2 class="font-display text-lg font-bold">Engine Room <span class="text-slate-500 font-sans font-medium text-sm ml-2">Hedera Mainnet</span></h2>
+<div class="flex items-center gap-2">
+<div class="size-2 bg-primary rounded-full animate-pulse"></div>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Live Feed</span>
+</div>
+</div>
+<div class="p-0">
+<div class="grid grid-cols-2 divide-x divide-border-dark border-b border-border-dark">
+<div class="p-4 flex items-center justify-between">
+<div>
+<p class="text-[10px] text-slate-500 font-bold uppercase">Mirror Node</p>
+<p class="text-xs font-mono text-primary">Connected &amp; Syncing</p>
+</div>
+<span class="material-symbols-outlined text-slate-700">dns</span>
+</div>
+<div class="p-4 flex items-center justify-between">
+<div>
+<p class="text-[10px] text-slate-500 font-bold uppercase">Chainlink Feeds</p>
+<p class="text-xs font-mono text-accent-sky">99.98% Reliable</p>
+</div>
+<span class="material-symbols-outlined text-slate-700">link</span>
+</div>
+</div>
+<div class="p-6">
+<h4 class="text-xs font-bold text-slate-400 mb-4 tracking-widest uppercase">Real-time Network Consensus</h4>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-2 bg-primary rounded-full"></div>
+<span class="text-xs font-mono text-slate-300">0.0.198322... Minted (HTS)</span>
+</div>
+<span class="text-[10px] font-mono text-slate-600">0.3s ago</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-2 bg-primary rounded-full"></div>
+<span class="text-xs font-mono text-slate-300">Compliance Check Logged (HCS)</span>
+</div>
+<span class="text-[10px] font-mono text-slate-600">1.2s ago</span>
+</div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="size-2 bg-accent-sky rounded-full"></div>
+<span class="text-xs font-mono text-slate-300">Chainlink COP/USD Update</span>
+</div>
+<span class="text-[10px] font-mono text-slate-600">5.8s ago</span>
+</div>
+<div class="flex items-center justify-between opacity-50">
+<div class="flex items-center gap-3">
+<div class="size-2 bg-primary rounded-full"></div>
+<span class="text-xs font-mono text-slate-300">Batch Sig 1/3 Verified</span>
+</div>
+<span class="text-[10px] font-mono text-slate-600">12.4s ago</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+<!-- ACCET GLOBAL NAV -->
+<div id="accet-global-nav" style="position:relative; bottom:0; left:0; right:0; background:rgba(13,13,13,0.95); backdrop-filter:blur(10px); color:#fff; font-family:'DM Sans',sans-serif; z-index:999999; display:flex; justify-content:space-between; align-items:center; padding:12px 24px; border-top:2px solid #5EC8F2; font-size:14px; box-shadow: 0 -4px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex; gap:15px; align-items:center;">
+    <a href="index.html" style="color:#5EC8F2; text-decoration:none; font-weight:bold; display:flex; align-items:center; gap:5px; transition:0.2s;">🏠 Índice</a>
+    <div style="width:1px; height:20px; background:rgba(255,255,255,0.2);"></div>
+    <a href="27_narrative_admin_journey.html" style="color:#fff; text-decoration:none; opacity:0.8; transition:0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">⬅ Anterior</a>
+  </div>
+  <div style="font-family:'Syne',sans-serif; font-weight:700; letter-spacing:1px; color:rgba(255,255,255,0.5);">
+    PASO <span style="color:#5EC8F2;">28</span> DE 37
+  </div>
+  <div>
+    <a href="29_admin_asset_management_minting_accet.html" style="background:#5EC8F2; color:#0D0D0D; text-decoration:none; padding:8px 18px; border-radius:4px; font-weight:bold; transition:0.2s;" onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 10px rgba(94,200,242,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">Siguiente ➡</a>
+  </div>
+</div>
+</body>
+</html>
+

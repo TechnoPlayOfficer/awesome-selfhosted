@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Poppins:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-tint": "#6bd3fd",
+                    "on-surface": "#e2e2e2",
+                    "surface-dim": "#121414",
+                    "surface-container-high": "#282a2b",
+                    "on-primary": "#003546",
+                    "inverse-primary": "#006684",
+                    "on-error-container": "#ffdad6",
+                    "primary-fixed": "#bde9ff",
+                    "background": "#020624",
+                    "on-secondary-container": "#b5b5b3",
+                    "on-primary-fixed-variant": "#004d64",
+                    "on-surface-variant": "#bdc8cf",
+                    "inverse-surface": "#e2e2e2",
+                    "tertiary-fixed": "#dee1ff",
+                    "on-tertiary-fixed-variant": "#3f4565",
+                    "surface-container-lowest": "#0c0f0f",
+                    "primary-container": "#5ac4ee",
+                    "error": "#ffb4ab",
+                    "secondary-fixed": "#e3e2e0",
+                    "primary-fixed-dim": "#6bd3fd",
+                    "tertiary-container": "#b1b6dc",
+                    "surface-bright": "#37393a",
+                    "outline-variant": "#3e484e",
+                    "on-error": "#690005",
+                    "surface": "#121414",
+                    "secondary-container": "#464746",
+                    "on-background": "#e2e2e2",
+                    "on-tertiary-fixed": "#131937",
+                    "on-secondary-fixed-variant": "#464746",
+                    "on-tertiary": "#292e4d",
+                    "on-tertiary-container": "#414767",
+                    "surface-variant": "#333535",
+                    "on-primary-fixed": "#001f2a",
+                    "secondary-fixed-dim": "#c7c6c4",
+                    "surface-container-low": "#1a1c1c",
+                    "tertiary-fixed-dim": "#bfc4eb",
+                    "primary": "#94ddff",
+                    "surface-container-highest": "#333535",
+                    "tertiary": "#cdd2f9",
+                    "inverse-on-surface": "#2f3131",
+                    "surface-container": "#1e2020",
+                    "on-secondary-fixed": "#1b1c1b",
+                    "secondary": "#c7c6c4",
+                    "error-container": "#93000a",
+                    "on-primary-container": "#004f66",
+                    "outline": "#889298",
+                    "on-secondary": "#303130"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "section-padding": "120px",
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "margin-page": "64px",
+                    "container-max": "1440px"
+            },
+            "fontFamily": {
+                    "h3": ["Space Grotesk"],
+                    "body-lg": ["Poppins"],
+                    "h1": ["Space Grotesk"],
+                    "label-caps": ["Space Grotesk"],
+                    "body-md": ["Poppins"],
+                    "h2": ["Space Grotesk"]
+            },
+            "fontSize": {
+                    "h3": ["1.75rem", {"lineHeight": "1.3", "letterSpacing": "0em", "fontWeight": "500"}],
+                    "body-lg": ["1.125rem", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h1": ["4rem", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-caps": ["0.75rem", {"lineHeight": "1", "letterSpacing": "0.1em", "fontWeight": "600"}],
+                    "body-md": ["1rem", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "h2": ["2.5rem", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #020624;
+            background-image: 
+                radial-gradient(circle at 0% 0%, rgba(90, 196, 238, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(90, 196, 238, 0.03) 0%, transparent 50%);
+            color: #e2e2e2;
+        }
+        .platinum-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glow-accent {
+            box-shadow: 0 0 20px rgba(90, 196, 238, 0.2);
+        }
+        .seal-of-light {
+            background: linear-gradient(135deg, #ffffff 0%, #5ac4ee 100%);
+            box-shadow: 0 0 30px rgba(90, 196, 238, 0.5), inset 0 0 10px rgba(255,255,255,0.8);
+        }
+        .vignette-bottom {
+            background: linear-gradient(to top, #020624 0%, transparent 100%);
+        }
+        .hex-grid {
+            background-image: radial-gradient(rgba(90, 196, 238, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="font-body-md selection:bg-primary/30">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 shadow-sm">
+<div class="flex justify-between items-center px-gutter py-4 w-full max-w-container-max mx-auto">
+<div class="flex items-center gap-8">
+<span class="font-h2 text-h2 font-bold tracking-tighter text-on-surface">ACCET</span>
+<div class="hidden md:flex gap-6">
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Gateway</a>
+<a class="font-label-caps text-label-caps text-primary border-b-2 border-primary pb-1" href="#">Pipeline</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Vault</a>
+<a class="font-label-caps text-label-caps text-on-surface-variant hover:text-on-surface transition-colors" href="#">Verification</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-primary-container/10 p-2 rounded transition-all">notifications</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-primary-container/10 p-2 rounded transition-all">settings</button>
+<button class="bg-primary text-on-primary px-6 py-2 rounded font-label-caps text-label-caps cursor-pointer active:scale-95 transition-all">Connect Identity</button>
+</div>
+</div>
+</nav>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-surface-container-low/90 backdrop-blur-2xl border-r border-outline-variant/20 shadow-2xl flex flex-col py-8 px-4 gap-6 pt-24">
+<div class="px-2">
+<h2 class="font-h3 text-h3 text-primary mb-1">Legal Twin Vault</h2>
+<p class="font-label-caps text-[10px] tracking-widest text-on-surface-variant opacity-60">Institutional Node v2.4</p>
+</div>
+<nav class="flex flex-col gap-1 mt-4">
+<div class="flex items-center gap-3 px-4 py-3 bg-primary-container/20 text-primary border-r-4 border-primary duration-200 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-caps text-label-caps tracking-widest">Pipeline</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 duration-200 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined">layers</span>
+<span class="font-label-caps text-label-caps tracking-widest">Legal Twins</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 duration-200 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined">database</span>
+<span class="font-label-caps text-label-caps tracking-widest">Oracles</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 duration-200 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined">verified_user</span>
+<span class="font-label-caps text-label-caps tracking-widest">Immutability</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-variant/50 duration-200 ease-in-out cursor-pointer">
+<span class="material-symbols-outlined">tune</span>
+<span class="font-label-caps text-label-caps tracking-widest">Settings</span>
+</div>
+</nav>
+<div class="mt-auto flex flex-col gap-2">
+<button class="bg-primary/10 border border-primary/30 text-primary w-full py-4 rounded font-label-caps text-label-caps hover:bg-primary/20 transition-all">New Asset Ingestion</button>
+<div class="flex flex-col gap-1 mt-4 border-t border-outline-variant/20 pt-4">
+<div class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface text-xs font-label-caps cursor-pointer">
+<span class="material-symbols-outlined text-sm">help</span>
+<span>Help Center</span>
+</div>
+<div class="flex items-center gap-3 px-4 py-2 text-on-surface-variant hover:text-on-surface text-xs font-label-caps cursor-pointer">
+<span class="material-symbols-outlined text-sm">sensors</span>
+<span>System Status</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 min-h-screen">
+<div class="px-margin-page max-w-container-max mx-auto py-12">
+<!-- Header Section -->
+<div class="mb-12 flex justify-between items-end">
+<div>
+<h1 class="font-h1 text-h2 text-on-surface tracking-tight mb-2 uppercase">VDA Issuance Control</h1>
+<p class="font-body-lg text-body-md text-on-surface-variant max-w-2xl">
+                        Management nexus for regulated asset fragmentation and <span class="text-primary">Capa de Memoria Perpetua</span> synchronicity.
+                    </p>
+</div>
+<div class="flex items-center gap-4 platinum-glass px-6 py-4 rounded">
+<div class="flex flex-col items-end">
+<span class="font-label-caps text-[10px] text-on-surface-variant">NODE STATUS</span>
+<span class="text-primary font-h3 text-xs flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                            AUTHENTICATED
+                        </span>
+</div>
+</div>
+</div>
+<!-- Dashboard Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Mass Evidentiary Packaging -->
+<div class="col-span-8 platinum-glass rounded-xl p-8 flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-on-surface">Mass Evidentiary Packaging</h3>
+<span class="material-symbols-outlined text-on-surface-variant">upload_file</span>
+</div>
+<div class="flex-1 border-2 border-dashed border-outline-variant/30 rounded-lg flex flex-col items-center justify-center py-16 px-8 hover:border-primary/50 transition-colors group cursor-pointer bg-surface-container-lowest/40">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl">add_box</span>
+</div>
+<p class="font-h3 text-body-lg text-on-surface mb-1 text-center">Ingest Contract Bundle</p>
+<p class="font-body-md text-sm text-on-surface-variant text-center">Support for high-volume PDFs, titles, and legal instruments.</p>
+</div>
+<div class="grid grid-cols-4 gap-4 mt-4">
+<div class="bg-surface-container-high/40 p-4 rounded border border-outline-variant/20">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-2">FRAGMENTATION CID</p>
+<div class="h-1 w-full bg-outline-variant/30 rounded overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+<p class="font-h3 text-xs mt-2 font-mono">0x71...E291</p>
+</div>
+<div class="bg-surface-container-high/40 p-4 rounded border border-outline-variant/20">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-2">INTEGRITY LOCK</p>
+<div class="h-1 w-full bg-outline-variant/30 rounded overflow-hidden">
+<div class="h-full bg-primary w-full"></div>
+</div>
+<p class="font-h3 text-xs mt-2 font-mono">VERIFIED</p>
+</div>
+<div class="col-span-2 hex-grid border border-outline-variant/20 rounded relative p-4 overflow-hidden">
+<div class="absolute inset-0 flex items-center justify-center opacity-40">
+<span class="text-[10px] font-mono tracking-widest text-primary">REAL-TIME HEX VISUALIZER</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Compliance Parameterization -->
+<div class="col-span-4 platinum-glass rounded-xl p-8 flex flex-col gap-6">
+<div class="flex justify-between items-center">
+<h3 class="font-h3 text-h3 text-on-surface">Compliance (ERC-3643)</h3>
+<span class="material-symbols-outlined text-on-surface-variant">policy</span>
+</div>
+<div class="flex flex-col gap-6">
+<div class="space-y-4">
+<label class="font-label-caps text-label-caps text-on-surface-variant">ASSET METADATA INJECTION</label>
+<div class="flex items-center justify-between p-4 platinum-glass rounded border-primary/20">
+<div>
+<p class="font-body-md text-on-surface">Whitelisted Wallets Only</p>
+<p class="text-[10px] text-on-surface-variant">Restrict to KYC-vetted institutions</p>
+</div>
+<div class="w-12 h-6 bg-primary/20 rounded-full relative border border-primary/40">
+<div class="absolute right-1 top-1 w-4 h-4 bg-primary rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between p-4 platinum-glass rounded border-white/5">
+<div>
+<p class="font-body-md text-on-surface">Jurisdictional Lock</p>
+<p class="text-[10px] text-on-surface-variant">EU-GDPR / US-SEC compliance</p>
+</div>
+<div class="w-12 h-6 bg-surface-container-highest rounded-full relative border border-outline-variant">
+<div class="absolute left-1 top-1 w-4 h-4 bg-on-surface-variant rounded-full"></div>
+</div>
+</div>
+</div>
+<div class="bg-error-container/10 border border-error/20 p-4 rounded">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-error text-sm">warning</span>
+<div>
+<p class="font-label-caps text-xs text-error">CRITICAL REQUIREMENT</p>
+<p class="text-[10px] text-on-error-container/70">Anti-Money Laundering (AML) metadata must be attached prior to Copia Digital Vinculante minting.</p>
+</div>
+</div>
+</div>
+<!-- Primary Action Button -->
+<div class="mt-auto">
+<button class="w-full seal-of-light text-on-primary font-h3 text-body-md py-6 rounded-lg uppercase tracking-widest flex items-center justify-center gap-3 group overflow-hidden relative">
+<span class="relative z-10">Initialize Mass Issuance</span>
+<span class="material-symbols-outlined relative z-10 group-hover:rotate-90 transition-transform duration-500">brightness_5</span>
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle,white_0%,transparent_70%)] group-hover:scale-150 transition-transform duration-700"></div>
+</button>
+<p class="text-center text-[10px] text-on-surface-variant mt-3 font-label-caps">ESTIMATED FINALIZATION: 4.2 SECONDS</p>
+</div>
+</div>
+</div>
+<!-- Public Faith API Monitor -->
+<div class="col-span-12 platinum-glass rounded-xl p-8">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h3 class="font-h3 text-h3 text-on-surface uppercase">Public Faith API Monitor</h3>
+<p class="text-xs text-on-surface-variant">Deterministic Legal Interrogator Latency &amp; Throughput</p>
+</div>
+<div class="flex gap-4">
+<div class="px-4 py-2 bg-surface-container-high rounded flex items-center gap-2 border border-outline-variant/20">
+<span class="w-2 h-2 rounded-full bg-green-400"></span>
+<span class="font-label-caps text-[10px]">SYSTEM HEALTH: 100%</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-4 gap-gutter">
+<div class="flex flex-col gap-2">
+<p class="font-label-caps text-[10px] text-on-surface-variant">API QUOTA CONSUMPTION</p>
+<div class="flex items-end gap-3">
+<span class="font-h1 text-h2 text-on-surface">82<span class="text-h3 opacity-50">%</span></span>
+<span class="material-symbols-outlined text-primary mb-2">trending_up</span>
+</div>
+<div class="h-1 w-full bg-outline-variant/20 rounded">
+<div class="h-full bg-primary w-[82%]"></div>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<p class="font-label-caps text-[10px] text-on-surface-variant">ORACLE LATENCY</p>
+<div class="flex items-end gap-3">
+<span class="font-h1 text-h2 text-on-surface">12<span class="text-h3 opacity-50">ms</span></span>
+<span class="material-symbols-outlined text-green-400 mb-2">check_circle</span>
+</div>
+<p class="text-[10px] text-on-surface-variant">DETERMINISTIC INTERROGATOR ACTIVE</p>
+</div>
+<div class="col-span-2 bg-surface-container-lowest/50 rounded-lg p-4 border border-outline-variant/10">
+<p class="font-label-caps text-[10px] text-on-surface-variant mb-4">RESILIENT IMMUTABILITY SYSTEMS LOG</p>
+<div class="space-y-2">
+<div class="flex justify-between font-mono text-[9px] text-primary/70">
+<span>[14:22:01] FRAGMENT_STORE_SUCCESS</span>
+<span class="text-on-surface-variant">SHARD_ID: 9912A</span>
+</div>
+<div class="flex justify-between font-mono text-[9px] text-primary/70">
+<span>[14:21:58] MEMORIA_PERPETUA_SYNC</span>
+<span class="text-on-surface-variant">NODES_RESPONDING: 128</span>
+</div>
+<div class="flex justify-between font-mono text-[9px] text-primary/70">
+<span>[14:21:55] LEGAL_TWIN_MINT_INIT</span>
+<span class="text-on-surface-variant">CID: Qm...4z9x</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Descriptive Image Gallery -->
+<div class="mt-16 grid grid-cols-2 gap-gutter">
+<div class="relative group overflow-hidden rounded-xl h-64 border border-outline-variant/30">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000" data-alt="A high-tech digital command center with glowing holographic server data streams in a dark atmosphere. The scene is dominated by deep blue tones and sharp cyan light accents, reflecting a sense of cinematic authority and legal precision. Sleek glass surfaces and floating data points emphasize a futuristic institutional environment focused on security and transparency." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6gQD2YNFffzc9PssqGrn8qdvV2z4RCT0Vx4UXKVRfQdinxckx3vsQiIHqqU1nsZB0zIbblUrIsgNBedcqYI0PfG_llUWvlg4GIclQD2K22JpeKQ_7Mr2p3ImHAMzJFLmoJum2dS5YofJ25MgdV2xZigzS7zRgEqX7At3-sg5busxuv-oVqrcH_PEX38SRqxhEoStqNAQoN4jVeorYK1k5FXIIHNZrGjg2UpoRrUi12AFguTwrfwgNWhRDDF6aZwVw5kqNz738zYtO"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6">
+<p class="font-label-caps text-label-caps text-primary mb-1">DATA INFRASTRUCTURE</p>
+<h4 class="font-h3 text-h3">Global Immutability Backbone</h4>
+</div>
+</div>
+<div class="relative group overflow-hidden rounded-xl h-64 border border-outline-variant/30">
+<img class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-1000" data-alt="A macro view of a sophisticated circuitry board illuminated by vibrant blue fiber optic cables weaving through geometric metal structures. The lighting is moody and cinematic, using high-contrast shadows to highlight the intricate technological detail. The aesthetic is industrial and professional, symbolizing the 'Capa de Memoria Perpetua' and robust legal data connectivity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnec0WZJe6Nw-hFIs6iX4OkXa3_YCgGghAY1B22Rkr9rTJ9E7CFjZz0ZfuiSYx54XCM_pnZAXQn5EcdzYzGI9fbbvdpuPO2FttfZh7uFf-jJRji9-dEbDKWgd5-KmZWp_nouXcOjRcnL_n-0PjMebRrMe4DY_EX-Qhjl4YTTk-IEDv4xMwBOo_4F84SQDm4mxdLAi2MamNMQf265g_RAQQw9NKKt8Qzphie8yI64XFspydJIpmQ5VGiw5XD35cUjQyRGKMNw_iTS8_"/>
+<div class="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-80"></div>
+<div class="absolute bottom-6 left-6">
+<p class="font-label-caps text-label-caps text-primary mb-1">LEGAL CONNECTIVITY</p>
+<h4 class="font-h3 text-h3">Capa de Memoria Perpetua</h4>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="relative w-full py-section-padding bg-surface-container-highest border-t border-outline-variant">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-page gap-gutter max-w-container-max mx-auto">
+<div class="flex flex-col gap-2">
+<span class="font-h3 text-h3 text-on-surface">ACCET</span>
+<p class="font-body-md text-body-md text-secondary">© 2024 ACCET. The Legal Connectivity Layer.</p>
+</div>
+<div class="flex gap-8">
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Protocol</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Security Audit</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">API Documentation</a>
+<a class="font-body-md text-body-md text-on-surface-variant hover:text-primary transition-colors" href="#">Whitepaper</a>
+</div>
+</div>
+</footer>
+<!-- Cinematic Vignettes -->
+<div class="fixed bottom-0 left-0 w-full h-32 pointer-events-none vignette-bottom z-10"></div>
+</body></html>

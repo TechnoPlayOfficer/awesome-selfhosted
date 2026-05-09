@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACCET · Los Ladrillones · Spot 3 — El Mínimo Imposible</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ════════════════ ACCET DESIGN SYSTEM ════════════════ */
+:root {
+  --sky:   #5EC8F2;
+  --ice:   #5ED7F2;
+  --teal:  #377D8C;
+  --dark:  #0D0D0D;
+  --sky04: rgba(94,200,242,.04);
+  --sky10: rgba(94,200,242,.10);
+  --sky20: rgba(94,200,242,.20);
+  --sky35: rgba(94,200,242,.35);
+  --amber: #ffaa00;
+  --red:   #cc3333;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--dark);
+  background-image:
+    linear-gradient(var(--sky04) 1px,transparent 1px),
+    linear-gradient(90deg,var(--sky04) 1px,transparent 1px);
+  background-size:40px 40px;
+  width:100%;height:100vh;
+  overflow:hidden;font-family:'DM Sans',sans-serif;user-select:none;
+}
+#stage{width:100%;height:100%;position:relative;overflow:hidden;}
+
+.accent-line{position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));z-index:200;}
+.prog-bar{position:absolute;bottom:0;left:0;height:3px;width:0%;
+  background:var(--sky);box-shadow:0 0 10px rgba(94,200,242,.7);
+  z-index:999;transition:width .08s linear;}
+
+.scene{position:absolute;top:0;left:0;width:100%;height:100%;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .5s ease;}
+.scene.active{opacity:1;pointer-events:auto;}
+
+.card-scene{
+  background:var(--dark);
+  background-image:linear-gradient(var(--sky04) 1px,transparent 1px),linear-gradient(90deg,var(--sky04) 1px,transparent 1px);
+  background-size:40px 40px;flex-direction:column;z-index:80;}
+.card-scene::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--sky),var(--ice),var(--teal));}
+
+/* ═══════════════════════════════════════
+   ENVIRONMENT — Ciudad / Fachada del Banco
+   ═══════════════════════════════════════ */
+.sky-env{
+  position:absolute;top:0;left:0;width:100%;height:58%;
+  background:linear-gradient(180deg,#080c10 0%,#0c1018 55%,#121820 100%);
+}
+/* City grid glow */
+.sky-env::before{
+  content:'';position:absolute;bottom:0;left:0;width:100%;height:40%;
+  background:radial-gradient(ellipse 80% 60% at 50% 100%,rgba(94,200,242,.04),transparent);
+}
+
+/* Stars */
+.star{position:absolute;background:white;border-radius:50%;
+  animation:twinkle var(--d,3s) var(--dl,0s) infinite;}
+@keyframes twinkle{0%,100%{opacity:.1;transform:scale(1);}50%{opacity:.7;transform:scale(1.25);}}
+
+/* Ground / pavement */
+.ground{
+  position:absolute;bottom:0;left:0;width:100%;height:40%;
+  background:linear-gradient(180deg,#161614 0%,#0e0e0c 100%);
+  border-top:1px solid rgba(94,200,242,.1);
+}
+.ground::before{
+  content:'';position:absolute;top:0;left:0;width:100%;height:100%;
+  background-image:
+    repeating-linear-gradient(90deg,transparent,transparent 52px,rgba(255,255,255,.025) 52px,rgba(255,255,255,.025) 53px),
+    repeating-linear-gradient(0deg,transparent,transparent 52px,rgba(255,255,255,.018) 52px,rgba(255,255,255,.018) 53px);
+}
+/* Ground sky glow */
+.ground-glow{
+  position:absolute;bottom:38%;left:50%;transform:translateX(-50%);
+  width:400px;height:60px;
+  background:radial-gradient(ellipse,rgba(94,200,242,.18),transparent 70%);
+  opacity:0;filter:blur(16px);pointer-events:none;
+  transition:opacity .8s;
+}
+
+/* ─── MEGA BANK BUILDING ─── */
+.bank-building{
+  position:absolute;bottom:38%;left:50%;transform:translateX(-50%);
+  width:min(320px,55%);
+  z-index:3;
+  display:flex;flex-direction:column;align-items:center;
+}
+.bank-facade{
+  width:100%;
+  background:linear-gradient(180deg,#1e1c16 0%,#18160e 100%);
+  border:1px solid rgba(255,200,80,.1);
+  border-bottom:none;
+  position:relative;
+  padding:0;
+}
+/* Columns */
+.bank-columns{
+  display:flex;justify-content:space-around;align-items:flex-end;
+  padding:0 12px;height:50px;
+  border-bottom:2px solid rgba(255,200,80,.12);
+}
+.col-pillar{
+  width:14px;
+  background:linear-gradient(90deg,#2a2618,#1e1c12,#2a2618);
+  border-radius:2px 2px 0 0;
+}
+/* Pediment */
+.bank-pediment{
+  width:calc(100% + 20px);height:24px;margin-left:-10px;
+  background:linear-gradient(180deg,#22201a,#1a1810);
+  clip-path:polygon(0 100%,50% 0%,100% 100%);
+  border-top:1px solid rgba(255,200,80,.08);
+}
+/* Inscription */
+.bank-name{
+  font-family:'Syne',sans-serif;font-size:clamp(9px,1.6vw,13px);
+  font-weight:800;letter-spacing:4px;
+  color:rgba(255,200,80,.4);
+  text-transform:uppercase;
+  padding:10px 0 6px;
+  text-align:center;
+}
+/* Steps */
+.bank-steps{
+  width:calc(100% + 40px);margin-left:-20px;
+  border-top:3px solid rgba(255,200,80,.15);
+}
+.step{
+  height:7px;
+  background:linear-gradient(180deg,#1a1814,#14120e);
+  border-bottom:1px solid rgba(255,200,80,.06);
+  transition:width .1s;
+}
+.step:nth-child(1){width:100%;}
+.step:nth-child(2){width:92%;margin:0 auto;}
+.step:nth-child(3){width:84%;margin:0 auto;}
+
+/* ─── MINIMUM SIGN ─── */
+.min-sign-wrap{
+  position:absolute;top:-8px;left:50%;
+  transform:translateX(-50%) translateY(-100%);
+  z-index:12;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;
+}
+.min-sign{
+  background:linear-gradient(135deg,#1a0a0a,#120808);
+  border:2px solid var(--red);
+  border-radius:6px;
+  padding:9px 18px;
+  text-align:center;
+  box-shadow:0 0 20px rgba(200,40,40,.25),0 4px 20px rgba(0,0,0,.5);
+  transition:opacity .5s, transform .5s;
+}
+.min-sign-label{
+  font-family:'JetBrains Mono',monospace;font-size:8px;
+  letter-spacing:2px;color:rgba(255,80,80,.5);
+  text-transform:uppercase;margin-bottom:4px;
+}
+.min-sign-amount{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(14px,2.8vw,22px);
+  color:var(--red);
+  text-shadow:0 0 14px rgba(200,40,40,.4);
+  letter-spacing:-1px;white-space:nowrap;
+}
+.min-sign-sub{
+  font-family:'JetBrains Mono',monospace;font-size:7px;
+  letter-spacing:1px;color:rgba(255,80,80,.35);
+  margin-top:3px;
+}
+.sign-post{
+  width:3px;height:22px;
+  background:linear-gradient(180deg,rgba(200,40,40,.4),transparent);
+}
+
+/* ACCET replacement sign */
+.accet-sign{
+  position:absolute;top:-8px;left:50%;
+  transform:translateX(-50%) translateY(-100%);
+  z-index:13;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center;
+  opacity:0;transition:opacity .5s, transform .6s cubic-bezier(.34,1.56,.64,1);
+  transform-origin:bottom center;
+}
+.accet-sign-box{
+  background:linear-gradient(135deg,rgba(94,200,242,.12),rgba(55,125,140,.08));
+  border:2px solid var(--sky);
+  border-radius:6px;padding:9px 18px;text-align:center;
+  box-shadow:0 0 24px rgba(94,200,242,.3),0 4px 20px rgba(0,0,0,.5);
+}
+.accet-sign-label{
+  font-family:'JetBrains Mono',monospace;font-size:8px;
+  letter-spacing:2px;color:rgba(94,200,242,.6);
+  text-transform:uppercase;margin-bottom:4px;
+}
+.accet-sign-amount{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(14px,2.8vw,22px);
+  color:var(--sky);
+  text-shadow:0 0 14px rgba(94,200,242,.5);
+  letter-spacing:-1px;white-space:nowrap;
+}
+.accet-sign-sub{
+  font-family:'JetBrains Mono',monospace;font-size:7px;
+  letter-spacing:1px;color:rgba(94,200,242,.4);margin-top:3px;
+}
+.accet-sign-post{
+  width:3px;height:22px;
+  background:linear-gradient(180deg,rgba(94,200,242,.4),transparent);
+}
+
+/* ─── $100 COIN ─── */
+.coin{
+  position:absolute;
+  background:radial-gradient(circle at 35% 30%,#ffe566,#ffaa00,#cc7700);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-weight:500;
+  color:#5a3800;
+  box-shadow:
+    inset 0 2px 4px rgba(255,255,255,.4),
+    inset 0 -2px 4px rgba(0,0,0,.25),
+    0 0 18px rgba(255,180,0,.5),
+    0 4px 12px rgba(0,0,0,.5);
+  transition:transform .3s, opacity .3s;
+  z-index:20;
+}
+/* Coin lick wiggle */
+@keyframes lick-wiggle{
+  0%,100%{transform:rotate(0deg)}
+  25%{transform:rotate(-12deg) translateY(-3px)}
+  75%{transform:rotate(10deg) translateY(-2px)}
+}
+/* Coin plant (flag) */
+@keyframes coin-plant{
+  0%{transform:translateX(-50%) scale(1) rotate(0deg)}
+  30%{transform:translateX(-50%) scale(1.5,0.7) rotate(3deg)}
+  55%{transform:translateX(-50%) scale(0.9,1.2) rotate(-2deg)}
+  75%{transform:translateX(-50%) scale(1.1,0.95) rotate(1deg)}
+  100%{transform:translateX(-50%) scale(1) rotate(0deg)}
+}
+/* Tokko inflate */
+@keyframes tokko-inflate{
+  0%{transform:scale(1)}
+  60%{transform:scale(2.2,2.2)}
+  80%{transform:scale(2.1,2.2)}
+  100%{transform:scale(2.0,2.1)}
+}
+/* Tokko float */
+@keyframes tokko-float{
+  0%,100%{transform:scale(2.0,2.1) translateY(0)}
+  50%{transform:scale(2.0,2.1) translateY(-10px)}
+}
+/* Domino laugh — separate per character */
+@keyframes laugh-bounce{
+  0%,100%{transform:translateY(0) rotate(0deg)}
+  20%{transform:translateY(-12px) rotate(-6deg)}
+  40%{transform:translateY(0) rotate(4deg)}
+  60%{transform:translateY(-8px) rotate(-3deg)}
+  80%{transform:translateY(0) rotate(2deg)}
+}
+/* Sign switch */
+@keyframes sign-off{
+  0%{opacity:1;transform:translateX(-50%) translateY(-100%) rotate(0deg)}
+  100%{opacity:0;transform:translateX(-50%) translateY(-80%) rotate(-15deg)}
+}
+@keyframes sign-on{
+  0%{opacity:0;transform:translateX(-50%) translateY(-115%) scale(.7)}
+  70%{transform:translateX(-50%) translateY(-97%) scale(1.08)}
+  100%{opacity:1;transform:translateX(-50%) translateY(-100%) scale(1)}
+}
+
+/* ════════════════════
+   BRICK CHARACTERS
+   ════════════════════ */
+.brick-char{
+  position:absolute;display:flex;flex-direction:column;
+  align-items:center;pointer-events:none;
+}
+.body{
+  position:relative;border-radius:10px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:6px;
+  box-shadow:
+    inset 0 3px 6px rgba(255,255,255,.14),
+    inset 0 -4px 6px rgba(0,0,0,.3),
+    0 8px 28px rgba(0,0,0,.55);
+  transition:transform .2s, background .4s;
+}
+.eyes{display:flex;gap:5px;margin-bottom:3px;}
+.eye{background:white;border-radius:50%;position:relative;overflow:visible;
+  display:flex;align-items:center;justify-content:center;}
+.pupil{width:42%;height:42%;background:#111;border-radius:50%;}
+.brow{position:absolute;top:-5px;left:-1px;width:calc(100% + 2px);height:3px;
+  background:#3a3a3a;border-radius:2px;}
+.mouth-laugh{
+  width:26px;height:14px;
+  border:3px solid #222;border-bottom:none;
+  border-radius:12px 12px 0 0;
+  margin:2px auto 0;
+}
+.mouth-open{
+  width:16px;height:16px;
+  background:#222;border-radius:50%;
+  margin:3px auto 0;
+}
+.mouth-shock{
+  width:14px;height:18px;
+  background:#222;border-radius:50% 50% 46% 46%;
+  margin:3px auto 0;
+}
+.mouth-proud{
+  width:22px;height:12px;
+  border:3px solid #222;border-bottom:none;
+  border-radius:12px 12px 0 0;
+  margin:2px auto 0;
+}
+.mouth-bored{
+  width:20px;height:3px;
+  background:#333;border-radius:2px;
+  margin:4px auto 0;
+}
+
+/* Speech bubble */
+.bubble{
+  position:absolute;background:white;border-radius:8px;
+  padding:7px 11px;font-family:'DM Sans',sans-serif;
+  font-size:11px;line-height:1.4;color:#1a1a1a;
+  white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.45);
+  opacity:0;transition:opacity .3s;z-index:30;pointer-events:none;
+}
+.bubble::after{content:'';position:absolute;bottom:-9px;left:50%;
+  transform:translateX(-50%);border:9px solid transparent;
+  border-top-color:white;border-bottom:none;}
+.bubble.left::after{left:18%;}
+.bubble.right::after{left:72%;}
+.bubble.up::after{bottom:auto;top:-9px;border-top:none;border-bottom:9px solid white;}
+
+/* Caption */
+.caption{
+  position:absolute;bottom:22px;left:50%;transform:translateX(-50%);
+  background:rgba(13,13,13,.82);backdrop-filter:blur(8px);
+  border:1px solid rgba(94,200,242,.12);
+  border-top:1px solid rgba(94,200,242,.25);
+  color:rgba(255,255,255,.85);
+  font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:.3px;
+  padding:7px 18px;border-radius:4px;
+  white-space:nowrap;opacity:0;z-index:50;
+  transition:opacity .25s;pointer-events:none;
+}
+
+/* ═════ CHARACTERS ═════ */
+
+/* ─── TOKKO ─── hero of this spot */
+#tokko{
+  bottom:39%;left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  transition:transform .4s, left .5s;
+}
+#tokko .body{
+  width:50px;height:50px;
+  background:linear-gradient(135deg,#d08800,#a86a00,#7a4a00);
+  transition:transform .5s cubic-bezier(.34,1.56,.64,1), width .5s, height .5s, background .5s;
+}
+.glasses-t{position:absolute;top:-14px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:1px;transition:transform .5s, top .5s;}
+.lens-t{width:18px;height:14px;border:2px solid #555;border-radius:4px;
+  background:rgba(94,200,242,.12);}
+.bridge-t{width:3px;height:2px;background:#555;margin-bottom:3px;}
+/* Inflated Tokko state */
+#tokko.inflated .body{
+  width:50px;height:50px;
+  background:linear-gradient(135deg,#ffaa00,#ff8800,#cc5500) !important;
+  box-shadow:
+    inset 0 3px 8px rgba(255,255,255,.2),
+    0 0 28px rgba(255,170,0,.5),
+    0 0 55px rgba(255,170,0,.2),
+    0 8px 28px rgba(0,0,0,.6) !important;
+}
+
+/* ─── BLOQUE ─── */
+#bloque{
+  bottom:39%;left:-110px;
+  z-index:9;transition:left .7s cubic-bezier(.34,1.56,.64,1);
+}
+#bloque .body{
+  width:72px;height:62px;
+  background:linear-gradient(140deg,#d86040,#c44f2a,#a03318);
+}
+.hard-hat{position:absolute;top:-22px;left:50%;transform:translateX(-50%);}
+.hat-dome{width:44px;height:22px;background:linear-gradient(160deg,#ffe033,#f0c000);
+  border-radius:50% 50% 0 0;margin:0 auto;box-shadow:0 -2px 8px rgba(255,200,0,.3);}
+.hat-brim{width:62px;height:7px;background:linear-gradient(180deg,#f0c000,#c89000);
+  border-radius:3px;margin:-2px auto 0;}
+
+/* ─── CRIPTO ─── */
+#cripto{
+  bottom:39%;right:-110px;
+  z-index:8;transition:right .65s cubic-bezier(.34,1.56,.64,1);
+}
+#cripto .body{
+  width:52px;height:90px;
+  background:
+    repeating-linear-gradient(60deg,rgba(94,200,242,.05) 0,rgba(94,200,242,.05) 2px,transparent 2px,transparent 22px),
+    linear-gradient(150deg,#0e2228,#091619,#060f11);
+}
+.hex-tag{font-size:8px;color:var(--sky);font-family:'JetBrains Mono';
+  opacity:.6;margin-bottom:2px;letter-spacing:1px;}
+.chain-tag{font-size:6px;color:var(--ice);font-family:'JetBrains Mono';
+  opacity:.45;margin-top:3px;letter-spacing:.5px;}
+
+/* ─── CEMEN ─── */
+#cemen{
+  bottom:39%;right:-130px;
+  z-index:7;transition:right .75s cubic-bezier(.34,1.56,.64,1);
+}
+#cemen .body{
+  width:68px;height:58px;
+  background:linear-gradient(135deg,#787868,#626255,#464638);
+}
+.crack-c{position:absolute;background:rgba(0,0,0,.35);border-radius:1px;}
+.beard-c{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);
+  width:28px;height:7px;background:linear-gradient(180deg,#888,#666);
+  border-radius:0 0 5px 5px;}
+
+/* ─── LÍQUI ─── */
+#liqui{
+  bottom:39%;right:-130px;
+  z-index:11;transition:right .9s cubic-bezier(.25,.46,.45,.94);
+}
+#liqui .body{
+  width:54px;height:84px;
+  background:linear-gradient(135deg,#a0d4e8,#7ab8d0,#5090a8);
+  box-shadow:
+    inset 0 4px 8px rgba(255,255,255,.32),
+    0 0 22px rgba(94,200,242,.22),
+    0 8px 28px rgba(0,0,0,.5);
+}
+.shine-l{position:absolute;top:8px;left:7px;width:10px;height:26px;
+  background:rgba(255,255,255,.35);border-radius:5px;transform:rotate(-8deg);}
+
+/* ─── LAUGHTER FX ─── */
+.ha-float{
+  position:absolute;pointer-events:none;
+  font-family:'Syne',sans-serif;font-weight:900;
+  color:rgba(255,200,50,.75);
+  opacity:0;z-index:25;
+  animation:ha-rise 1.1s ease-out forwards;
+}
+@keyframes ha-rise{
+  0%{opacity:0;transform:translateY(0) scale(.6)}
+  25%{opacity:1}
+  100%{opacity:0;transform:translateY(-55px) scale(1.1)}
+}
+
+/* ─── COIN PLANTED AS FLAG ─── */
+.flag-pole{
+  position:absolute;bottom:39%;left:50%;
+  transform:translateX(-50%);
+  width:4px;height:0px;
+  background:linear-gradient(180deg,var(--amber),#8a5a00);
+  border-radius:2px;opacity:0;
+  transition:height .5s ease, opacity .2s;
+  z-index:15;
+}
+
+/* ─── CONFETTI ─── */
+.conf{position:absolute;border-radius:2px;pointer-events:none;z-index:90;}
+
+/* ─── SCENE LABEL ─── */
+.scene-label{
+  position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:rgba(94,200,242,.2);text-transform:uppercase;z-index:50;pointer-events:none;
+}
+
+/* ─── TYPOGRAPHY ─── */
+.spot-eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:rgba(94,200,242,.55);text-transform:uppercase;margin-bottom:14px;
+  opacity:0;animation:fadeup .6s .3s forwards;
+}
+.spot-headline{
+  font-family:'Syne',sans-serif;font-size:clamp(30px,6vw,58px);font-weight:900;
+  color:white;text-align:center;line-height:1.05;
+  opacity:0;animation:fadeup .6s .6s forwards;
+}
+.spot-headline .accent{color:var(--sky);}
+.spot-sub{
+  font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;
+  color:rgba(94,200,242,.35);margin-top:14px;text-transform:uppercase;
+  opacity:0;animation:fadeup .6s .9s forwards;
+}
+.tagline{
+  font-family:'Syne',sans-serif;font-size:clamp(22px,4.5vw,46px);font-weight:900;
+  color:white;text-align:center;line-height:1.15;max-width:580px;
+  opacity:0;transform:translateY(18px);transition:opacity .8s,transform .8s;
+}
+.t-sky{color:var(--sky);}.t-ice{color:var(--ice);}
+.end-sep{width:280px;height:1px;background:rgba(94,200,242,.15);
+  margin:18px auto 0;opacity:0;transition:opacity .4s .4s;}
+.end-tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;
+  justify-content:center;opacity:0;transition:opacity .6s .5s;}
+.etag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1.5px;
+  padding:3px 8px;border:1px solid rgba(94,200,242,.3);
+  color:rgba(94,200,242,.6);background:var(--sky10);}
+.end-brand{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;
+  color:var(--sky);margin-top:22px;opacity:0;transition:opacity .5s .9s;}
+.end-info{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;
+  color:rgba(255,255,255,.18);margin-top:5px;opacity:0;transition:opacity .4s 1.1s;}
+
+@keyframes fadeup{
+  from{opacity:0;transform:translateY(16px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+#replay-btn{
+  position:absolute;bottom:28px;right:28px;
+  background:var(--sky);color:#0D0D0D;
+  border:none;padding:10px 22px;border-radius:4px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;letter-spacing:2px;font-weight:500;
+  cursor:pointer;z-index:999;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s,transform .15s;
+}
+#replay-btn:hover{transform:scale(1.06);}
+#replay-btn.show{opacity:1;pointer-events:auto;}
+</style>
+</head>
+<body>
+<div id="stage">
+
+  <div class="accent-line"></div>
+  <div class="prog-bar" id="prog"></div>
+
+  <!-- ══════════════ INTRO CARD ══════════════ -->
+  <div class="scene card-scene active" id="scene-intro">
+    <div style="text-align:center">
+      <div class="spot-eyebrow">Los Ladrillones · Spot 3 de 4</div>
+      <div class="spot-headline">El Mínimo<br><span class="accent">Imposible</span></div>
+      <div class="spot-sub">Animación de marca ACCET · 30s</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ MAIN SCENE ══════════════ -->
+  <div class="scene" id="scene-main">
+
+    <!-- Environment -->
+    <div class="sky-env" id="sky-env"></div>
+    <div class="ground"></div>
+    <div class="ground-glow" id="glow"></div>
+    <div class="scene-label">ACCET · El Mínimo Imposible</div>
+
+    <!-- ── MEGA BANK ── -->
+    <div class="bank-building" id="bank-building">
+      <!-- Old minimum sign -->
+      <div class="min-sign-wrap" id="old-sign-wrap">
+        <div class="min-sign" id="old-sign">
+          <div class="min-sign-label">Inversión mínima</div>
+          <div class="min-sign-amount" id="min-amount">$500.000.000</div>
+          <div class="min-sign-sub">COP — SIN EXCEPCIONES</div>
+        </div>
+        <div class="sign-post"></div>
+      </div>
+      <!-- ACCET sign (hidden initially) -->
+      <div class="accet-sign" id="accet-sign">
+        <div class="accet-sign-box">
+          <div class="accet-sign-label">Inversión mínima</div>
+          <div class="accet-sign-amount">$1.000.000</div>
+          <div class="accet-sign-sub">COP · ERC-3643 · ACCET</div>
+        </div>
+        <div class="accet-sign-post"></div>
+      </div>
+      <div class="bank-facade">
+        <div class="bank-pediment"></div>
+        <div class="bank-columns">
+          <div class="col-pillar" style="height:38px"></div>
+          <div class="col-pillar" style="height:44px"></div>
+          <div class="col-pillar" style="height:50px"></div>
+          <div class="col-pillar" style="height:50px"></div>
+          <div class="col-pillar" style="height:44px"></div>
+          <div class="col-pillar" style="height:38px"></div>
+        </div>
+        <div class="bank-name">Banco Nacional</div>
+      </div>
+      <div class="bank-steps">
+        <div class="step"></div>
+        <div class="step"></div>
+        <div class="step"></div>
+      </div>
+    </div>
+
+    <!-- ── FLAG POLE ── -->
+    <div class="flag-pole" id="flag-pole"></div>
+
+    <!-- ── COIN ── -->
+    <div class="coin" id="coin"
+      style="width:40px;height:40px;font-size:10px;bottom:39%;left:50%;transform:translateX(-50%);">
+      $100
+    </div>
+
+    <!-- ── TOKKO ── -->
+    <div class="brick-char" id="tokko">
+      <div class="glasses-t" id="tokko-glasses">
+        <div class="lens-t"></div>
+        <div class="bridge-t"></div>
+        <div class="lens-t"></div>
+      </div>
+      <div class="body" id="tokko-body">
+        <div class="eyes" id="tokko-eyes">
+          <div class="eye" style="width:16px;height:16px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:16px;height:16px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-bored" id="tokko-mouth"></div>
+      </div>
+      <div class="bubble left" id="bub-tokko1" style="bottom:70px;left:50px;font-size:10px;">
+        $500 millones... tengo<br>$100 USD. 😔
+      </div>
+      <div class="bubble left" id="bub-tokko2" style="bottom:70px;left:50px;font-size:10px;">
+        ...¿lo lamo?<br>¿le da suerte? 🤔
+      </div>
+      <div class="bubble" id="bub-tokko3" style="bottom:140px;left:50%;transform:translateX(-50%);font-size:10px;white-space:nowrap;">
+        ¡¡SOY GIGANTE!! 🚀
+      </div>
+    </div>
+
+    <!-- ── BLOQUE ── -->
+    <div class="brick-char" id="bloque">
+      <div class="hard-hat">
+        <div class="hat-dome"></div>
+        <div class="hat-brim"></div>
+      </div>
+      <div class="body" id="bloque-body">
+        <div class="eyes">
+          <div class="eye" style="width:20px;height:20px">
+            <div class="brow" style="transform:rotate(0deg)"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:20px;height:20px">
+            <div class="brow" style="transform:rotate(0deg)"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-bored" id="bloque-mouth"></div>
+      </div>
+      <div class="bubble left" id="bub-bloque" style="bottom:80px;left:70px;font-size:10px;">
+        jajaja — ¡¿$100?!<br>¡Te falta un cero! 🤣
+      </div>
+    </div>
+
+    <!-- ── CRIPTO ── -->
+    <div class="brick-char" id="cripto">
+      <div class="body" id="cripto-body">
+        <div class="hex-tag">⬡⬡⬡</div>
+        <div class="eyes">
+          <div class="eye" style="width:15px;height:15px;background:linear-gradient(135deg,var(--sky),var(--teal))">
+            <div class="brow"></div>
+            <div class="pupil" style="background:#fff"></div>
+          </div>
+          <div class="eye" style="width:15px;height:15px;background:linear-gradient(135deg,var(--sky),var(--teal))">
+            <div class="brow"></div>
+            <div class="pupil" style="background:#fff"></div>
+          </div>
+        </div>
+        <div class="mouth-bored" id="cripto-mouth" style="background:var(--sky);opacity:.6"></div>
+        <div class="chain-tag">ERC·3643</div>
+      </div>
+      <div class="bubble right" id="bub-cripto" style="bottom:108px;right:50px;font-size:10px;">
+        HA... HA... HA...<br>insuficiente fondos 😂
+      </div>
+    </div>
+
+    <!-- ── CEMEN ── -->
+    <div class="brick-char" id="cemen">
+      <div class="body" id="cemen-body">
+        <div class="crack-c" style="width:2px;height:16px;position:absolute;top:7px;left:18px;transform:rotate(14deg);"></div>
+        <div class="crack-c" style="width:1px;height:12px;position:absolute;top:28px;right:12px;transform:rotate(-8deg);"></div>
+        <div class="eyes" style="margin-top:4px">
+          <div class="eye" style="width:18px;height:18px">
+            <div class="brow" style="transform:rotate(14deg)"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:18px;height:18px">
+            <div class="brow" style="transform:rotate(-14deg)"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-bored" id="cemen-mouth"></div>
+        <div class="beard-c"></div>
+      </div>
+      <div class="bubble" id="bub-cemen" style="bottom:76px;right:70px;font-size:9px;white-space:nowrap;">
+        Ji ji ji... pobrecito. 😏
+      </div>
+    </div>
+
+    <!-- ── LÍQUI ── -->
+    <div class="brick-char" id="liqui">
+      <div class="body">
+        <div class="shine-l"></div>
+        <div class="eyes" style="margin-top:12px">
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+          <div class="eye" style="width:17px;height:17px">
+            <div class="brow"></div>
+            <div class="pupil"></div>
+          </div>
+        </div>
+        <div class="mouth-proud" style="width:20px;height:10px;border-color:#225566;"></div>
+      </div>
+      <div class="bubble right" id="bub-liqui" style="bottom:98px;right:52px;font-size:10px;">
+        Desde $1.000.000<br>COP, Tokko. 😉
+      </div>
+    </div>
+
+    <div class="caption" id="caption"></div>
+
+  </div><!-- /scene-main -->
+
+  <!-- ══════════════ END CARD ══════════════ -->
+  <div class="scene card-scene" id="scene-end">
+    <div style="text-align:center">
+      <div class="tagline" id="tagline">
+        Invierte desde<br>
+        <span class="t-sky">$1M COP.</span><br>
+        <span class="t-ice">ACCET.</span>
+      </div>
+      <div class="end-sep" id="end-sep"></div>
+      <div class="end-tags" id="end-tags">
+        <span class="etag">DESDE $1M COP</span>
+        <span class="etag">17% E.A.</span>
+        <span class="etag">ERC-3643</span>
+        <span class="etag">HEDERA HTS</span>
+      </div>
+      <div class="end-brand" id="end-brand">ACCET</div>
+      <div class="end-info" id="end-info">Real Estate Tokenization · Acceso desde $1M COP</div>
+    </div>
+  </div>
+
+  <button id="replay-btn" onclick="run()">↺ REPLAY</button>
+
+</div>
+<script>
+const TOTAL=30000;
+let timers=[],progInterval=null,t0=null;
+const $=id=>document.getElementById(id);
+function tick(ms,fn){timers.push(setTimeout(fn,ms));}
+function clearAll(){timers.forEach(clearTimeout);timers=[];if(progInterval)clearInterval(progInterval);}
+function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');}
+function caption(txt,dur=2600){const el=$('caption');el.textContent=txt;el.style.opacity='1';tick(dur,()=>el.style.opacity='0');}
+function bubble(id,dur=2400){const el=$(id);el.style.opacity='1';tick(dur,()=>el.style.opacity='0');}
+
+function buildStars(){
+  const sky=$('sky-env');sky.innerHTML='';
+  for(let i=0;i<32;i++){
+    const s=document.createElement('div');s.className='star';
+    const sz=Math.random()*2.2+.4;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*88}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1.5).toFixed(1)}s;--dl:${(Math.random()*3).toFixed(1)}s;`;
+    sky.appendChild(s);
+  }
+}
+
+function spawnHa(char,delay,txt='HA!'){
+  tick(delay,()=>{
+    const el=char.querySelector('.body');
+    if(!el)return;
+    const ha=document.createElement('div');
+    ha.className='ha-float';
+    ha.textContent=txt;
+    ha.style.cssText=`
+      font-size:${12+Math.random()*10}px;
+      top:${-10-Math.random()*20}px;
+      left:${-8+Math.random()*40}px;
+    `;
+    char.appendChild(ha);
+    tick(1300,()=>ha.remove());
+  });
+}
+
+function confetti(n=55){
+  const stage=document.getElementById('stage');
+  const cols=['#5EC8F2','#5ED7F2','#377D8C','#ffaa00','#ffffff','#b0e0f5'];
+  for(let i=0;i<n;i++){
+    const el=document.createElement('div');el.className='conf';
+    const w=Math.random()*10+3,h=Math.random()>.5?w:w*2.2;
+    const col=cols[Math.floor(Math.random()*cols.length)];
+    const sx=15+Math.random()*70,delay=Math.random()*600,dur=900+Math.random()*1300;
+    const dx=(Math.random()-.5)*100;
+    el.style.cssText=`width:${w}px;height:${h}px;background:${col};left:${sx}%;top:15%;border-radius:${Math.random()>.5?'50%':'2px'};opacity:1;`;
+    stage.appendChild(el);
+    setTimeout(()=>{
+      el.style.transition=`transform ${dur}ms ease-in,opacity ${dur}ms ease-in`;
+      el.style.transform=`translate(${dx}px,${260+Math.random()*200}px) rotate(${Math.random()*700}deg)`;
+      el.style.opacity='0';
+      setTimeout(()=>el.remove(),dur+100);
+    },delay+30);
+  }
+}
+
+function resetState(){
+  // Tokko
+  $('tokko').style.cssText='position:absolute;bottom:39%;left:50%;transform:translateX(-50%);z-index:10;transition:none;';
+  $('tokko').classList.remove('inflated');
+  $('tokko-body').style.cssText='width:50px;height:50px;background:linear-gradient(135deg,#d08800,#a86a00,#7a4a00);transition:transform .2s,background .4s;';
+  $('tokko-body').style.animation='';
+  $('tokko-glasses').style.cssText='position:absolute;top:-14px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:1px;transition:transform .5s,top .5s;';
+  $('tokko-mouth').className='mouth-bored';
+  ['bub-tokko1','bub-tokko2','bub-tokko3'].forEach(id=>{$(id).style.opacity='0';});
+
+  // Bloque
+  $('bloque').style.cssText='position:absolute;bottom:39%;left:-110px;z-index:9;transition:none;';
+  $('bloque-body').style.animation='';
+  $('bloque-mouth').className='mouth-bored';
+  $('bub-bloque').style.opacity='0';
+
+  // Cripto
+  $('cripto').style.cssText='position:absolute;bottom:39%;right:-110px;z-index:8;transition:none;';
+  $('cripto-body').style.animation='';
+  $('cripto-mouth').className='mouth-bored';
+  $('cripto-mouth').style.cssText='background:var(--sky);opacity:.6;width:18px;height:3px;border-radius:2px;margin:4px auto 0;';
+  $('bub-cripto').style.opacity='0';
+
+  // Cemen
+  $('cemen').style.cssText='position:absolute;bottom:39%;right:-130px;z-index:7;transition:none;';
+  $('cemen-body').style.animation='';
+  $('cemen-mouth').className='mouth-bored';
+  $('bub-cemen').style.opacity='0';
+
+  // Líqui
+  $('liqui').style.cssText='position:absolute;bottom:39%;right:-130px;z-index:11;transition:none;';
+  $('bub-liqui').style.opacity='0';
+
+  // Coin
+  $('coin').style.cssText='width:40px;height:40px;font-size:10px;bottom:39%;left:50%;transform:translateX(-50%);position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe566,#ffaa00,#cc7700);display:flex;align-items:center;justify-content:center;font-family:"JetBrains Mono",monospace;font-weight:500;color:#5a3800;box-shadow:inset 0 2px 4px rgba(255,255,255,.4),inset 0 -2px 4px rgba(0,0,0,.25),0 0 18px rgba(255,180,0,.5),0 4px 12px rgba(0,0,0,.5);transition:transform .3s,opacity .3s;z-index:20;opacity:1;';
+  $('coin').textContent='$100';
+
+  // Signs
+  $('old-sign').style.animation='';
+  $('old-sign-wrap').style.opacity='1';
+  $('old-sign-wrap').style.transform='';
+  $('accet-sign').style.opacity='0';
+  $('accet-sign').style.animation='';
+
+  // Flag pole
+  $('flag-pole').style.height='0px';
+  $('flag-pole').style.opacity='0';
+
+  // Glow
+  $('glow').style.opacity='0';
+
+  // End card
+  $('tagline').style.opacity='0';$('tagline').style.transform='translateY(18px)';
+  $('end-sep').style.opacity='0';
+  $('end-tags').style.opacity='0';
+  $('end-brand').style.opacity='0';
+  $('end-info').style.opacity='0';
+
+  $('caption').style.opacity='0';
+  $('replay-btn').classList.remove('show');
+  $('prog').style.width='0%';
+  document.querySelectorAll('.conf,.ha-float').forEach(el=>el.remove());
+}
+
+// ════════════════════════════════════════
+//  MAIN ANIMATION — 30s
+// ════════════════════════════════════════
+function run(){
+  clearAll();resetState();buildStars();
+  t0=Date.now();
+
+  progInterval=setInterval(()=>{
+    const pct=Math.min(((Date.now()-t0)/TOTAL)*100,100);
+    $('prog').style.width=pct+'%';
+    if(pct>=100)clearInterval(progInterval);
+  },60);
+
+  show('scene-intro');
+
+  // ── INTRO: 0–2400ms ────────────────────────────────
+  tick(2400,()=>{
+    show('scene-main');
+
+    // ◆ BEAT 1 — Tokko solo frente al banco (0–3s rel)
+    caption('Tokko frente al banco. Letrero: $500.000.000. Tokko: $100. 💀',3000);
+    bubble('bub-tokko1',3000);
+
+    // ◆ BEAT 2 — Tokko saca el coin y lo lame (3200ms rel)
+    tick(3200,()=>{
+      $('tokko-mouth').className='mouth-open';
+      caption('Tokko lo mira... lo lame... por las dudas. 🪙',2400);
+      bubble('bub-tokko2',2400);
+
+      // Coin lick animation
+      $('coin').style.animation='lick-wiggle .35s ease-in-out 5';
+      tick(2000,()=>{ $('coin').style.animation=''; });
+    });
+
+    // ◆ BEAT 3 — Bloque, Cripto y Cemen entran y se ríen (5800ms rel)
+    tick(5800,()=>{
+      caption('Bloque, Cripto y Cemen los ven... y explotan. 🤣',2600);
+
+      // Bloque entra desde la izquierda
+      $('bloque').style.transition='left .6s cubic-bezier(.34,1.56,.64,1)';
+      $('bloque').style.left='8%';
+
+      // Cripto entra desde la derecha
+      tick(200,()=>{
+        $('cripto').style.transition='right .55s cubic-bezier(.34,1.56,.64,1)';
+        $('cripto').style.right='8%';
+      });
+
+      // Cemen entra desde más a la derecha
+      tick(400,()=>{
+        $('cemen').style.transition='right .65s cubic-bezier(.34,1.56,.64,1)';
+        $('cemen').style.right='22%';
+      });
+
+      // LAUGHS — domino cascade
+      tick(1100,()=>{
+        $('bloque-mouth').className='mouth-laugh';
+        $('bloque-body').style.animation='laugh-bounce .55s ease-in-out infinite';
+        bubble('bub-bloque',2400);
+        spawnHa($('bloque'),  100,'HA!');
+        spawnHa($('bloque'),  600,'HA!');
+        spawnHa($('bloque'), 1100,'HA!');
+
+        tick(350,()=>{
+          $('cripto-mouth').className='mouth-laugh';
+          $('cripto-body').style.animation='laugh-bounce .5s ease-in-out infinite';
+          bubble('bub-cripto',2400);
+          spawnHa($('cripto'),  100,'HA');
+          spawnHa($('cripto'),  580,'HA');
+          spawnHa($('cripto'), 1050,'HA');
+        });
+
+        tick(700,()=>{
+          $('cemen-mouth').className='mouth-laugh';
+          $('cemen-body').style.animation='laugh-bounce .58s ease-in-out infinite';
+          bubble('bub-cemen',2200);
+          spawnHa($('cemen'),  100,'Ji');
+          spawnHa($('cemen'),  540,'Ji');
+          spawnHa($('cemen'), 1000,'JI!');
+        });
+      });
+    });
+
+    // ◆ BEAT 4 — Líqui entra, apaga el letrero (9500ms rel)
+    tick(9500,()=>{
+      // Laughers stop
+      ['bloque-body','cripto-body','cemen-body'].forEach(id=>{
+        $(id).style.animation='';
+      });
+
+      $('liqui').style.transition='right .85s cubic-bezier(.25,.46,.45,.94)';
+      $('liqui').style.right='32%';
+
+      tick(1000,()=>{
+        caption('Líqui llega. Apaga el letrero. Sin drama. 😊',2200);
+        bubble('bub-liqui',2200);
+
+        // Old sign fades / swaps
+        tick(600,()=>{
+          $('old-sign-wrap').style.transition='opacity .5s,transform .5s';
+          $('old-sign-wrap').style.opacity='0';
+          $('old-sign-wrap').style.transform='translateY(-12px) rotate(-8deg)';
+
+          // ACCET sign appears
+          tick(500,()=>{
+            $('accet-sign').style.transition='opacity .6s,transform .6s cubic-bezier(.34,1.56,.64,1)';
+            $('accet-sign').style.opacity='1';
+            $('accet-sign').style.transform='translateX(-50%) translateY(-100%) scale(1)';
+            $('glow').style.opacity='1';
+            caption('¡$1.000.000 COP! ¡Tokko puede! 🌟',2400);
+          });
+        });
+      });
+    });
+
+    // ◆ BEAT 5 — Tokko se da cuenta (13200ms rel)
+    tick(13200,()=>{
+      $('tokko-mouth').className='mouth-shock';
+      $('tokko-body').style.animation='shock-bounce .6s ease-in-out';
+      caption('Tokko procesa la info... los ojos le cambian. 👁️',2000);
+
+      tick(800,()=>{
+        $('tokko-mouth').className='mouth-open';
+      });
+    });
+
+    // ◆ BEAT 6 — Tokko se INFLA como globo (15500ms rel)
+    tick(15500,()=>{
+      caption('Tokko se infla. Se convierte en GIGANTE. 🎈',2800);
+
+      // Move Tokko to center stage
+      $('tokko').style.transition='left .4s ease, bottom .4s ease';
+      $('tokko').style.left='50%';
+      $('tokko').style.bottom='40%';
+
+      tick(500,()=>{
+        // Inflate the body
+        $('tokko-body').style.animation='tokko-inflate 1.1s cubic-bezier(.34,1.56,.64,1) forwards';
+        $('tokko-body').style.background='linear-gradient(135deg,#ffaa00,#ff8800,#cc5500)';
+        $('tokko-body').style.boxShadow='inset 0 3px 8px rgba(255,255,255,.2), 0 0 28px rgba(255,170,0,.5), 0 0 55px rgba(255,170,0,.2), 0 8px 28px rgba(0,0,0,.6)';
+        // Glasses move up with inflation
+        $('tokko-glasses').style.top='-32px';
+        $('tokko-mouth').className='mouth-proud';
+      });
+
+      tick(1500,()=>{
+        // Tokko float loop
+        $('tokko-body').style.animation='tokko-float 1.6s ease-in-out infinite';
+        bubble('bub-tokko3',2400);
+        caption('¡¡SOY GIGANTE!! ¡$100 me alcanzan! 🚀',2400);
+      });
+    });
+
+    // ◆ BEAT 7 — Coin se convierte en BANDERA (18500ms rel)
+    tick(18500,()=>{
+      // Coin grows into planted flag
+      $('coin').style.transition='width .5s, height .5s, font-size .5s, bottom .5s, box-shadow .5s';
+      $('coin').style.width='58px';
+      $('coin').style.height='58px';
+      $('coin').style.fontSize='13px';
+      $('coin').style.bottom='52%';
+      $('coin').style.boxShadow='0 0 28px rgba(255,180,0,.8),0 0 60px rgba(255,140,0,.3)';
+
+      // Flag pole rises
+      $('flag-pole').style.opacity='1';
+      $('flag-pole').style.height='90px';
+
+      tick(700,()=>{
+        // Coin plant bounce
+        $('coin').style.animation='coin-plant .7s cubic-bezier(.34,1.56,.64,1)';
+        caption('¡Planta el coin como bandera! 🏴 ¡Tokko conquistó! 💥',2800);
+        confetti(70);
+
+        // All celebrate
+        tick(400,()=>{
+          $('bloque-mouth').className='mouth-laugh';
+          $('bloque-body').style.animation='laugh-bounce .5s ease-in-out 4';
+          $('cripto-mouth').className='mouth-laugh';
+          $('cripto-body').style.animation='laugh-bounce .45s ease-in-out 4';
+          $('cemen-mouth').className='mouth-laugh';
+          $('cemen-body').style.animation='laugh-bounce .52s ease-in-out 4';
+        });
+
+        // Sky stars glow brighter
+        tick(300,()=>{
+          document.querySelectorAll('.star').forEach(s=>{
+            s.style.animationDuration='.8s';
+          });
+        });
+      });
+    });
+
+    // ◆ BEAT 8 — Final pose held (22s rel)
+    tick(22000,()=>{
+      caption('ACCET. Desde $1M COP. 🧱→🚀',2000);
+    });
+
+  });// /scene-main
+
+  // ── END CARD: 26000ms ────────────────────────────────
+  tick(26000,()=>{
+    show('scene-end');
+    const tg=$('tagline');
+    tg.style.transition='opacity .85s,transform .85s';
+    tick(60,()=>{tg.style.opacity='1';tg.style.transform='translateY(0)';});
+    tick(400,()=>{$('end-sep').style.transition='opacity .4s';$('end-sep').style.opacity='1';});
+    tick(500,()=>{$('end-tags').style.opacity='1';});
+    tick(700,()=>{$('end-brand').style.opacity='1';});
+    tick(900,()=>{$('end-info').style.opacity='1';});
+    tick(400,()=>confetti(38));
+    tick(2200,()=>$('replay-btn').classList.add('show'));
+    $('prog').style.width='100%';
+  });
+}
+
+// Inject keyframes
+const ks=document.createElement('style');
+ks.textContent=`
+@keyframes laugh-bounce{0%,100%{transform:translateY(0) rotate(0deg)}20%{transform:translateY(-12px) rotate(-6deg)}40%{transform:translateY(0) rotate(4deg)}60%{transform:translateY(-8px) rotate(-3deg)}80%{transform:translateY(0) rotate(2deg)}}
+@keyframes shock-bounce{0%{transform:scale(1)}25%{transform:scale(1.08,.92) translateY(-12px)}50%{transform:scale(.94,1.06) translateY(0)}70%{transform:scale(1.04,.97) translateY(-5px)}100%{transform:scale(1) translateY(0)}}
+@keyframes tokko-inflate{0%{transform:scale(1)}60%{transform:scale(2.2,2.2)}80%{transform:scale(2.1,2.2)}100%{transform:scale(2.0,2.1)}}
+@keyframes tokko-float{0%,100%{transform:scale(2.0,2.1) translateY(0)}50%{transform:scale(2.0,2.1) translateY(-10px)}}
+@keyframes coin-plant{0%{transform:translateX(-50%) scale(1) rotate(0deg)}30%{transform:translateX(-50%) scale(1.4,.7) rotate(3deg)}55%{transform:translateX(-50%) scale(.9,1.2) rotate(-2deg)}75%{transform:translateX(-50%) scale(1.08,.95) rotate(1deg)}100%{transform:translateX(-50%) scale(1) rotate(0deg)}}
+@keyframes lick-wiggle{0%,100%{transform:translateX(-50%) rotate(0deg)}25%{transform:translateX(-50%) rotate(-12deg) translateY(-3px)}75%{transform:translateX(-50%) rotate(10deg) translateY(-2px)}}
+`;
+document.head.appendChild(ks);
+
+window.addEventListener('load',()=>setTimeout(run,200));
+</script>
+</body>
+</html>
